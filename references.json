@@ -1,0 +1,40 @@
+[
+    {
+        "DOI": "10.1128/AEM.71.12.8228-8235.2005",
+        "URL": "https://journals.asm.org/doi/full/10.1128/aem.71.12.8228-8235.2005",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Lozupone",
+                "given": "Catherine"
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "Applied and Environmental Microbiology",
+        "id": "lozupone2005",
+        "issue": "12",
+        "issued": {
+            "date-parts": [
+                [
+                    2005,
+                    12
+                ]
+            ]
+        },
+        "key": "VYUIMKS7",
+        "libraryid": "3",
+        "page": "8228-8235",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "UniFrac: a New Phylogenetic Method for Comparing Microbial Communities",
+        "title-short": "UniFrac",
+        "type": "article-journal",
+        "volume": "71"
+    }
+]
