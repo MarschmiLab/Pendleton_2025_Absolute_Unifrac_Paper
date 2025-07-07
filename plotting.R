@@ -1,6 +1,12 @@
 library(ggplot2)
 library(NatParksPalettes)
 
+ggpreview <- function(...) {
+  fname <- tempfile(fileext = ".png")
+  ggsave(filename = fname, ...)
+  system2("open", fname)
+  invisible(NULL)
+}
 
 ont_theme <- theme_classic() + 
   theme(axis.text = element_text(size = 10),
