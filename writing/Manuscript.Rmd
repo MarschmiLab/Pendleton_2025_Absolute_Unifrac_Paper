@@ -1,0 +1,81 @@
+---
+editor_options: 
+  chunk_output_type: console
+bibliography: references.json
+csl: the-isme-journal.csl
+header-includes:
+   - \usepackage{lineno}
+   - \linenumbers
+   - \usepackage{setspace}
+   - \doublespacing
+   - \usepackage{fancyhdr}  
+   - \pagestyle{fancy}      
+   - \fancyhf{}             
+   - \fancyfoot[C]{\thepage}
+   - \renewcommand{\headrulewidth}{0pt}
+output:
+  bookdown::pdf_document2:
+    number_sections: false
+    latex_engine: xelatex
+    toc: false
+geometry: margin=1in
+papersize: a4
+pagestyle: empty
+fontsize: 12 pt 
+---
+
+\singlespacing
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
+                      options(scipen=999
+                              )
+                      )
+library(phyloseq)
+library(tidyverse)
+```
+
+\newpage
+
+## Interpretation and application of absolute abundance in Weighted UniFrac distance
+
+Augustus Pendleton^1^\* & Marian L. Schmidt^1^\*
+
+^1^Department of Microbiology, Cornell University, 123 Wing Dr, Ithaca, NY 14850, USA
+
+**Corresponding Authors:** Augustus Pendleton: [arp277\@cornell.edu](mailto:arp277@cornell.edu){.email}; Marian L. Schmidt: [marschmi\@cornell.edu](mailto:marschmi@cornell.edu){.email}
+
+**Author Contribution Statement:** Both authors contributed equally to the manuscript.
+
+**Preprint servers:** This article was submitted to *bioRxiv* (doi: ) under a CC-BY-NC-ND 4.0 International license.
+
+**Keywords:** Microbial Ecology - Beta Diversity - Absolute Abundance - Bioinformatics
+
+\newpage
+
+    The UniFrac distance was first introduced by Lozupone & Knight in 2005, and has since become enormously popular as a measure of $\beta$-diversity within the field of microbial ecology [@lozupone2005]. A major draw of the UniFrac distance is that is considers phylogenetic information when estimating the distance between two communities. After first generating a phylogenetic tree representing species (or proxies like ASVs/OTUs) from all samples, the UniFrac distance computes the fraction of branch-lengths which is *shared* between communities, relative to the total branch length represented in the phylogenetic tree. UniFrac can be both *unweighted*, in which only the incidence of species is considered, or *weighted*, wherein the contribution a branch makes to the overall distance is weighted by the proportional abundance of taxa descended from that branch [@lozupone2007]. The weighted UniFrac is derived as: 
+$$
+U^R=\frac{\sum_{i=1}^{n} b_i|p_i^a-p_i^b|}{\sum_{i=1}^{n} b_i(p_i^a+p_i^b)}
+$$ 
+Where we weight the length of each branch, $b_i$, by the difference in the relative abundance of all species ($p_i$) descended from that branch in sample $a$ or sample $a$. As such, we denote this distance as *U^R^*, for "Relative Unifrac". Popular packages which calculate weighted Unifrac, including QIIME and the R packages `phyloseq` and `GUniFrac` run this normalization by default.
+
+    Because $U^R$ is most sensitive to changes in abundant lineages, it can sometimes obscure compositional changes occurring in rare to moderately-abundant taxa [@chen2012]. To address this weakness, @chen2012 introduced the generalized UniFrac distance ($GU^R$), in which the impact of abundant lineages can be mitigated by decreasing the parameter $\alpha$:
+$$
+GU^R=\frac{\sum\limits_{i=1}^{n} b_i(p_i^a+p_i^b)^\alpha\left|\dfrac{p_i^a-p_i^b}{p_i^a+p_i^b}\right|}{\sum\limits_{i=1}^{n} b_i(p_i^a+p_i^b)^\alpha}
+$$
+However, if one wishes to use absolute abundances, both $U^R$ and $GU^R$ can be derived without normalizing by total counts: 
+
+$$
+\begin{aligned}
+U^A=\frac{\sum\limits_{i=1}^{n}b_i|c_i^a-c_i^b|}{\sum\limits_{i=1}^{n}b_i(c_i^a+c_i^b)}\qquad&&
+GU^A=\frac{\sum\limits_{i=1}^{n}b_i(c_i^a+c_i^b)^\alpha\left|\dfrac{c_i^a-c_i^b}{c_i^a+c_i^b}\right|}{\sum\limits_{i=1}^{n}b_i(c_i^a+c_i^b)^\alpha}
+\end{aligned}
+$$
+
+Where $c_i^a$ and $c_i^b$ stands for the absolute counts of species descended from branch $b_i$ in community $a$ and $b$, respectively.
+
+    We were curious as to the implications of using this "Absolute Unifrac" (*U^A^*) compared to *U^R^*, and the impact of absolute abundances between phylogenetic and non-phylogenetic distance measures like Bray-Curtis Dissimilarity derived from both relative ($BC^R$) and absolute ($BC^A$) abundances.
+
+    
+
+#### References

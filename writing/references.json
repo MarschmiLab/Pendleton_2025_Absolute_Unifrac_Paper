@@ -1,0 +1,152 @@
+[
+    {
+        "DOI": "10.1128/AEM.71.12.8228-8235.2005",
+        "URL": "https://journals.asm.org/doi/full/10.1128/aem.71.12.8228-8235.2005",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Lozupone",
+                "given": "Catherine"
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "Applied and Environmental Microbiology",
+        "id": "lozupone2005",
+        "issue": "12",
+        "issued": {
+            "date-parts": [
+                [
+                    2005,
+                    12
+                ]
+            ]
+        },
+        "key": "VYUIMKS7",
+        "libraryid": "3",
+        "page": "8228-8235",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "UniFrac: a New Phylogenetic Method for Comparing Microbial Communities",
+        "title-short": "UniFrac",
+        "type": "article-journal",
+        "volume": "71"
+    },
+    {
+        "DOI": "10.1128/AEM.01996-06",
+        "URL": "https://journals.asm.org/doi/10.1128/aem.01996-06",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Lozupone",
+                "given": "Catherine A."
+            },
+            {
+                "family": "Hamady",
+                "given": "Micah"
+            },
+            {
+                "family": "Kelley",
+                "given": "Scott T."
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "Applied and Environmental Microbiology",
+        "id": "lozupone2007",
+        "issue": "5",
+        "issued": {
+            "date-parts": [
+                [
+                    2007,
+                    3
+                ]
+            ]
+        },
+        "key": "BA3Y8GL7",
+        "libraryid": "3",
+        "page": "1576-1585",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "Quantitative and Qualitative β Diversity Measures Lead to Different Insights into Factors That Structure Microbial Communities",
+        "type": "article-journal",
+        "volume": "73"
+    },
+    {
+        "DOI": "10.1093/bioinformatics/bts342",
+        "ISSN": "1367-4803",
+        "URL": "https://doi.org/10.1093/bioinformatics/bts342",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Chen",
+                "given": "Jun"
+            },
+            {
+                "family": "Bittinger",
+                "given": "Kyle"
+            },
+            {
+                "family": "Charlson",
+                "given": "Emily S."
+            },
+            {
+                "family": "Hoffmann",
+                "given": "Christian"
+            },
+            {
+                "family": "Lewis",
+                "given": "James"
+            },
+            {
+                "family": "Wu",
+                "given": "Gary D."
+            },
+            {
+                "family": "Collman",
+                "given": "Ronald G."
+            },
+            {
+                "family": "Bushman",
+                "given": "Frederic D."
+            },
+            {
+                "family": "Li",
+                "given": "Hongzhe"
+            }
+        ],
+        "container-title": "Bioinformatics",
+        "container-title-short": "Bioinformatics",
+        "id": "chen2012",
+        "issue": "16",
+        "issued": {
+            "date-parts": [
+                [
+                    2012,
+                    8,
+                    15
+                ]
+            ]
+        },
+        "key": "L2RJGSQU",
+        "libraryid": "3",
+        "page": "2106-2113",
+        "providerkey": "Zotero",
+        "source": "Silverchair",
+        "title": "Associating microbiome composition with environmental covariates using generalized UniFrac distances",
+        "type": "article-journal",
+        "volume": "28"
+    }
+]

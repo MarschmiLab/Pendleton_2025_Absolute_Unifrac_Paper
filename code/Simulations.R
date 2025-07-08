@@ -5,7 +5,9 @@ library(ggtree)
 library(patchwork)
 library(vegan)
 
-nonsym_tree <- ape::read.tree("nonsym_tree.tree")
+source(plotting.R)
+
+nonsym_tree <- ape::read.tree("data/nonsym_tree.tree")
 
 smol_tree_plot <- ggtree(nonsym_tree) + 
   geom_tiplab(label = paste("ASV_", c(1:4))) + 
@@ -116,9 +118,9 @@ ggsave(filename = "figures/diff_hists.png", width = 6, height = 2)
 
 # Using real data
 
-load("full_abs_physeq.RData")
-load("ont_absolute_wunifrac.RData")
-load("ont_relative_unifrac.RData")
+load("data/full_abs_physeq.RData")
+load("data/ont_absolute_wunifrac.RData")
+load("data/ont_relative_unifrac.RData")
 
 # Maybe remove upwelling stations, cause that's a WHOLE other story
 full_abs_physeq <- full_abs_physeq %>%
@@ -201,17 +203,18 @@ ont_mantels %>%
   ggplot(aes(x = Alpha, y = Correlation, color = Normalization)) + 
   geom_line() + 
   annotate(geom = "segment", y = ont_mantels$Bray_Rel, yend = ont_mantels$Bray_Rel,
-           x = 0, xend = Inf, linetype = 2, color = "#196689") + 
+           x = 0, xend = 1, linetype = 2, color = "#196689") + 
   annotate(geom = "segment", y = ont_mantels$Bray_Abs, yend = ont_mantels$Bray_Abs,
-           x = 0, xend = Inf, linetype = 2, color = "#B6AA0D") +  
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D") +  
   labs(x = "Generalized alpha value", y = "Correlation with cell counts") + 
-  scale_x_continuous(expand = expansion(mult = 0))+ 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
   scale_color_manual(labels = c("Absolute Unifrac", "Relative Unifrac"),
                      name = "",
                      values = c("#F2C621", "#008FF8"))+ 
   theme(legend.position = "none")
 
-ggsave(filename = "figures/ont_mantel.png", width = 5, height = 3.5)
+
+ggsave(filename = "figures/ont_mantel.png", width = 4, height = 3.5)
 
 # Permanovas
 sam_data_for_adonis <- data.frame(sample_data(full_abs_physeq))
@@ -231,15 +234,17 @@ ont_perms %>%
   ggplot(aes(x = Alpha, y = R2, color = Normalization)) + 
   geom_line() + 
   annotate(geom = "segment", y = ont_perms$Bray_Rel[[1,4]], yend = ont_perms$Bray_Rel[[1,4]],
-           x = 0, xend = Inf, linetype = 2, color = "red") + 
+           x = 0, xend = 1, linetype = 2, color = "#196689") + 
   annotate(geom = "segment", y = ont_perms$Bray_Abs[[1,4]], yend = ont_perms$Bray_Abs[[1,4]],
-           x = 0, xend =Inf, linetype = 2, color = "black") +
-  labs(x = "Generalized alpha value", y = "R-Squared") + 
-  scale_x_continuous(expand = expansion(mult = 0))+ 
+           x = 0, xend =1, linetype = 2, color = "#B6AA0D") +
+  labs(x = "Generalized alpha value", y = "R-Squared (Depth-Month Groups)") + 
+  scale_x_continuous(expand = expansion(mult = c(0,0.05)))+ 
   scale_color_manual(labels = c("Absolute Unifrac", "Relative Unifrac"),
                      name = "",
-                     values = c("#B6AA0D", "#008FF8"))+ 
+                     values = c("#F2C621", "#008FF8"))+ 
   theme(legend.position = "none")
+
+ggsave(filename = "figures/ont_rsqr.png", width = 4, height = 3.5)
 
 ont_perms %>%
   bind_rows(.id = "Metric") %>%
@@ -250,13 +255,16 @@ ont_perms %>%
   ggplot(aes(x = Alpha, y = statistic, color = Normalization)) + 
   geom_line() + 
   annotate(geom = "segment", y = ont_perms$Bray_Rel[[1,5]], yend = ont_perms$Bray_Rel[[1,5]],
-           x = 0, xend = Inf, linetype = 2, color = "red") + 
+           x = 0, xend = 1, linetype = 2, color = "#196689") + 
   annotate(geom = "segment", y = ont_perms$Bray_Abs[[1,5]], yend = ont_perms$Bray_Abs[[1,5]],
-           x = 0, xend =Inf, linetype = 2, color = "black") +
-  labs(x = "Generalized alpha value", y = "F-Statistic") + 
-  scale_x_continuous(expand = expansion(mult = 0))+ 
+           x = 0, xend =1, linetype = 2, color = "#B6AA0D") +
+  labs(x = "Generalized alpha value", y = "F-Statistic (Depth-Month Groups)") + 
+  scale_x_continuous(expand = expansion(mult = c(0,0.05)))+ 
   scale_color_manual(labels = c("Absolute Unifrac", "Relative Unifrac"),
                      name = "",
-                     values = c("#B6AA0D", "#008FF8"))+ 
+                     values = c("#F2C621", "#008FF8"))+ 
   theme(legend.position = "none")
+
+ggsave(filename = "figures/ont_fstat.png", width = 4, height = 3.5)
+
 
