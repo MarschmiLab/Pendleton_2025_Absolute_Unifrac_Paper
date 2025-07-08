@@ -266,5 +266,292 @@
         "title": "Current Applications of Absolute Bacterial Quantification in Microbiome Studies and Decision-Making Regarding Different Biological Questions",
         "type": "article-journal",
         "volume": "9"
+    },
+    {
+        "2692-8205\npages": "2025.01.17.633667",
+        "DOI": "10.1101/2025.01.17.633667",
+        "ISSN": "2692-8205,",
+        "URL": "https://www.biorxiv.org/content/10.1101/2025.01.17.633667v2",
+        "abstractnote": "The Laurentian Great Lakes hold 21% of the world’s surface freshwater and supply drinking water to nearly 40 million people. Here we provide the first evidence that winddriven upwelling fundamentally restructures microbial communities in Lake Ontario, with its effects extended and redistributed by an internal Kelvin wave propagating along the shoreline. While thermal stratification is known to organize microbial communities by depth and season, we show that this vertical structure arises from contrasting mechanisms: homogenizing selection in surface waters and dispersal limitation with drift in the hypolimnion. Kelvin wave-driven upwelling disrupts this scaffold, displacing rare taxa into the surface and creating novel coastal communities enriched in methane oxidation and sulfur metabolism genes—functional traits absent elsewhere in the lake. We observed a Kelvin wave lasting over two weeks and propagating eastward at ∼60 km day <sup>1</sup>. Given the ∼10–12 day recurrence of wind events (1), at any time, at least one segment of Lake Ontario’s coastline is typically experiencing upwelling—producing pulses frequent and sustained enough to remodel microbial communities on ecologically relevant timescales. Recurrent upwellings, sustained and redistributed by Kelvin waves, act as a biological disturbance that overrides stratification, mobilizes rare functional potential, and assembles novel coastal microbial communities. As climate change lengthens stratified periods and reshapes large-lake circulation, understanding how physical forcing governs microbial assembly is essential for forecasting the biogeochemical future of Earth’s great lakes—especially in shoreline zones where ecological shifts directly affect human communities. Significance Statement The Laurentian Great Lakes hold 21% of the world’s surface freshwater and nearly 85% of North America’s—supplying drinking water to over 40 million people. Yet the microbial life that underpins their ecological function remains poorly understood. We show that wind-driven upwelling, followed by internal Kelvin waves that redistribute and sustain upwelling, acts as a recurring physical disturbance that overrides thermal stratification, redistributing rare microbes and assembling novel shoreline communities. These shifts bring unexpected functional changes, including enrichment of methane oxidation and sulfur metabolism genes, where people most interact with lake water. As climate change reshapes large lake circulation and intensifies thermal layering, understanding how microbial ecosystems respond is essential for forecasting transformations in water quality, ecosystem function, and biogeochemical resilience.",
+        "accessdate": "2025-07-08 15:30:36",
+        "author": [
+            {
+                "family": "Pendleton",
+                "given": "Augustus"
+            },
+            {
+                "family": "Wells",
+                "given": "Mathew"
+            },
+            {
+                "family": "Schmidt",
+                "given": "Marian L."
+            }
+        ],
+        "date": "2025-07-03 2025-07-03",
+        "extra": "ISSN: 2692-8205, 2692-8205 Pages: 2025.01.17.633667 Section: New Results",
+        "id": "pendleton",
+        "key": "XECMGR9Y",
+        "language": "en",
+        "librarycatalog": "bioRxiv",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "repository": "bioRxiv",
+        "rights": "© 2025, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "section": "New",
+        "title": "Upwelling periodically disturbs the ecological assembly of microbial communities in the Laurentian Great Lakes",
+        "type": "article"
+    },
+    {
+        "DOI": "10.1128/msystems.00166-16",
+        "URL": "https://journals.asm.org/doi/full/10.1128/msystems.00166-16",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Morton",
+                "given": "James T."
+            },
+            {
+                "family": "Toran",
+                "given": "Liam"
+            },
+            {
+                "family": "Edlund",
+                "given": "Anna"
+            },
+            {
+                "family": "Metcalf",
+                "given": "Jessica L."
+            },
+            {
+                "family": "Lauber",
+                "given": "Christian"
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "mSystems",
+        "id": "morton2017",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    2,
+                    21
+                ]
+            ]
+        },
+        "key": "93267LKJ",
+        "libraryid": "3",
+        "page": "10.1128/msystems.00166-16",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "Uncovering the Horseshoe Effect in Microbial Analyses",
+        "type": "article-journal",
+        "volume": "2"
+    },
+    {
+        "DOI": "10.1038/s41586-021-03241-8",
+        "ISSN": "1476-4687",
+        "URL": "https://www.nature.com/articles/s41586-021-03241-8",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Rao",
+                "given": "Chitong"
+            },
+            {
+                "family": "Coyte",
+                "given": "Katharine Z."
+            },
+            {
+                "family": "Bainter",
+                "given": "Wayne"
+            },
+            {
+                "family": "Geha",
+                "given": "Raif S."
+            },
+            {
+                "family": "Martin",
+                "given": "Camilia R."
+            },
+            {
+                "family": "Rakoff-Nahoum",
+                "given": "Seth"
+            }
+        ],
+        "container-title": "Nature",
+        "id": "rao2021",
+        "issue": "7851",
+        "issued": {
+            "date-parts": [
+                [
+                    2021,
+                    3
+                ]
+            ]
+        },
+        "key": "2JNT9XAC",
+        "language": "en",
+        "libraryid": "3",
+        "page": "633-638",
+        "providerkey": "Zotero",
+        "publisher": "Nature",
+        "rights": "2021 The Author(s), under exclusive licence to Springer Nature Limited",
+        "source": "www.nature.com",
+        "title": "Multi-kingdom ecological drivers of microbiota assembly in preterm infants",
+        "type": "article-journal",
+        "volume": "591"
+    },
+    {
+        "DOI": "10.1038/ismej.2009.118",
+        "ISSN": "1751-7362",
+        "URL": "https://doi.org/10.1038/ismej.2009.118",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Shapiro",
+                "given": "Orr H"
+            },
+            {
+                "family": "Kushmaro",
+                "given": "Ariel"
+            },
+            {
+                "family": "Brenner",
+                "given": "Asher"
+            }
+        ],
+        "container-title": "The ISME Journal",
+        "container-title-short": "The ISME Journal",
+        "id": "shapiro2010",
+        "issue": "3",
+        "issued": {
+            "date-parts": [
+                [
+                    2010,
+                    3,
+                    1
+                ]
+            ]
+        },
+        "key": "T76SVMUI",
+        "libraryid": "3",
+        "page": "327-336",
+        "providerkey": "Zotero",
+        "source": "Silverchair",
+        "title": "Bacteriophage predation regulates microbial abundance and diversity in a full-scale bioreactor treating industrial wastewater",
+        "type": "article-journal",
+        "volume": "4"
+    },
+    {
+        "DOI": "10.3389/fmicb.2025.1481197",
+        "ISSN": "1664-302X",
+        "URL": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2025.1481197/full",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Wagner",
+                "given": "Stefanie"
+            },
+            {
+                "family": "Weber",
+                "given": "Michael"
+            },
+            {
+                "family": "Paul",
+                "given": "Lena-Sophie"
+            },
+            {
+                "family": "Grümpel-Schlüter",
+                "given": "Angelika"
+            },
+            {
+                "family": "Kluess",
+                "given": "Jeannette"
+            },
+            {
+                "family": "Neuhaus",
+                "given": "Klaus"
+            },
+            {
+                "family": "Fuchs",
+                "given": "Thilo M."
+            }
+        ],
+        "container-title": "Frontiers in Microbiology",
+        "container-title-short": "Front. Microbiol.",
+        "id": "wagner2025",
+        "issued": {
+            "date-parts": [
+                [
+                    2025,
+                    3,
+                    24
+                ]
+            ]
+        },
+        "key": "RCJKTQVA",
+        "language": "English",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "publisher": "Frontiers",
+        "source": "Frontiers",
+        "title": "Absolute abundance calculation enhances the significance of microbiome data in antibiotic treatment studies",
+        "type": "article-journal",
+        "volume": "16"
+    },
+    {
+        "DOI": "10.3389/fmicb.2021.796025",
+        "ISSN": "1664-302X",
+        "URL": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2021.796025/full",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Kers",
+                "given": "Jannigje Gerdien"
+            },
+            {
+                "family": "Saccenti",
+                "given": "Edoardo"
+            }
+        ],
+        "container-title": "Frontiers in Microbiology",
+        "container-title-short": "Front. Microbiol.",
+        "id": "kers2022",
+        "issued": {
+            "date-parts": [
+                [
+                    2022,
+                    3,
+                    3
+                ]
+            ]
+        },
+        "key": "LHSHIHDL",
+        "language": "English",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "publisher": "Frontiers",
+        "source": "Frontiers",
+        "title": "The Power of Microbiome Studies: Some Considerations on Which Alpha and Beta Metrics to Use and How to Report Results",
+        "title-short": "The Power of Microbiome Studies",
+        "type": "article-journal",
+        "volume": "12"
     }
 ]
