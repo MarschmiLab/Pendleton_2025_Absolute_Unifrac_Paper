@@ -36,7 +36,7 @@ Augustus Pendleton^1^\* & Marian L. Schmidt^1^\*
 NY 14850, USA
 
 **Corresponding Authors:** Augustus Pendleton:
-[arpt277\@cornell.edu](mailto:arpt277@cornell.edu){.email}; Marian L.
+[arpt277\@cornell.edu](mailto:arp277@cornell.edu){.email}; Marian L.
 Schmidt: [marschmi\@cornell.edu](mailto:marschmi@cornell.edu){.email}
 
 \newpage
