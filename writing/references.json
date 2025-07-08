@@ -148,5 +148,123 @@
         "title": "Associating microbiome composition with environmental covariates using generalized UniFrac distances",
         "type": "article-journal",
         "volume": "28"
+    },
+    {
+        "DOI": "10.1038/ismej.2016.117",
+        "ISSN": "1751-7370",
+        "URL": "https://www.nature.com/articles/ismej2016117",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Props",
+                "given": "Ruben"
+            },
+            {
+                "family": "Kerckhof",
+                "given": "Frederiek-Maarten"
+            },
+            {
+                "family": "Rubbens",
+                "given": "Peter"
+            },
+            {
+                "family": "De Vrieze",
+                "given": "Jo"
+            },
+            {
+                "family": "Hernandez Sanabria",
+                "given": "Emma"
+            },
+            {
+                "family": "Waegeman",
+                "given": "Willem"
+            },
+            {
+                "family": "Monsieurs",
+                "given": "Pieter"
+            },
+            {
+                "family": "Hammes",
+                "given": "Frederik"
+            },
+            {
+                "family": "Boon",
+                "given": "Nico"
+            }
+        ],
+        "container-title": "The ISME Journal",
+        "container-title-short": "ISME J",
+        "id": "props2017",
+        "issue": "2",
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    2
+                ]
+            ]
+        },
+        "key": "JAZBIWBQ",
+        "language": "en",
+        "libraryid": "3",
+        "page": "584-587",
+        "providerkey": "Zotero",
+        "publisher": "Nature",
+        "rights": "2017 International Society for Microbial Ecology",
+        "source": "www.nature.com",
+        "title": "Absolute quantification of microbial taxon abundances",
+        "type": "article-journal",
+        "volume": "11"
+    },
+    {
+        "DOI": "10.3390/microorganisms9091797",
+        "ISSN": "2076-2607",
+        "URL": "https://www.mdpi.com/2076-2607/9/9/1797",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Wang",
+                "given": "Xiaofan"
+            },
+            {
+                "family": "Howe",
+                "given": "Samantha"
+            },
+            {
+                "family": "Deng",
+                "given": "Feilong"
+            },
+            {
+                "family": "Zhao",
+                "given": "Jiangchao"
+            }
+        ],
+        "container-title": "Microorganisms",
+        "id": "wang2021",
+        "issue": "9",
+        "issued": {
+            "date-parts": [
+                [
+                    2021,
+                    9
+                ]
+            ]
+        },
+        "key": "WYESXR85",
+        "language": "en",
+        "libraryid": "3",
+        "number": "9",
+        "page": "1797",
+        "providerkey": "Zotero",
+        "publisher": "Multidisciplinary",
+        "rights": "http://creativecommons.org/licenses/by/3.0/",
+        "source": "www.mdpi.com",
+        "title": "Current Applications of Absolute Bacterial Quantification in Microbiome Studies and Decision-Making Regarding Different Biological Questions",
+        "type": "article-journal",
+        "volume": "9"
     }
 ]

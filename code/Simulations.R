@@ -4,6 +4,7 @@ library(phyloseq)
 library(ggtree)
 library(patchwork)
 library(vegan)
+library(GUniFrac)
 
 source(plotting.R)
 
@@ -59,6 +60,23 @@ dists <- list(Bray_Relative = bray_rel,
               Bray_Absolute = bray_abs,
               Unifrac_Relative = uni_rel,
               Unifrac_Absolute = uni_abs)
+
+map(dists, \(x)broom::tidy(x)) %>%
+  bind_rows(.id = "Distance") %>%
+  mutate(Comp_Key = paste(item1, item2, sep = ":")) %>%
+  select(-item1, -item2) %>%
+  pivot_wider(names_from = Distance, values_from = distance) %>%
+  select(-Comp_Key) %>%
+  corrr::correlate() %>%
+  corrr::focus(Unifrac_Absolute)
+
+map(dists, \(x)broom::tidy(x)) %>%
+  bind_rows(.id = "Distance") %>%
+  mutate(Comp_Key = paste(item1, item2, sep = ":")) %>%
+  select(-item1, -item2) %>%
+  pivot_wider(names_from = Distance, values_from = distance) %>%
+  summarize(cors = list(cor.test(Bray_Absolute, Unifrac_Absolute))) %>%
+  pull(cors)
 
 map(dists, \(x)broom::tidy(x)) %>%
   bind_rows(.id = "Distance") %>%
