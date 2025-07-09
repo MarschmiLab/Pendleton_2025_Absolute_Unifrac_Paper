@@ -553,5 +553,680 @@
         "title-short": "The Power of Microbiome Studies",
         "type": "article-journal",
         "volume": "12"
+    },
+    {
+        "DOI": "10.3389/fmicb.2017.02224",
+        "ISSN": "1664-302X",
+        "PMCID": "PMC5695134",
+        "PMID": "29187837",
+        "URL": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5695134/",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Gloor",
+                "given": "Gregory B."
+            },
+            {
+                "family": "Macklaim",
+                "given": "Jean M."
+            },
+            {
+                "family": "Pawlowsky-Glahn",
+                "given": "Vera"
+            },
+            {
+                "family": "Egozcue",
+                "given": "Juan J."
+            }
+        ],
+        "container-title": "Frontiers in Microbiology",
+        "container-title-short": "Front Microbiol",
+        "id": "gloor2017",
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    11,
+                    15
+                ]
+            ]
+        },
+        "key": "97IX3MNG",
+        "libraryid": "3",
+        "page": "2224",
+        "providerkey": "Zotero",
+        "source": "PubMed Central",
+        "title": "Microbiome Datasets Are Compositional: And This Is Not Optional",
+        "title-short": "Microbiome Datasets Are Compositional",
+        "type": "article-journal",
+        "volume": "8"
+    },
+    {
+        "URL": "https://CRAN.R-project.org/package=tidyverse",
+        "author": [
+            {
+                "family": "Wickham",
+                "given": "Hadley"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-tidyverse",
+        "issued": {
+            "date-parts": [
+                [
+                    2023
+                ]
+            ]
+        },
+        "key": "SJCWAI4E",
+        "libraryid": "3",
+        "note": "Citation Key: R-tidyverse",
+        "providerkey": "Zotero",
+        "title": "tidyverse: Easily install and load the tidyverse",
+        "type": "report"
+    },
+    {
+        "URL": "http://dx.plos.org/10.1371/journal.pone.0061217",
+        "author": [
+            {
+                "family": "McMurdie",
+                "given": "Paul J."
+            },
+            {
+                "family": "Holmes",
+                "given": "Susan"
+            },
+            {
+                "family": "Jordan",
+                "given": "with contributions from Gregory"
+            },
+            {
+                "family": "Chamberlain",
+                "given": "Scott"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-phyloseq",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "5NGT6GGK",
+        "libraryid": "3",
+        "note": "Citation Key: R-phyloseq",
+        "providerkey": "Zotero",
+        "title": "phyloseq: Handling and analysis of high-throughput microbiome census data",
+        "type": "report"
+    },
+    {
+        "URL": "https://github.com/vegandevs/vegan",
+        "author": [
+            {
+                "family": "Oksanen",
+                "given": "Jari"
+            },
+            {
+                "family": "Simpson",
+                "given": "Gavin L."
+            },
+            {
+                "family": "Blanchet",
+                "given": "F. Guillaume"
+            },
+            {
+                "family": "Kindt",
+                "given": "Roeland"
+            },
+            {
+                "family": "Legendre",
+                "given": "Pierre"
+            },
+            {
+                "family": "Minchin",
+                "given": "Peter R."
+            },
+            {
+                "family": "O’Hara",
+                "given": "R.B."
+            },
+            {
+                "family": "Solymos",
+                "given": "Peter"
+            },
+            {
+                "family": "Stevens",
+                "given": "M. Henry H."
+            },
+            {
+                "family": "Szoecs",
+                "given": "Eduard"
+            },
+            {
+                "family": "Wagner",
+                "given": "Helene"
+            },
+            {
+                "family": "Barbour",
+                "given": "Matt"
+            },
+            {
+                "family": "Bedward",
+                "given": "Michael"
+            },
+            {
+                "family": "Bolker",
+                "given": "Ben"
+            },
+            {
+                "family": "Borcard",
+                "given": "Daniel"
+            },
+            {
+                "family": "Carvalho",
+                "given": "Gustavo"
+            },
+            {
+                "family": "Chirico",
+                "given": "Michael"
+            },
+            {
+                "family": "De Caceres",
+                "given": "Miquel"
+            },
+            {
+                "family": "Durand",
+                "given": "Sebastien"
+            },
+            {
+                "family": "Evangelista",
+                "given": "Heloisa Beatriz Antoniazi"
+            },
+            {
+                "family": "FitzJohn",
+                "given": "Rich"
+            },
+            {
+                "family": "Friendly",
+                "given": "Michael"
+            },
+            {
+                "family": "Furneaux",
+                "given": "Brendan"
+            },
+            {
+                "family": "Hannigan",
+                "given": "Geoffrey"
+            },
+            {
+                "family": "Hill",
+                "given": "Mark O."
+            },
+            {
+                "family": "Lahti",
+                "given": "Leo"
+            },
+            {
+                "family": "McGlinn",
+                "given": "Dan"
+            },
+            {
+                "family": "Ouellette",
+                "given": "Marie-Helene"
+            },
+            {
+                "family": "Ribeiro Cunha",
+                "given": "Eduardo"
+            },
+            {
+                "family": "Smith",
+                "given": "Tyler"
+            },
+            {
+                "family": "Stier",
+                "given": "Adrian"
+            },
+            {
+                "family": "Ter Braak",
+                "given": "Cajo J.F."
+            },
+            {
+                "family": "Weedon",
+                "given": "James"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-vegan",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "SDB7WLXE",
+        "libraryid": "3",
+        "note": "Citation Key: R-vegan",
+        "providerkey": "Zotero",
+        "title": "vegan: Community ecology package",
+        "type": "report"
+    },
+    {
+        "DOI": "10.1111/2041-210X.12628",
+        "URL": "http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12628/abstract",
+        "author": [
+            {
+                "family": "Yu",
+                "given": "Guangchuang"
+            },
+            {
+                "family": "Smith",
+                "given": "David"
+            },
+            {
+                "family": "Zhu",
+                "given": "Huachen"
+            },
+            {
+                "family": "Guan",
+                "given": "Yi"
+            },
+            {
+                "family": "Lam",
+                "given": "Tommy Tsan-Yuk"
+            }
+        ],
+        "container-title": "Methods in Ecology and Evolution",
+        "id": "ggtree2017a",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2017
+                ]
+            ]
+        },
+        "key": "5C5XGKFF",
+        "libraryid": "3",
+        "note": "Citation Key: ggtree2017a",
+        "page": "28-36",
+        "providerkey": "Zotero",
+        "title": "ggtree: an R package for visualization and annotation of phylogenetic trees with their covariates and other associated data.",
+        "type": "article-journal",
+        "volume": "8"
+    },
+    {
+        "URL": "https://CRAN.R-project.org/package=patchwork",
+        "author": [
+            {
+                "family": "Pedersen",
+                "given": "Thomas Lin"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-patchwork",
+        "issued": {
+            "date-parts": [
+                [
+                    2024
+                ]
+            ]
+        },
+        "key": "DQLCFF2N",
+        "libraryid": "3",
+        "note": "Citation Key: R-patchwork",
+        "providerkey": "Zotero",
+        "title": "patchwork: The composer of plots",
+        "type": "report"
+    },
+    {
+        "URL": "http://ape-package.ird.fr/",
+        "author": [
+            {
+                "family": "Paradis",
+                "given": "Emmanuel"
+            },
+            {
+                "family": "Blomberg",
+                "given": "Simon"
+            },
+            {
+                "family": "Bolker",
+                "given": "Ben"
+            },
+            {
+                "family": "Brown",
+                "given": "Joseph"
+            },
+            {
+                "family": "Claramunt",
+                "given": "Santiago"
+            },
+            {
+                "family": "Claude",
+                "given": "Julien"
+            },
+            {
+                "family": "Cuong",
+                "given": "Hoa Sien"
+            },
+            {
+                "family": "Desper",
+                "given": "Richard"
+            },
+            {
+                "family": "Didier",
+                "given": "Gilles"
+            },
+            {
+                "family": "Durand",
+                "given": "Benoit"
+            },
+            {
+                "family": "Dutheil",
+                "given": "Julien"
+            },
+            {
+                "family": "Ewing",
+                "given": "RJ"
+            },
+            {
+                "family": "Gascuel",
+                "given": "Olivier"
+            },
+            {
+                "family": "Guillerme",
+                "given": "Thomas"
+            },
+            {
+                "family": "Heibl",
+                "given": "Christoph"
+            },
+            {
+                "family": "Ives",
+                "given": "Anthony"
+            },
+            {
+                "family": "Jones",
+                "given": "Bradley"
+            },
+            {
+                "family": "Krah",
+                "given": "Franz"
+            },
+            {
+                "family": "Lawson",
+                "given": "Daniel"
+            },
+            {
+                "family": "Lefort",
+                "given": "Vincent"
+            },
+            {
+                "family": "Legendre",
+                "given": "Pierre"
+            },
+            {
+                "family": "Lemon",
+                "given": "Jim"
+            },
+            {
+                "family": "Louvel",
+                "given": "Guillaume"
+            },
+            {
+                "family": "Marcon",
+                "given": "Eric"
+            },
+            {
+                "family": "McCloskey",
+                "given": "Rosemary"
+            },
+            {
+                "family": "Nylander",
+                "given": "Johan"
+            },
+            {
+                "family": "Opgen-Rhein",
+                "given": "Rainer"
+            },
+            {
+                "family": "Popescu",
+                "given": "Andrei-Alin"
+            },
+            {
+                "family": "Royer-Carenzi",
+                "given": "Manuela"
+            },
+            {
+                "family": "Schliep",
+                "given": "Klaus"
+            },
+            {
+                "family": "Strimmer",
+                "given": "Korbinian"
+            },
+            {
+                "family": "Vienne",
+                "given": "Damien",
+                "non-dropping-particle": "de"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-ape",
+        "issued": {
+            "date-parts": [
+                [
+                    2023
+                ]
+            ]
+        },
+        "key": "WSWWL3L2",
+        "libraryid": "3",
+        "note": "Citation Key: R-ape",
+        "providerkey": "Zotero",
+        "title": "ape: Analyses of phylogenetics and evolution",
+        "type": "report"
+    },
+    {
+        "URL": "https://CRAN.R-project.org/package=broom",
+        "author": [
+            {
+                "family": "Robinson",
+                "given": "David"
+            },
+            {
+                "family": "Hayes",
+                "given": "Alex"
+            },
+            {
+                "family": "Couch",
+                "given": "Simon"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-broom",
+        "issued": {
+            "date-parts": [
+                [
+                    2023
+                ]
+            ]
+        },
+        "key": "F735P5J7",
+        "libraryid": "3",
+        "note": "Citation Key: R-broom",
+        "providerkey": "Zotero",
+        "title": "broom: Convert statistical objects into tidy tibbles",
+        "type": "report"
+    },
+    {
+        "URL": "https://github.com/kevinsblake/NatParksPalettes",
+        "author": [
+            {
+                "family": "Blake",
+                "given": "Kevin"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-NatParksPalettes",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "ZCHKQJBX",
+        "libraryid": "3",
+        "note": "Citation Key: R-NatParksPalettes",
+        "providerkey": "Zotero",
+        "title": "NatParksPalettes: Color palettes inspired by national parks",
+        "type": "report"
+    },
+    {
+        "DOI": "10.32614/CRAN.package.corrr",
+        "URL": "https://CRAN.R-project.org/package=corrr",
+        "author": [
+            {
+                "family": "Kuhn",
+                "given": "Max"
+            },
+            {
+                "family": "Jackson",
+                "given": "Simon"
+            },
+            {
+                "family": "Cimentada",
+                "given": "Jorge"
+            }
+        ],
+        "genre": "manual",
+        "id": "kuhn2022",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "N8ICQNZB",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "title": "corrr: Correlations in R",
+        "type": "report"
+    },
+    {
+        "DOI": "10.32614/CRAN.package.renv",
+        "URL": "https://CRAN.R-project.org/package=renv",
+        "author": [
+            {
+                "family": "Ushey",
+                "given": "Kevin"
+            },
+            {
+                "family": "Wickham",
+                "given": "Hadley"
+            }
+        ],
+        "genre": "manual",
+        "id": "ushey2024",
+        "issued": {
+            "date-parts": [
+                [
+                    2024
+                ]
+            ]
+        },
+        "key": "Q9I4UBGQ",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "title": "renv: Project environments",
+        "type": "report"
+    },
+    {
+        "URL": "https://www.R-project.org/",
+        "author": [
+            {
+                "family": "R Core Team"
+            }
+        ],
+        "id": "rcoreteamLanguageEnvironmentStatistical2020",
+        "issued": {
+            "date-parts": [
+                [
+                    2020
+                ]
+            ]
+        },
+        "key": "42XZZC54",
+        "libraryid": "1",
+        "providerkey": "Zotero",
+        "publisher": "R Foundation for Statistical Computing",
+        "publisher-place": "Vienna, Austria",
+        "title": "R: A Language and Environment for Statistical Computing",
+        "type": "book"
+    },
+    {
+        "URL": "http://www.rstudio.com/",
+        "author": [
+            {
+                "family": "RStudio Team"
+            }
+        ],
+        "id": "rstudioteam2020",
+        "issued": {
+            "date-parts": [
+                [
+                    2020
+                ]
+            ]
+        },
+        "key": "HURZAA9U",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "publisher": "RStudio, PBC.",
+        "publisher-place": "Boston, MA",
+        "title": "RStudio: Integrated Development Environment for R",
+        "type": "book"
+    },
+    {
+        "DOI": "10.1128/msphere.00355-23",
+        "URL": "https://journals.asm.org/doi/full/10.1128/msphere.00355-23",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Schloss",
+                "given": "Patrick D."
+            }
+        ],
+        "container-title": "mSphere",
+        "id": "schloss2023",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2023,
+                    12,
+                    6
+                ]
+            ]
+        },
+        "key": "VAST522A",
+        "libraryid": "3",
+        "page": "e00355-23",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "Waste not, want not: revisiting the analysis that called into question the practice of rarefaction",
+        "title-short": "Waste not, want not",
+        "type": "article-journal",
+        "volume": "9"
     }
 ]

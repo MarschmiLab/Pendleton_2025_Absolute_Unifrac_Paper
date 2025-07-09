@@ -37,11 +37,10 @@ comp_group_colors <- c(
   "Deep_May" = triglav[6],
   "Deep_September" = triglav[3])
 
-comp_group_colors_hier <- c(
+comp_group_colors_three <- c(
   "Shallow_May" = triglav[5],
   "Shallow_September" = triglav[4],
-  "Deep (May)" = triglav[6],
-  "Deep (September)" = triglav[3])
+  "Deep" = triglav[6])
 
 
 erie_month_colors <- c(

@@ -209,10 +209,10 @@ rel_unifrac_dist_0 <- as.dist(ont_relative_wunifrac$unifracs[, , "d_0"])
 ordinate_and_plot <- function(dist, physeq, title){
   plot_ordination(physeq = physeq,
                   ordination = ordinate(physeq, method = "PCoA", distance = dist),
-                  color = "Comp_Group_Hier_Colors") + 
+                  color = "Comp_Group_Hier") + 
     labs(title = title,
          color = "Group") + 
-    scale_color_manual(values = comp_group_colors_hier)+ 
+    scale_color_manual(values = comp_group_colors_three)+ 
     geom_point(alpha = 0.5, size = 4) + 
     theme(axis.title = element_text(size = 20),
           axis.title.x = element_text(face = "bold"),
@@ -333,5 +333,46 @@ ont_perms %>%
 
 ggsave(filename = "figures/ont_fstat.png", width = 4, height = 3.5, dpi=600)
 
-## Permute absolute abundance of samples? 
+## Correlation of Axis1 and Cell counts
 
+pcoa_res <- ordinate(full_abs_physeq, method = "PCoA", distance = abs_unifrac_dist)$vectors %>%as.data.frame()
+
+cell_df <- sample_data(full_abs_physeq) %>%
+  data.frame() %>%
+  select(avg_cells_per_ml) %>%
+  mutate(sample = row.names(.))
+
+pcoa_res %>%
+  select(Axis.1) %>%
+  mutate(sample = row.names(.)) %>%
+  left_join(cell_df) %>%
+  summarize(cor = list(cor.test(Axis.1, avg_cells_per_ml, method = "spearman"))) %>%
+  pull(cor)
+
+pcoa_res <- ordinate(full_abs_physeq, method = "PCoA", distance = abs_unifrac_dist_0.5)$vectors %>%as.data.frame()
+
+cell_df <- sample_data(full_abs_physeq) %>%
+  data.frame() %>%
+  select(avg_cells_per_ml) %>%
+  mutate(sample = row.names(.))
+
+pcoa_res %>%
+  select(Axis.1) %>%
+  mutate(sample = row.names(.)) %>%
+  left_join(cell_df) %>%
+  summarize(cor = list(cor.test(Axis.1, avg_cells_per_ml, method = "spearman"))) %>%
+  pull(cor)
+
+pcoa_res <- ordinate(full_abs_physeq, method = "PCoA", distance = abs_unifrac_dist_0)$vectors %>%as.data.frame()
+
+cell_df <- sample_data(full_abs_physeq) %>%
+  data.frame() %>%
+  select(avg_cells_per_ml) %>%
+  mutate(sample = row.names(.))
+
+pcoa_res %>%
+  select(Axis.1) %>%
+  mutate(sample = row.names(.)) %>%
+  left_join(cell_df) %>%
+  summarize(cor = list(cor.test(Axis.1, avg_cells_per_ml, method = "spearman"))) %>%
+  pull(cor)

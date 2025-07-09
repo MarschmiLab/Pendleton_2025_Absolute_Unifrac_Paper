@@ -22,6 +22,8 @@ geometry: margin=1in
 papersize: a4
 pagestyle: empty
 fontsize: 12 pt 
+bibliography: references.json
+csl: the-isme-journal.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -43,16 +45,18 @@ Schmidt: [marschmi\@cornell.edu](mailto:marschmi@cornell.edu){.email}
 
 # Supplemental Figures
 
-
-
 ![](../figures/Figure_S1.png)
 
 \singlespacing \begingroup
 \fontsize{10}{12}\selectfont
 
-*Figure S1. $U^A$ is always less than $BC^A$ when branch lengths are fully symmetrical.* (A) Symmetrical tree used for simulations as opposed to non-symmetrical tree in Fig. 1A. (B) Distribution of differences between $BC^A$ and $U^A$. As the differences are never negative, $U^A$ is always less than or equal to $BC^A$.
+*Figure S1.* $U^A$ is always less than $BC^A$ when branch lengths are
+fully symmetrical. (A) Symmetrical tree used for simulations as opposed
+to non-symmetrical tree in Fig. 1A. (B) Distribution of differences
+between $BC^A$ and $U^A$. As the differences are never negative, $U^A$
+is always less than or equal to $BC^A$.
 
-\endgroup \doublespacing
+\endgroup
 
 \newpage
 
@@ -61,9 +65,17 @@ Schmidt: [marschmi\@cornell.edu](mailto:marschmi@cornell.edu){.email}
 \singlespacing \begingroup
 \fontsize{10}{12}\selectfont
 
-*Figure S2. Taxonomic composition and absolute abundance of microbial communities from Lake Ontario.* Each bar represents a sample taken from Lake Ontario. The height of the bar represents the absolute abundance (cells/ml) in each sample, filled at the Class level. Samples are clustered via hierarchical clustering (in this case, using UPGMA with $GU^A$, $\alpha$ = 0.05), reflecting both changes in composition (e.g. Cyanobacteriia in Shallow September, Anaerolineae in Deep) and absolute abundance (Deep samples have the fewest cell counts, follwoed by Shallow May and Shallow September).
+*Figure S2. Taxonomic composition and absolute abundance of microbial
+communities from Lake Ontario.* Each bar represents a sample taken from
+Lake Ontario. The height of the bar represents the absolute abundance
+(cells/ml) in each sample, filled at the Class level. Samples are
+clustered via hierarchical clustering (in this case, using UPGMA with
+$GU^A$, $\alpha$ = 0.05), reflecting both changes in composition (e.g.
+Cyanobacteriia in Shallow September, Anaerolineae in Deep) and absolute
+abundance (Deep samples have the fewest cell counts, follwoed by Shallow
+May and Shallow September).
 
-\endgroup \doublespacing
+\endgroup
 
 \newpage
 
@@ -72,6 +84,31 @@ Schmidt: [marschmi\@cornell.edu](mailto:marschmi@cornell.edu){.email}
 \singlespacing \begingroup
 \fontsize{10}{12}\selectfont
 
-*Figure S3. Principal Coordinates Analysis of Lake Ontario samples using $GU^R$ across three $\alpha$ values.*
+*Figure S3. Principal Coordinates Analysis of Lake Ontario samples
+using $GU^R$ across three $\alpha$ values.*
 
-\endgroup \doublespacing
+\endgroup
+
+\newpage
+
+| Package/Software | Version | Citation |
+|------------------|-----------------|-------------------------------------|
+| R | 4.5.0 | @rcoreteamLanguageEnvironmentStatistical2020 |
+| RStudio | 2024.12.1+563 | @rstudioteam2020 |
+| tidyverse | 2.0.0 | @R-tidyverse |
+| phyloseq | 1.52.0 | @R-phyloseq |
+| vegan | 2.7-1 | @R-vegan |
+| GUniFrac\* | 1.8.1 | @chen2012 |
+| ggtree | 3.16.0 | @ggtree2017a |
+| patchwork | 1.3.1 | @R-patchwork |
+| NatParksPalettes | 0.2.0 | @R-NatParksPalettes |
+| ape | 5.8-1 | @R-ape |
+| broom | 1.0.8 | @R-broom |
+| corrr | 0.4.4 | @kuhn2022 |
+| renv | 1.0.5 | @ushey2024 |
+
+*Table S1. Software and packages used in analysis.* Note that GUniFrac was modified slightly to make incorporating absolute abundances more apparent; this version can be installed via Github at https://github.com/MarschmiLab/GUniFrac.
+
+\newpage
+
+#### Supporting References
