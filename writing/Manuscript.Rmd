@@ -1,7 +1,7 @@
 ---
 editor_options: 
   chunk_output_type: console
-bibliography: references.json
+bibliography: references_updated.json
 csl: the-isme-journal.csl
 header-includes:
    - \usepackage{lineno}
@@ -26,18 +26,10 @@ fontsize: 12 pt
 
 \singlespacing
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
-                      options(scipen=999
-                              )
-                      )
-library(phyloseq)
-library(tidyverse)
-```
 
 \newpage
 
-## Interpretation and application of absolute abundance in Weighted UniFrac distance
+## Interpreting UniFrac with Absolute Abundance: A Conceptual and Practical Guide
 
 Augustus Pendleton^1^\* & Marian L. Schmidt^1^\*
 
@@ -54,6 +46,10 @@ Augustus Pendleton^1^\* & Marian L. Schmidt^1^\*
 **Data Availability:** All data and code used to produce the manuscript are available at <https://github.com/MarschmiLab/Pendleton_2025_Absolute_Unifrac_Paper>, in addition to a reproducible `renv` environment. All packages used for analysis are listed in Table S1.
 
 \newpage
+
+    Microbial ecologists routinely compare communities using β-diversity metrics derived from relative abundances. Yet this approach overlooks a critical ecological dimension: microbial load. Across ecosystems, ranging from gut to soil to water, total microbial abundance can vary by orders of magnitude, even among healthy systems. Relative data can misrepresent true shifts in biomass, making taxa appear to change when they have not. High-throughput sequencing produces compositional data, in which each taxon’s abundance is constrained by all others [@gloor2017]. In low-biomass samples, this distortion is especially pronounced, allowing contaminants to appear biologically meaningful when absolute counts are unknown.
+
+    Recognition of these limitations has reshaped how we interpret microbial variation. Quantitative profiling studies show that cell abundance, not only composition, can drive major community differences and alter co-occurrence networks [@vandeputte2017]. To overcome compositional constraints, researchers increasingly use flow cytometry, qPCR, and genomic spike-ins to quantify microbial load [@props2017; @wang2021]. These tools improve detection of functionally relevant taxa and mitigate the compositional constraints imposed by sequencing [@gloor2017; @vandeputte2017]. Most studies using absolute data rely on Bray-Curtis dissimilarity, which does not require normalization to proportions [e.g. @props2017; @rao2021]. Weighted UniFrac remains the dominant phylogenetic β-diversity metric, yet its behavior under absolute abundance frameworks remains unclear. Here, we present *Absolute UniFrac*, a direct extension of Weighted UniFrac that incorporates total abundance, and evaluate its impact across simulated and real-world datasets.
 
     The UniFrac distance was first introduced by Lozupone & Knight (2005), and has since become enormously popular as a measure of $\beta$-diversity within the field of microbial ecology [@lozupone2005]. A benefit of the UniFrac distance is that is considers phylogenetic information when estimating the distance between two communities. After first generating a phylogenetic tree representing species (or amplicon sequence variants, "ASVs") from all samples, the UniFrac distance computes the fraction of branch-lengths which is *shared* between communities, relative to the total branch length represented in the tree. UniFrac can be both unweighted, in which only the incidence of species is considered, or weighted, wherein a branch's contribution is weighted by the proportional abundance of taxa on that branch [@lozupone2007]. The weighted UniFrac is derived: $$
 U^R=\frac{\sum_{i=1}^{n} b_i|p_i^a-p_i^b|}{\sum_{i=1}^{n} b_i(p_i^a+p_i^b)}
@@ -74,13 +70,13 @@ $$
 
 Where $c_i^a$ and $c_i^b$ stands for the absolute counts of species descended from branch $b_i$ in community $a$ and $b$, respectively. We refer to these distances as "Absolute Unifrac" and "Generalized Absolute Unifrac" ($U^A$ and $GU^A$) .
 
-    There is growing recognition that microbial load matters, and methods for discerning absolute abundance like flow cytometry, qPCR, and genomic spike-ins are growing in popularity [@props2017; @wang2021]. These methods allow microbial ecologists to make more ecologically relevant conclusions; they relax the constraints sequencing imposes via compositionality, they capture absolute changes in functionally relevant taxa, and they can uncover dose-dependent effects driven by microbial load rather than composition [@gloor2017; @wang2021]. Previous metabarcoding studies using absolute abundance have generally used Bray-Curtis dissimilarity, which does not assume normalization to proportions [e.g. @props2017; @rao2021]. However, weighted UniFrac distance integrates differences in composition, phylogeny, *and* abundance, and so it is conceptually difficult to predict and interpret the impact of absolute abundance on this metric.
+    To illustrate how $U^A$ behaves, we constructed a simulated community of four ASVs arranged in a simple, balanced phylogeny (Fig. 1A). By varying the absolute abundance of each ASV (1, 10, or 100), we generated 81 samples and 3,240 pairwise comparisons. For each pair, we computed four dissimilarity metrics: Bray-Curtis with relative abundance ($BC^R$), Bray-Curtis with absolute abundance ($BC^A$), Weighted UniFrac with relative abundance ($U^R$), and Weighted UniFrac with absolute abundance ($U^A$). 
 
-    To help clarify how $U^A$ should be interpreted, we began with a simulated community, represented by four ASVs with simple phylogenetic relationships (Fig. 1A). We assigned each ASV an absolute count of 1, 10, or 100, yielding 81 samples and 3240 cross-sample comparisons for which we calculate four distance metrics: Bray-Curtis using relative abundance ($BC^R$), Bray-Curtis using absolute abundance ($BC^A$), weighted Unifrac using relative abundance ($U^R$), and weighted Unifrac using absolute abundance ($U^A$) . We then calculated the difference in distance calculated by each metric compared to $U^A$; the distributions of these differences are shown in Fig. 1B.
+    $U^A$ does not consistently yield higher or lower distances but instead varies depending on how abundance and phylogeny intersect (Fig. 1B). In the improbable scenario that all branch lengths are equal, $U^A$ is always less than or equal to $BC^A$ (Fig. S1), but real-world trees rarely behave this way. These comparisons emphasize that incorporating phylogeny and absolute abundance reshapes distance estimates in nontrivial ways.
 
-    For all metrics, there are scenarios where $U^A$ estimates either greater or lesser distance (Fig. 1B). In the improbable scenario that all branch lengths are equal, $U^A$ will always be equal to or less than $BC^A$ (Fig. S1). We then isolated specific comparisons to illustrate where and when $U^A$ differs from other metrics (Fig. 1C). Scenario one (gold star) indicates the canonical benefit of UniFrac distances: the phylogenetic similarity of ASV_1 and ASV_2 allow $U^R$ and $U^A$ to discern greater similarity between samples than the phylogenetically-oblivious $BC^R$ and $BC^A$. Scenario two (red star) illustrates the importance of absolute abundances: $BC^R$ and $U^R$ perceive two communities as identical despite large differences in absolute abundance.
+    To better understand how these metrics diverge, we examined individual sample pairs (Fig. 1C). Scenario 1 (gold star) illustrates the classic advantage of UniFrac: ASV_1 and ASV_2 are phylogenetically close, so $U^R$ and $U^A$ discern greater similarity between samples than $BC^R$ and $BC^A$, which ignore phylogenetic structure. Scenario 2 (red star) highlights a limitation of relative metrics: two samples with identical relative composition but a 100-fold difference in biomass appear identical to $BC^R$ and $U^R$, but not to their absolute counterparts. In Scenario 3 (green star), incorporating absolute abundance decreases dissimilarity. $BC^A$ and $U^A$ are lower than their relative counterparts because half the community is identical in absolute terms, despite proportional differences. In contrast, Scenario 4 (blue star) shows that $U^A$ can increase dissimilarity relative to $BC^A$ when abundance differences occur on long branches, amplifying phylogenetic dissimilarity. 
 
-    At times, the incorporation of absolute abundance can also *decrease* the perceived dissimilarity (green star). Here, $BC^A$ and $U^A$ are both smaller than their relative counterparts, as half of the community is perceived as identical, despite differences in their relative abundances due to proportionality. Finally, $U^A$ is highly correlated with $BC^A$ (Pearsons $r$ = 0.82, $p$ \< 0.0001) compared to $BC^R$ ($r$ = 0.41) and $U^R$ ($r$ = 0.55), and usually less than $BC^A$ due to the effect described in Scenario one. However, there are scenarios in which $U^A$ is greater than $BC^A$ (blue star). Because the absolute differences are observed on longer branches relative to the rest of the tree, $U^A$ discerns greater distance than $BC^A$.
+    Across all 3,240 pairwise comparisons, $U^A$ is usually smaller than and strongly correlated with $BC^A$ (Pearsons $r$ = 0.82, $p$ \< 0.0001) than with $BC^R$ ($r$ = 0.41) and $U^R$ ($r$ = 0.55), reflecting the effect illustrated in Scenario 1. However, exceptions like Scenario 4 show that $U^A$ can also yield larger distances than $BC^A$ when abundance differences occur on long branches. These scenarios demonstrate that $U^A$ integrates ecological realism by capturing differences in both lineage identity and total biomass, offering a nuanced view of community structure grounded in biological context, while remaining sensitive to long branches.
 
 \begingroup \centering
 
@@ -110,7 +106,7 @@ Where $c_i^a$ and $c_i^b$ stands for the absolute counts of species descended fr
 \endgroup
 \begingroup \fontsize{10}{12}\selectfont
 
-*Figure 2. Impact of absolute abundance on separating freshwater microbial communities* (A) Samples represent microbial communities from Lake Ontario taken at different times (May and September) and at different depths (Shallow and Deep), as originally described in Pendleton et al. (2025). We used Principal Coordinates Analysis (PCoA) to ordinate samples based on the $GU^A$ at $\alpha$ values of 0.0, 0.5, and 1.0. The proportion of variance assigned to each axis is provided in brackets. Note that the x-axis is reversed in the first panel, to provide visual symmetry across ordinations. We then used PERMANOVAs to quantify the variance ($R^2$) (B) and statistical power ($F$-statistic) (C) our three depth-month groups can explain across different distance metrics ($GU^R$, $GU^A$, $BC^R$ and $BC^A$) and different alpha values. (D) Correlations between different distance metrics and differences in over-all cell abundances as assessed by a Mantel test.
+*Figure 2. Impact of absolute abundance on separating freshwater microbial communities* (A) Samples represent microbial communities from Lake Ontario taken at different times (May and September) and at different depths (Shallow and Deep), as originally described in [@pendleton]. We used Principal Coordinates Analysis (PCoA) to ordinate samples based on the $GU^A$ at $\alpha$ values of 0.0, 0.5, and 1.0. The proportion of variance assigned to each axis is provided in brackets. Note that the x-axis is reversed in the first panel, to provide visual symmetry across ordinations. We then used PERMANOVAs to quantify the variance ($R^2$) (B) and statistical power ($F$-statistic) (C) our three depth-month groups can explain across different distance metrics ($GU^R$, $GU^A$, $BC^R$ and $BC^A$) and different alpha values. (D) Correlations between different distance metrics and differences in over-all cell abundances as assessed by a Mantel test.
 
 \endgroup
 
