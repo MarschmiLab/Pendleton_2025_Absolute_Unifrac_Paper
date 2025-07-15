@@ -30,7 +30,8 @@ csl: the-isme-journal.csl
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, options(scipen=999))
 ```
 
-## Interpretation and application of absolute abundance in Weighted UniFrac distance
+# Supporting Information
+## Interpreting UniFrac with Absolute Abundance: A Conceptual and Practical Guide
 
 Augustus Pendleton^1^\* & Marian L. Schmidt^1^\*
 
@@ -43,7 +44,7 @@ Schmidt: [marschmi\@cornell.edu](mailto:marschmi@cornell.edu){.email}
 
 \newpage
 
-# Supplemental Figures
+## Supplemental Figures
 
 ![](../figures/Figure_S1.png)
 
