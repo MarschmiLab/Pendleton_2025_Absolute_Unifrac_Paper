@@ -1,1318 +1,1364 @@
 [
-  {
-    "DOI": "10.1128/AEM.71.12.8228-8235.2005",
-    "URL": "https://journals.asm.org/doi/full/10.1128/aem.71.12.8228-8235.2005",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.1128/AEM.71.12.8228-8235.2005",
+        "URL": "https://journals.asm.org/doi/full/10.1128/aem.71.12.8228-8235.2005",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Lozupone",
+                "given": "Catherine"
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "Applied and Environmental Microbiology",
+        "id": "lozupone2005",
+        "issue": "12",
+        "issued": {
+            "date-parts": [
+                [
+                    2005,
+                    12
+                ]
+            ]
+        },
+        "key": "VYUIMKS7",
+        "libraryid": "3",
+        "page": "8228-8235",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "UniFrac: a New Phylogenetic Method for Comparing Microbial Communities",
+        "title-short": "UniFrac",
+        "type": "article-journal",
+        "volume": "71"
     },
-    "author": [
-      {
-        "family": "Lozupone",
-        "given": "Catherine"
-      },
-      {
-        "family": "Knight",
-        "given": "Rob"
-      }
-    ],
-    "container-title": "Applied and Environmental Microbiology",
-    "id": "lozupone2005",
-    "issue": "12",
-    "issued": {
-      "date-parts": [
-        [
-          2005,
-          12
-        ]
-      ]
+    {
+        "DOI": "10.1128/AEM.01996-06",
+        "URL": "https://journals.asm.org/doi/10.1128/aem.01996-06",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Lozupone",
+                "given": "Catherine A."
+            },
+            {
+                "family": "Hamady",
+                "given": "Micah"
+            },
+            {
+                "family": "Kelley",
+                "given": "Scott T."
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "Applied and Environmental Microbiology",
+        "id": "lozupone2007",
+        "issue": "5",
+        "issued": {
+            "date-parts": [
+                [
+                    2007,
+                    3
+                ]
+            ]
+        },
+        "key": "BA3Y8GL7",
+        "libraryid": "3",
+        "page": "1576-1585",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "Quantitative and Qualitative β Diversity Measures Lead to Different Insights into Factors That Structure Microbial Communities",
+        "type": "article-journal",
+        "volume": "73"
     },
-    "key": "VYUIMKS7",
-    "libraryid": "3",
-    "page": "8228-8235",
-    "providerkey": "Zotero",
-    "publisher": "American",
-    "source": "journals.asm.org (Atypon)",
-    "title": "UniFrac: a New Phylogenetic Method for Comparing Microbial Communities",
-    "title-short": "UniFrac",
-    "type": "article-journal",
-    "volume": "71"
-  },
-  {
-    "DOI": "10.1128/AEM.01996-06",
-    "URL": "https://journals.asm.org/doi/10.1128/aem.01996-06",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.1093/bioinformatics/bts342",
+        "ISSN": "1367-4803",
+        "URL": "https://doi.org/10.1093/bioinformatics/bts342",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Chen",
+                "given": "Jun"
+            },
+            {
+                "family": "Bittinger",
+                "given": "Kyle"
+            },
+            {
+                "family": "Charlson",
+                "given": "Emily S."
+            },
+            {
+                "family": "Hoffmann",
+                "given": "Christian"
+            },
+            {
+                "family": "Lewis",
+                "given": "James"
+            },
+            {
+                "family": "Wu",
+                "given": "Gary D."
+            },
+            {
+                "family": "Collman",
+                "given": "Ronald G."
+            },
+            {
+                "family": "Bushman",
+                "given": "Frederic D."
+            },
+            {
+                "family": "Li",
+                "given": "Hongzhe"
+            }
+        ],
+        "container-title": "Bioinformatics",
+        "container-title-short": "Bioinformatics",
+        "id": "chen2012",
+        "issue": "16",
+        "issued": {
+            "date-parts": [
+                [
+                    2012,
+                    8,
+                    15
+                ]
+            ]
+        },
+        "key": "L2RJGSQU",
+        "libraryid": "3",
+        "page": "2106-2113",
+        "providerkey": "Zotero",
+        "source": "Silverchair",
+        "title": "Associating microbiome composition with environmental covariates using generalized UniFrac distances",
+        "type": "article-journal",
+        "volume": "28"
     },
-    "author": [
-      {
-        "family": "Lozupone",
-        "given": "Catherine A."
-      },
-      {
-        "family": "Hamady",
-        "given": "Micah"
-      },
-      {
-        "family": "Kelley",
-        "given": "Scott T."
-      },
-      {
-        "family": "Knight",
-        "given": "Rob"
-      }
-    ],
-    "container-title": "Applied and Environmental Microbiology",
-    "id": "lozupone2007",
-    "issue": "5",
-    "issued": {
-      "date-parts": [
-        [
-          2007,
-          3
-        ]
-      ]
+    {
+        "DOI": "10.1038/ismej.2016.117",
+        "ISSN": "1751-7370",
+        "URL": "https://www.nature.com/articles/ismej2016117",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Props",
+                "given": "Ruben"
+            },
+            {
+                "family": "Kerckhof",
+                "given": "Frederiek-Maarten"
+            },
+            {
+                "family": "Rubbens",
+                "given": "Peter"
+            },
+            {
+                "family": "De Vrieze",
+                "given": "Jo"
+            },
+            {
+                "family": "Hernandez Sanabria",
+                "given": "Emma"
+            },
+            {
+                "family": "Waegeman",
+                "given": "Willem"
+            },
+            {
+                "family": "Monsieurs",
+                "given": "Pieter"
+            },
+            {
+                "family": "Hammes",
+                "given": "Frederik"
+            },
+            {
+                "family": "Boon",
+                "given": "Nico"
+            }
+        ],
+        "container-title": "The ISME Journal",
+        "container-title-short": "ISME J",
+        "id": "props2017",
+        "issue": "2",
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    2
+                ]
+            ]
+        },
+        "key": "JAZBIWBQ",
+        "language": "en",
+        "libraryid": "3",
+        "page": "584-587",
+        "providerkey": "Zotero",
+        "publisher": "Nature",
+        "rights": "2017 International Society for Microbial Ecology",
+        "source": "www.nature.com",
+        "title": "Absolute quantification of microbial taxon abundances",
+        "type": "article-journal",
+        "volume": "11"
     },
-    "key": "BA3Y8GL7",
-    "libraryid": "3",
-    "page": "1576-1585",
-    "providerkey": "Zotero",
-    "publisher": "American",
-    "source": "journals.asm.org (Atypon)",
-    "title": "Quantitative and Qualitative \u03b2 Diversity Measures Lead to Different Insights into Factors That Structure Microbial Communities",
-    "type": "article-journal",
-    "volume": "73"
-  },
-  {
-    "DOI": "10.1093/bioinformatics/bts342",
-    "ISSN": "1367-4803",
-    "URL": "https://doi.org/10.1093/bioinformatics/bts342",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.3390/microorganisms9091797",
+        "ISSN": "2076-2607",
+        "URL": "https://www.mdpi.com/2076-2607/9/9/1797",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Wang",
+                "given": "Xiaofan"
+            },
+            {
+                "family": "Howe",
+                "given": "Samantha"
+            },
+            {
+                "family": "Deng",
+                "given": "Feilong"
+            },
+            {
+                "family": "Zhao",
+                "given": "Jiangchao"
+            }
+        ],
+        "container-title": "Microorganisms",
+        "id": "wang2021",
+        "issue": "9",
+        "issued": {
+            "date-parts": [
+                [
+                    2021,
+                    9
+                ]
+            ]
+        },
+        "key": "WYESXR85",
+        "language": "en",
+        "libraryid": "3",
+        "number": "9",
+        "page": "1797",
+        "providerkey": "Zotero",
+        "publisher": "Multidisciplinary",
+        "rights": "http://creativecommons.org/licenses/by/3.0/",
+        "source": "www.mdpi.com",
+        "title": "Current Applications of Absolute Bacterial Quantification in Microbiome Studies and Decision-Making Regarding Different Biological Questions",
+        "type": "article-journal",
+        "volume": "9"
     },
-    "author": [
-      {
-        "family": "Chen",
-        "given": "Jun"
-      },
-      {
-        "family": "Bittinger",
-        "given": "Kyle"
-      },
-      {
-        "family": "Charlson",
-        "given": "Emily S."
-      },
-      {
-        "family": "Hoffmann",
-        "given": "Christian"
-      },
-      {
-        "family": "Lewis",
-        "given": "James"
-      },
-      {
-        "family": "Wu",
-        "given": "Gary D."
-      },
-      {
-        "family": "Collman",
-        "given": "Ronald G."
-      },
-      {
-        "family": "Bushman",
-        "given": "Frederic D."
-      },
-      {
-        "family": "Li",
-        "given": "Hongzhe"
-      }
-    ],
-    "container-title": "Bioinformatics",
-    "container-title-short": "Bioinformatics",
-    "id": "chen2012",
-    "issue": "16",
-    "issued": {
-      "date-parts": [
-        [
-          2012,
-          8,
-          15
-        ]
-      ]
+    {
+        "2692-8205\npages": "2025.01.17.633667",
+        "DOI": "10.1101/2025.01.17.633667",
+        "ISSN": "2692-8205,",
+        "URL": "https://www.biorxiv.org/content/10.1101/2025.01.17.633667v2",
+        "abstractnote": "The Laurentian Great Lakes hold 21% of the world’s surface freshwater and supply drinking water to nearly 40 million people. Here we provide the first evidence that winddriven upwelling fundamentally restructures microbial communities in Lake Ontario, with its effects extended and redistributed by an internal Kelvin wave propagating along the shoreline. While thermal stratification is known to organize microbial communities by depth and season, we show that this vertical structure arises from contrasting mechanisms: homogenizing selection in surface waters and dispersal limitation with drift in the hypolimnion. Kelvin wave-driven upwelling disrupts this scaffold, displacing rare taxa into the surface and creating novel coastal communities enriched in methane oxidation and sulfur metabolism genes—functional traits absent elsewhere in the lake. We observed a Kelvin wave lasting over two weeks and propagating eastward at ∼60 km day <sup>1</sup>. Given the ∼10–12 day recurrence of wind events (1), at any time, at least one segment of Lake Ontario’s coastline is typically experiencing upwelling—producing pulses frequent and sustained enough to remodel microbial communities on ecologically relevant timescales. Recurrent upwellings, sustained and redistributed by Kelvin waves, act as a biological disturbance that overrides stratification, mobilizes rare functional potential, and assembles novel coastal microbial communities. As climate change lengthens stratified periods and reshapes large-lake circulation, understanding how physical forcing governs microbial assembly is essential for forecasting the biogeochemical future of Earth’s great lakes—especially in shoreline zones where ecological shifts directly affect human communities. Significance Statement The Laurentian Great Lakes hold 21% of the world’s surface freshwater and nearly 85% of North America’s—supplying drinking water to over 40 million people. Yet the microbial life that underpins their ecological function remains poorly understood. We show that wind-driven upwelling, followed by internal Kelvin waves that redistribute and sustain upwelling, acts as a recurring physical disturbance that overrides thermal stratification, redistributing rare microbes and assembling novel shoreline communities. These shifts bring unexpected functional changes, including enrichment of methane oxidation and sulfur metabolism genes, where people most interact with lake water. As climate change reshapes large lake circulation and intensifies thermal layering, understanding how microbial ecosystems respond is essential for forecasting transformations in water quality, ecosystem function, and biogeochemical resilience.",
+        "accessdate": "2025-07-08 15:30:36",
+        "author": [
+            {
+                "family": "Pendleton",
+                "given": "Augustus"
+            },
+            {
+                "family": "Wells",
+                "given": "Mathew"
+            },
+            {
+                "family": "Schmidt",
+                "given": "Marian L."
+            }
+        ],
+        "date": "2025-07-03 2025-07-03",
+        "extra": "ISSN: 2692-8205, 2692-8205 Pages: 2025.01.17.633667 Section: New Results",
+        "id": "pendleton",
+        "key": "XECMGR9Y",
+        "language": "en",
+        "librarycatalog": "bioRxiv",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "repository": "bioRxiv",
+        "rights": "© 2025, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "section": "New",
+        "title": "Upwelling periodically disturbs the ecological assembly of microbial communities in the Laurentian Great Lakes",
+        "type": "article"
     },
-    "key": "L2RJGSQU",
-    "libraryid": "3",
-    "page": "2106-2113",
-    "providerkey": "Zotero",
-    "source": "Silverchair",
-    "title": "Associating microbiome composition with environmental covariates using generalized UniFrac distances",
-    "type": "article-journal",
-    "volume": "28"
-  },
-  {
-    "DOI": "10.1038/ismej.2016.117",
-    "ISSN": "1751-7370",
-    "URL": "https://www.nature.com/articles/ismej2016117",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.1128/msystems.00166-16",
+        "URL": "https://journals.asm.org/doi/full/10.1128/msystems.00166-16",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Morton",
+                "given": "James T."
+            },
+            {
+                "family": "Toran",
+                "given": "Liam"
+            },
+            {
+                "family": "Edlund",
+                "given": "Anna"
+            },
+            {
+                "family": "Metcalf",
+                "given": "Jessica L."
+            },
+            {
+                "family": "Lauber",
+                "given": "Christian"
+            },
+            {
+                "family": "Knight",
+                "given": "Rob"
+            }
+        ],
+        "container-title": "mSystems",
+        "id": "morton2017",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    2,
+                    21
+                ]
+            ]
+        },
+        "key": "93267LKJ",
+        "libraryid": "3",
+        "page": "10.1128/msystems.00166-16",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "Uncovering the Horseshoe Effect in Microbial Analyses",
+        "type": "article-journal",
+        "volume": "2"
     },
-    "author": [
-      {
-        "family": "Props",
-        "given": "Ruben"
-      },
-      {
-        "family": "Kerckhof",
-        "given": "Frederiek-Maarten"
-      },
-      {
-        "family": "Rubbens",
-        "given": "Peter"
-      },
-      {
-        "family": "De Vrieze",
-        "given": "Jo"
-      },
-      {
-        "family": "Hernandez Sanabria",
-        "given": "Emma"
-      },
-      {
-        "family": "Waegeman",
-        "given": "Willem"
-      },
-      {
-        "family": "Monsieurs",
-        "given": "Pieter"
-      },
-      {
-        "family": "Hammes",
-        "given": "Frederik"
-      },
-      {
-        "family": "Boon",
-        "given": "Nico"
-      }
-    ],
-    "container-title": "The ISME Journal",
-    "container-title-short": "ISME J",
-    "id": "props2017",
-    "issue": "2",
-    "issued": {
-      "date-parts": [
-        [
-          2017,
-          2
-        ]
-      ]
+    {
+        "DOI": "10.1038/s41586-021-03241-8",
+        "ISSN": "1476-4687",
+        "URL": "https://www.nature.com/articles/s41586-021-03241-8",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Rao",
+                "given": "Chitong"
+            },
+            {
+                "family": "Coyte",
+                "given": "Katharine Z."
+            },
+            {
+                "family": "Bainter",
+                "given": "Wayne"
+            },
+            {
+                "family": "Geha",
+                "given": "Raif S."
+            },
+            {
+                "family": "Martin",
+                "given": "Camilia R."
+            },
+            {
+                "family": "Rakoff-Nahoum",
+                "given": "Seth"
+            }
+        ],
+        "container-title": "Nature",
+        "id": "rao2021",
+        "issue": "7851",
+        "issued": {
+            "date-parts": [
+                [
+                    2021,
+                    3
+                ]
+            ]
+        },
+        "key": "2JNT9XAC",
+        "language": "en",
+        "libraryid": "3",
+        "page": "633-638",
+        "providerkey": "Zotero",
+        "publisher": "Nature",
+        "rights": "2021 The Author(s), under exclusive licence to Springer Nature Limited",
+        "source": "www.nature.com",
+        "title": "Multi-kingdom ecological drivers of microbiota assembly in preterm infants",
+        "type": "article-journal",
+        "volume": "591"
     },
-    "key": "JAZBIWBQ",
-    "language": "en",
-    "libraryid": "3",
-    "page": "584-587",
-    "providerkey": "Zotero",
-    "publisher": "Nature",
-    "rights": "2017 International Society for Microbial Ecology",
-    "source": "www.nature.com",
-    "title": "Absolute quantification of microbial taxon abundances",
-    "type": "article-journal",
-    "volume": "11"
-  },
-  {
-    "DOI": "10.3390/microorganisms9091797",
-    "ISSN": "2076-2607",
-    "URL": "https://www.mdpi.com/2076-2607/9/9/1797",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.1038/ismej.2009.118",
+        "ISSN": "1751-7362",
+        "URL": "https://doi.org/10.1038/ismej.2009.118",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Shapiro",
+                "given": "Orr H"
+            },
+            {
+                "family": "Kushmaro",
+                "given": "Ariel"
+            },
+            {
+                "family": "Brenner",
+                "given": "Asher"
+            }
+        ],
+        "container-title": "The ISME Journal",
+        "container-title-short": "The ISME Journal",
+        "id": "shapiro2010",
+        "issue": "3",
+        "issued": {
+            "date-parts": [
+                [
+                    2010,
+                    3,
+                    1
+                ]
+            ]
+        },
+        "key": "T76SVMUI",
+        "libraryid": "3",
+        "page": "327-336",
+        "providerkey": "Zotero",
+        "source": "Silverchair",
+        "title": "Bacteriophage predation regulates microbial abundance and diversity in a full-scale bioreactor treating industrial wastewater",
+        "type": "article-journal",
+        "volume": "4"
     },
-    "author": [
-      {
-        "family": "Wang",
-        "given": "Xiaofan"
-      },
-      {
-        "family": "Howe",
-        "given": "Samantha"
-      },
-      {
-        "family": "Deng",
-        "given": "Feilong"
-      },
-      {
-        "family": "Zhao",
-        "given": "Jiangchao"
-      }
-    ],
-    "container-title": "Microorganisms",
-    "id": "wang2021",
-    "issue": "9",
-    "issued": {
-      "date-parts": [
-        [
-          2021,
-          9
-        ]
-      ]
+    {
+        "DOI": "10.3389/fmicb.2025.1481197",
+        "ISSN": "1664-302X",
+        "URL": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2025.1481197/full",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Wagner",
+                "given": "Stefanie"
+            },
+            {
+                "family": "Weber",
+                "given": "Michael"
+            },
+            {
+                "family": "Paul",
+                "given": "Lena-Sophie"
+            },
+            {
+                "family": "Grümpel-Schlüter",
+                "given": "Angelika"
+            },
+            {
+                "family": "Kluess",
+                "given": "Jeannette"
+            },
+            {
+                "family": "Neuhaus",
+                "given": "Klaus"
+            },
+            {
+                "family": "Fuchs",
+                "given": "Thilo M."
+            }
+        ],
+        "container-title": "Frontiers in Microbiology",
+        "container-title-short": "Front. Microbiol.",
+        "id": "wagner2025",
+        "issued": {
+            "date-parts": [
+                [
+                    2025,
+                    3,
+                    24
+                ]
+            ]
+        },
+        "key": "RCJKTQVA",
+        "language": "English",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "publisher": "Frontiers",
+        "source": "Frontiers",
+        "title": "Absolute abundance calculation enhances the significance of microbiome data in antibiotic treatment studies",
+        "type": "article-journal",
+        "volume": "16"
     },
-    "key": "WYESXR85",
-    "language": "en",
-    "libraryid": "3",
-    "number": "9",
-    "page": "1797",
-    "providerkey": "Zotero",
-    "publisher": "Multidisciplinary",
-    "rights": "http://creativecommons.org/licenses/by/3.0/",
-    "source": "www.mdpi.com",
-    "title": "Current Applications of Absolute Bacterial Quantification in Microbiome Studies and Decision-Making Regarding Different Biological Questions",
-    "type": "article-journal",
-    "volume": "9"
-  },
-  {
-    "2692-8205\npages": "2025.01.17.633667",
-    "DOI": "10.1101/2025.01.17.633667",
-    "ISSN": "2692-8205,",
-    "URL": "https://www.biorxiv.org/content/10.1101/2025.01.17.633667v2",
-    "abstractnote": "The Laurentian Great Lakes hold 21% of the world\u2019s surface freshwater and supply drinking water to nearly 40 million people. Here we provide the first evidence that winddriven upwelling fundamentally restructures microbial communities in Lake Ontario, with its effects extended and redistributed by an internal Kelvin wave propagating along the shoreline. While thermal stratification is known to organize microbial communities by depth and season, we show that this vertical structure arises from contrasting mechanisms: homogenizing selection in surface waters and dispersal limitation with drift in the hypolimnion. Kelvin wave-driven upwelling disrupts this scaffold, displacing rare taxa into the surface and creating novel coastal communities enriched in methane oxidation and sulfur metabolism genes\u2014functional traits absent elsewhere in the lake. We observed a Kelvin wave lasting over two weeks and propagating eastward at \u223c60 km day <sup>1</sup>. Given the \u223c10\u201312 day recurrence of wind events (1), at any time, at least one segment of Lake Ontario\u2019s coastline is typically experiencing upwelling\u2014producing pulses frequent and sustained enough to remodel microbial communities on ecologically relevant timescales. Recurrent upwellings, sustained and redistributed by Kelvin waves, act as a biological disturbance that overrides stratification, mobilizes rare functional potential, and assembles novel coastal microbial communities. As climate change lengthens stratified periods and reshapes large-lake circulation, understanding how physical forcing governs microbial assembly is essential for forecasting the biogeochemical future of Earth\u2019s great lakes\u2014especially in shoreline zones where ecological shifts directly affect human communities. Significance Statement The Laurentian Great Lakes hold 21% of the world\u2019s surface freshwater and nearly 85% of North America\u2019s\u2014supplying drinking water to over 40 million people. Yet the microbial life that underpins their ecological function remains poorly understood. We show that wind-driven upwelling, followed by internal Kelvin waves that redistribute and sustain upwelling, acts as a recurring physical disturbance that overrides thermal stratification, redistributing rare microbes and assembling novel shoreline communities. These shifts bring unexpected functional changes, including enrichment of methane oxidation and sulfur metabolism genes, where people most interact with lake water. As climate change reshapes large lake circulation and intensifies thermal layering, understanding how microbial ecosystems respond is essential for forecasting transformations in water quality, ecosystem function, and biogeochemical resilience.",
-    "accessdate": "2025-07-08 15:30:36",
-    "author": [
-      {
-        "family": "Pendleton",
-        "given": "Augustus"
-      },
-      {
-        "family": "Wells",
-        "given": "Mathew"
-      },
-      {
-        "family": "Schmidt",
-        "given": "Marian L."
-      }
-    ],
-    "date": "2025-07-03 2025-07-03",
-    "extra": "ISSN: 2692-8205, 2692-8205 Pages: 2025.01.17.633667 Section: New Results",
-    "id": "pendleton",
-    "key": "XECMGR9Y",
-    "language": "en",
-    "librarycatalog": "bioRxiv",
-    "libraryid": "3",
-    "providerkey": "Zotero",
-    "repository": "bioRxiv",
-    "rights": "\u00a9 2025, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/",
-    "section": "New",
-    "title": "Upwelling periodically disturbs the ecological assembly of microbial communities in the Laurentian Great Lakes",
-    "type": "article"
-  },
-  {
-    "DOI": "10.1128/msystems.00166-16",
-    "URL": "https://journals.asm.org/doi/full/10.1128/msystems.00166-16",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.3389/fmicb.2021.796025",
+        "ISSN": "1664-302X",
+        "URL": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2021.796025/full",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Kers",
+                "given": "Jannigje Gerdien"
+            },
+            {
+                "family": "Saccenti",
+                "given": "Edoardo"
+            }
+        ],
+        "container-title": "Frontiers in Microbiology",
+        "container-title-short": "Front. Microbiol.",
+        "id": "kers2022",
+        "issued": {
+            "date-parts": [
+                [
+                    2022,
+                    3,
+                    3
+                ]
+            ]
+        },
+        "key": "LHSHIHDL",
+        "language": "English",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "publisher": "Frontiers",
+        "source": "Frontiers",
+        "title": "The Power of Microbiome Studies: Some Considerations on Which Alpha and Beta Metrics to Use and How to Report Results",
+        "title-short": "The Power of Microbiome Studies",
+        "type": "article-journal",
+        "volume": "12"
     },
-    "author": [
-      {
-        "family": "Morton",
-        "given": "James T."
-      },
-      {
-        "family": "Toran",
-        "given": "Liam"
-      },
-      {
-        "family": "Edlund",
-        "given": "Anna"
-      },
-      {
-        "family": "Metcalf",
-        "given": "Jessica L."
-      },
-      {
-        "family": "Lauber",
-        "given": "Christian"
-      },
-      {
-        "family": "Knight",
-        "given": "Rob"
-      }
-    ],
-    "container-title": "mSystems",
-    "id": "morton2017",
-    "issue": "1",
-    "issued": {
-      "date-parts": [
-        [
-          2017,
-          2,
-          21
-        ]
-      ]
+    {
+        "DOI": "10.3389/fmicb.2017.02224",
+        "ISSN": "1664-302X",
+        "PMCID": "PMC5695134",
+        "PMID": "29187837",
+        "URL": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5695134/",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Gloor",
+                "given": "Gregory B."
+            },
+            {
+                "family": "Macklaim",
+                "given": "Jean M."
+            },
+            {
+                "family": "Pawlowsky-Glahn",
+                "given": "Vera"
+            },
+            {
+                "family": "Egozcue",
+                "given": "Juan J."
+            }
+        ],
+        "container-title": "Frontiers in Microbiology",
+        "container-title-short": "Front Microbiol",
+        "id": "gloor2017",
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    11,
+                    15
+                ]
+            ]
+        },
+        "key": "97IX3MNG",
+        "libraryid": "3",
+        "page": "2224",
+        "providerkey": "Zotero",
+        "source": "PubMed Central",
+        "title": "Microbiome Datasets Are Compositional: And This Is Not Optional",
+        "title-short": "Microbiome Datasets Are Compositional",
+        "type": "article-journal",
+        "volume": "8"
     },
-    "key": "93267LKJ",
-    "libraryid": "3",
-    "page": "10.1128/msystems.00166-16",
-    "providerkey": "Zotero",
-    "publisher": "American",
-    "source": "journals.asm.org (Atypon)",
-    "title": "Uncovering the Horseshoe Effect in Microbial Analyses",
-    "type": "article-journal",
-    "volume": "2"
-  },
-  {
-    "DOI": "10.1038/s41586-021-03241-8",
-    "ISSN": "1476-4687",
-    "URL": "https://www.nature.com/articles/s41586-021-03241-8",
-    "accessed": {
-      "date-parts": []
+    {
+        "URL": "https://CRAN.R-project.org/package=tidyverse",
+        "author": [
+            {
+                "family": "Wickham",
+                "given": "Hadley"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-tidyverse",
+        "issued": {
+            "date-parts": [
+                [
+                    2023
+                ]
+            ]
+        },
+        "key": "SJCWAI4E",
+        "libraryid": "3",
+        "note": "Citation Key: R-tidyverse",
+        "providerkey": "Zotero",
+        "title": "tidyverse: Easily install and load the tidyverse",
+        "type": "report"
     },
-    "author": [
-      {
-        "family": "Rao",
-        "given": "Chitong"
-      },
-      {
-        "family": "Coyte",
-        "given": "Katharine Z."
-      },
-      {
-        "family": "Bainter",
-        "given": "Wayne"
-      },
-      {
-        "family": "Geha",
-        "given": "Raif S."
-      },
-      {
-        "family": "Martin",
-        "given": "Camilia R."
-      },
-      {
-        "family": "Rakoff-Nahoum",
-        "given": "Seth"
-      }
-    ],
-    "container-title": "Nature",
-    "id": "rao2021",
-    "issue": "7851",
-    "issued": {
-      "date-parts": [
-        [
-          2021,
-          3
-        ]
-      ]
+    {
+        "URL": "http://dx.plos.org/10.1371/journal.pone.0061217",
+        "author": [
+            {
+                "family": "McMurdie",
+                "given": "Paul J."
+            },
+            {
+                "family": "Holmes",
+                "given": "Susan"
+            },
+            {
+                "family": "Jordan",
+                "given": "with contributions from Gregory"
+            },
+            {
+                "family": "Chamberlain",
+                "given": "Scott"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-phyloseq",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "5NGT6GGK",
+        "libraryid": "3",
+        "note": "Citation Key: R-phyloseq",
+        "providerkey": "Zotero",
+        "title": "phyloseq: Handling and analysis of high-throughput microbiome census data",
+        "type": "report"
     },
-    "key": "2JNT9XAC",
-    "language": "en",
-    "libraryid": "3",
-    "page": "633-638",
-    "providerkey": "Zotero",
-    "publisher": "Nature",
-    "rights": "2021 The Author(s), under exclusive licence to Springer Nature Limited",
-    "source": "www.nature.com",
-    "title": "Multi-kingdom ecological drivers of microbiota assembly in preterm infants",
-    "type": "article-journal",
-    "volume": "591"
-  },
-  {
-    "DOI": "10.1038/ismej.2009.118",
-    "ISSN": "1751-7362",
-    "URL": "https://doi.org/10.1038/ismej.2009.118",
-    "accessed": {
-      "date-parts": []
+    {
+        "URL": "https://github.com/vegandevs/vegan",
+        "author": [
+            {
+                "family": "Oksanen",
+                "given": "Jari"
+            },
+            {
+                "family": "Simpson",
+                "given": "Gavin L."
+            },
+            {
+                "family": "Blanchet",
+                "given": "F. Guillaume"
+            },
+            {
+                "family": "Kindt",
+                "given": "Roeland"
+            },
+            {
+                "family": "Legendre",
+                "given": "Pierre"
+            },
+            {
+                "family": "Minchin",
+                "given": "Peter R."
+            },
+            {
+                "family": "O’Hara",
+                "given": "R.B."
+            },
+            {
+                "family": "Solymos",
+                "given": "Peter"
+            },
+            {
+                "family": "Stevens",
+                "given": "M. Henry H."
+            },
+            {
+                "family": "Szoecs",
+                "given": "Eduard"
+            },
+            {
+                "family": "Wagner",
+                "given": "Helene"
+            },
+            {
+                "family": "Barbour",
+                "given": "Matt"
+            },
+            {
+                "family": "Bedward",
+                "given": "Michael"
+            },
+            {
+                "family": "Bolker",
+                "given": "Ben"
+            },
+            {
+                "family": "Borcard",
+                "given": "Daniel"
+            },
+            {
+                "family": "Carvalho",
+                "given": "Gustavo"
+            },
+            {
+                "family": "Chirico",
+                "given": "Michael"
+            },
+            {
+                "family": "De Caceres",
+                "given": "Miquel"
+            },
+            {
+                "family": "Durand",
+                "given": "Sebastien"
+            },
+            {
+                "family": "Evangelista",
+                "given": "Heloisa Beatriz Antoniazi"
+            },
+            {
+                "family": "FitzJohn",
+                "given": "Rich"
+            },
+            {
+                "family": "Friendly",
+                "given": "Michael"
+            },
+            {
+                "family": "Furneaux",
+                "given": "Brendan"
+            },
+            {
+                "family": "Hannigan",
+                "given": "Geoffrey"
+            },
+            {
+                "family": "Hill",
+                "given": "Mark O."
+            },
+            {
+                "family": "Lahti",
+                "given": "Leo"
+            },
+            {
+                "family": "McGlinn",
+                "given": "Dan"
+            },
+            {
+                "family": "Ouellette",
+                "given": "Marie-Helene"
+            },
+            {
+                "family": "Ribeiro Cunha",
+                "given": "Eduardo"
+            },
+            {
+                "family": "Smith",
+                "given": "Tyler"
+            },
+            {
+                "family": "Stier",
+                "given": "Adrian"
+            },
+            {
+                "family": "Ter Braak",
+                "given": "Cajo J.F."
+            },
+            {
+                "family": "Weedon",
+                "given": "James"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-vegan",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "SDB7WLXE",
+        "libraryid": "3",
+        "note": "Citation Key: R-vegan",
+        "providerkey": "Zotero",
+        "title": "vegan: Community ecology package",
+        "type": "report"
     },
-    "author": [
-      {
-        "family": "Shapiro",
-        "given": "Orr H"
-      },
-      {
-        "family": "Kushmaro",
-        "given": "Ariel"
-      },
-      {
-        "family": "Brenner",
-        "given": "Asher"
-      }
-    ],
-    "container-title": "The ISME Journal",
-    "container-title-short": "The ISME Journal",
-    "id": "shapiro2010",
-    "issue": "3",
-    "issued": {
-      "date-parts": [
-        [
-          2010,
-          3,
-          1
-        ]
-      ]
+    {
+        "DOI": "10.1111/2041-210X.12628",
+        "URL": "http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12628/abstract",
+        "author": [
+            {
+                "family": "Yu",
+                "given": "Guangchuang"
+            },
+            {
+                "family": "Smith",
+                "given": "David"
+            },
+            {
+                "family": "Zhu",
+                "given": "Huachen"
+            },
+            {
+                "family": "Guan",
+                "given": "Yi"
+            },
+            {
+                "family": "Lam",
+                "given": "Tommy Tsan-Yuk"
+            }
+        ],
+        "container-title": "Methods in Ecology and Evolution",
+        "id": "ggtree2017a",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2017
+                ]
+            ]
+        },
+        "key": "5C5XGKFF",
+        "libraryid": "3",
+        "note": "Citation Key: ggtree2017a",
+        "page": "28-36",
+        "providerkey": "Zotero",
+        "title": "ggtree: an R package for visualization and annotation of phylogenetic trees with their covariates and other associated data.",
+        "type": "article-journal",
+        "volume": "8"
     },
-    "key": "T76SVMUI",
-    "libraryid": "3",
-    "page": "327-336",
-    "providerkey": "Zotero",
-    "source": "Silverchair",
-    "title": "Bacteriophage predation regulates microbial abundance and diversity in a full-scale bioreactor treating industrial wastewater",
-    "type": "article-journal",
-    "volume": "4"
-  },
-  {
-    "DOI": "10.3389/fmicb.2025.1481197",
-    "ISSN": "1664-302X",
-    "URL": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2025.1481197/full",
-    "accessed": {
-      "date-parts": []
+    {
+        "URL": "https://CRAN.R-project.org/package=patchwork",
+        "author": [
+            {
+                "family": "Pedersen",
+                "given": "Thomas Lin"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-patchwork",
+        "issued": {
+            "date-parts": [
+                [
+                    2024
+                ]
+            ]
+        },
+        "key": "DQLCFF2N",
+        "libraryid": "3",
+        "note": "Citation Key: R-patchwork",
+        "providerkey": "Zotero",
+        "title": "patchwork: The composer of plots",
+        "type": "report"
     },
-    "author": [
-      {
-        "family": "Wagner",
-        "given": "Stefanie"
-      },
-      {
-        "family": "Weber",
-        "given": "Michael"
-      },
-      {
-        "family": "Paul",
-        "given": "Lena-Sophie"
-      },
-      {
-        "family": "Gr\u00fcmpel-Schl\u00fcter",
-        "given": "Angelika"
-      },
-      {
-        "family": "Kluess",
-        "given": "Jeannette"
-      },
-      {
-        "family": "Neuhaus",
-        "given": "Klaus"
-      },
-      {
-        "family": "Fuchs",
-        "given": "Thilo M."
-      }
-    ],
-    "container-title": "Frontiers in Microbiology",
-    "container-title-short": "Front. Microbiol.",
-    "id": "wagner2025",
-    "issued": {
-      "date-parts": [
-        [
-          2025,
-          3,
-          24
-        ]
-      ]
+    {
+        "URL": "http://ape-package.ird.fr/",
+        "author": [
+            {
+                "family": "Paradis",
+                "given": "Emmanuel"
+            },
+            {
+                "family": "Blomberg",
+                "given": "Simon"
+            },
+            {
+                "family": "Bolker",
+                "given": "Ben"
+            },
+            {
+                "family": "Brown",
+                "given": "Joseph"
+            },
+            {
+                "family": "Claramunt",
+                "given": "Santiago"
+            },
+            {
+                "family": "Claude",
+                "given": "Julien"
+            },
+            {
+                "family": "Cuong",
+                "given": "Hoa Sien"
+            },
+            {
+                "family": "Desper",
+                "given": "Richard"
+            },
+            {
+                "family": "Didier",
+                "given": "Gilles"
+            },
+            {
+                "family": "Durand",
+                "given": "Benoit"
+            },
+            {
+                "family": "Dutheil",
+                "given": "Julien"
+            },
+            {
+                "family": "Ewing",
+                "given": "RJ"
+            },
+            {
+                "family": "Gascuel",
+                "given": "Olivier"
+            },
+            {
+                "family": "Guillerme",
+                "given": "Thomas"
+            },
+            {
+                "family": "Heibl",
+                "given": "Christoph"
+            },
+            {
+                "family": "Ives",
+                "given": "Anthony"
+            },
+            {
+                "family": "Jones",
+                "given": "Bradley"
+            },
+            {
+                "family": "Krah",
+                "given": "Franz"
+            },
+            {
+                "family": "Lawson",
+                "given": "Daniel"
+            },
+            {
+                "family": "Lefort",
+                "given": "Vincent"
+            },
+            {
+                "family": "Legendre",
+                "given": "Pierre"
+            },
+            {
+                "family": "Lemon",
+                "given": "Jim"
+            },
+            {
+                "family": "Louvel",
+                "given": "Guillaume"
+            },
+            {
+                "family": "Marcon",
+                "given": "Eric"
+            },
+            {
+                "family": "McCloskey",
+                "given": "Rosemary"
+            },
+            {
+                "family": "Nylander",
+                "given": "Johan"
+            },
+            {
+                "family": "Opgen-Rhein",
+                "given": "Rainer"
+            },
+            {
+                "family": "Popescu",
+                "given": "Andrei-Alin"
+            },
+            {
+                "family": "Royer-Carenzi",
+                "given": "Manuela"
+            },
+            {
+                "family": "Schliep",
+                "given": "Klaus"
+            },
+            {
+                "family": "Strimmer",
+                "given": "Korbinian"
+            },
+            {
+                "family": "Vienne",
+                "given": "Damien",
+                "non-dropping-particle": "de"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-ape",
+        "issued": {
+            "date-parts": [
+                [
+                    2023
+                ]
+            ]
+        },
+        "key": "WSWWL3L2",
+        "libraryid": "3",
+        "note": "Citation Key: R-ape",
+        "providerkey": "Zotero",
+        "title": "ape: Analyses of phylogenetics and evolution",
+        "type": "report"
     },
-    "key": "RCJKTQVA",
-    "language": "English",
-    "libraryid": "3",
-    "providerkey": "Zotero",
-    "publisher": "Frontiers",
-    "source": "Frontiers",
-    "title": "Absolute abundance calculation enhances the significance of microbiome data in antibiotic treatment studies",
-    "type": "article-journal",
-    "volume": "16"
-  },
-  {
-    "DOI": "10.3389/fmicb.2021.796025",
-    "ISSN": "1664-302X",
-    "URL": "https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2021.796025/full",
-    "accessed": {
-      "date-parts": []
+    {
+        "URL": "https://CRAN.R-project.org/package=broom",
+        "author": [
+            {
+                "family": "Robinson",
+                "given": "David"
+            },
+            {
+                "family": "Hayes",
+                "given": "Alex"
+            },
+            {
+                "family": "Couch",
+                "given": "Simon"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-broom",
+        "issued": {
+            "date-parts": [
+                [
+                    2023
+                ]
+            ]
+        },
+        "key": "F735P5J7",
+        "libraryid": "3",
+        "note": "Citation Key: R-broom",
+        "providerkey": "Zotero",
+        "title": "broom: Convert statistical objects into tidy tibbles",
+        "type": "report"
     },
-    "author": [
-      {
-        "family": "Kers",
-        "given": "Jannigje Gerdien"
-      },
-      {
-        "family": "Saccenti",
-        "given": "Edoardo"
-      }
-    ],
-    "container-title": "Frontiers in Microbiology",
-    "container-title-short": "Front. Microbiol.",
-    "id": "kers2022",
-    "issued": {
-      "date-parts": [
-        [
-          2022,
-          3,
-          3
-        ]
-      ]
+    {
+        "URL": "https://github.com/kevinsblake/NatParksPalettes",
+        "author": [
+            {
+                "family": "Blake",
+                "given": "Kevin"
+            }
+        ],
+        "genre": "manual",
+        "id": "R-NatParksPalettes",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "ZCHKQJBX",
+        "libraryid": "3",
+        "note": "Citation Key: R-NatParksPalettes",
+        "providerkey": "Zotero",
+        "title": "NatParksPalettes: Color palettes inspired by national parks",
+        "type": "report"
     },
-    "key": "LHSHIHDL",
-    "language": "English",
-    "libraryid": "3",
-    "providerkey": "Zotero",
-    "publisher": "Frontiers",
-    "source": "Frontiers",
-    "title": "The Power of Microbiome Studies: Some Considerations on Which Alpha and Beta Metrics to Use and How to Report Results",
-    "title-short": "The Power of Microbiome Studies",
-    "type": "article-journal",
-    "volume": "12"
-  },
-  {
-    "DOI": "10.3389/fmicb.2017.02224",
-    "ISSN": "1664-302X",
-    "PMCID": "PMC5695134",
-    "PMID": "29187837",
-    "URL": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5695134/",
-    "accessed": {
-      "date-parts": []
+    {
+        "DOI": "10.32614/CRAN.package.corrr",
+        "URL": "https://CRAN.R-project.org/package=corrr",
+        "author": [
+            {
+                "family": "Kuhn",
+                "given": "Max"
+            },
+            {
+                "family": "Jackson",
+                "given": "Simon"
+            },
+            {
+                "family": "Cimentada",
+                "given": "Jorge"
+            }
+        ],
+        "genre": "manual",
+        "id": "kuhn2022",
+        "issued": {
+            "date-parts": [
+                [
+                    2022
+                ]
+            ]
+        },
+        "key": "N8ICQNZB",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "title": "corrr: Correlations in R",
+        "type": "report"
     },
-    "author": [
-      {
-        "family": "Gloor",
-        "given": "Gregory B."
-      },
-      {
-        "family": "Macklaim",
-        "given": "Jean M."
-      },
-      {
-        "family": "Pawlowsky-Glahn",
-        "given": "Vera"
-      },
-      {
-        "family": "Egozcue",
-        "given": "Juan J."
-      }
-    ],
-    "container-title": "Frontiers in Microbiology",
-    "container-title-short": "Front Microbiol",
-    "id": "gloor2017",
-    "issued": {
-      "date-parts": [
-        [
-          2017,
-          11,
-          15
-        ]
-      ]
+    {
+        "DOI": "10.32614/CRAN.package.renv",
+        "URL": "https://CRAN.R-project.org/package=renv",
+        "author": [
+            {
+                "family": "Ushey",
+                "given": "Kevin"
+            },
+            {
+                "family": "Wickham",
+                "given": "Hadley"
+            }
+        ],
+        "genre": "manual",
+        "id": "ushey2024",
+        "issued": {
+            "date-parts": [
+                [
+                    2024
+                ]
+            ]
+        },
+        "key": "Q9I4UBGQ",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "title": "renv: Project environments",
+        "type": "report"
     },
-    "key": "97IX3MNG",
-    "libraryid": "3",
-    "page": "2224",
-    "providerkey": "Zotero",
-    "source": "PubMed Central",
-    "title": "Microbiome Datasets Are Compositional: And This Is Not Optional",
-    "title-short": "Microbiome Datasets Are Compositional",
-    "type": "article-journal",
-    "volume": "8"
-  },
-  {
-    "URL": "https://CRAN.R-project.org/package=tidyverse",
-    "author": [
-      {
-        "family": "Wickham",
-        "given": "Hadley"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-tidyverse",
-    "issued": {
-      "date-parts": [
-        [
-          2023
-        ]
-      ]
+    {
+        "URL": "https://www.R-project.org/",
+        "author": [
+            {
+                "family": "R Core Team"
+            }
+        ],
+        "id": "rcoreteamLanguageEnvironmentStatistical2020",
+        "issued": {
+            "date-parts": [
+                [
+                    2020
+                ]
+            ]
+        },
+        "key": "42XZZC54",
+        "libraryid": "1",
+        "providerkey": "Zotero",
+        "publisher": "R Foundation for Statistical Computing",
+        "publisher-place": "Vienna, Austria",
+        "title": "R: A Language and Environment for Statistical Computing",
+        "type": "book"
     },
-    "key": "SJCWAI4E",
-    "libraryid": "3",
-    "note": "Citation Key: R-tidyverse",
-    "providerkey": "Zotero",
-    "title": "tidyverse: Easily install and load the tidyverse",
-    "type": "report"
-  },
-  {
-    "URL": "http://dx.plos.org/10.1371/journal.pone.0061217",
-    "author": [
-      {
-        "family": "McMurdie",
-        "given": "Paul J."
-      },
-      {
-        "family": "Holmes",
-        "given": "Susan"
-      },
-      {
-        "family": "Jordan",
-        "given": "with contributions from Gregory"
-      },
-      {
-        "family": "Chamberlain",
-        "given": "Scott"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-phyloseq",
-    "issued": {
-      "date-parts": [
-        [
-          2022
-        ]
-      ]
+    {
+        "URL": "http://www.rstudio.com/",
+        "author": [
+            {
+                "family": "RStudio Team"
+            }
+        ],
+        "id": "rstudioteam2020",
+        "issued": {
+            "date-parts": [
+                [
+                    2020
+                ]
+            ]
+        },
+        "key": "HURZAA9U",
+        "libraryid": "3",
+        "providerkey": "Zotero",
+        "publisher": "RStudio, PBC.",
+        "publisher-place": "Boston, MA",
+        "title": "RStudio: Integrated Development Environment for R",
+        "type": "book"
     },
-    "key": "5NGT6GGK",
-    "libraryid": "3",
-    "note": "Citation Key: R-phyloseq",
-    "providerkey": "Zotero",
-    "title": "phyloseq: Handling and analysis of high-throughput microbiome census data",
-    "type": "report"
-  },
-  {
-    "URL": "https://github.com/vegandevs/vegan",
-    "author": [
-      {
-        "family": "Oksanen",
-        "given": "Jari"
-      },
-      {
-        "family": "Simpson",
-        "given": "Gavin L."
-      },
-      {
-        "family": "Blanchet",
-        "given": "F. Guillaume"
-      },
-      {
-        "family": "Kindt",
-        "given": "Roeland"
-      },
-      {
-        "family": "Legendre",
-        "given": "Pierre"
-      },
-      {
-        "family": "Minchin",
-        "given": "Peter R."
-      },
-      {
-        "family": "O\u2019Hara",
-        "given": "R.B."
-      },
-      {
-        "family": "Solymos",
-        "given": "Peter"
-      },
-      {
-        "family": "Stevens",
-        "given": "M. Henry H."
-      },
-      {
-        "family": "Szoecs",
-        "given": "Eduard"
-      },
-      {
-        "family": "Wagner",
-        "given": "Helene"
-      },
-      {
-        "family": "Barbour",
-        "given": "Matt"
-      },
-      {
-        "family": "Bedward",
-        "given": "Michael"
-      },
-      {
-        "family": "Bolker",
-        "given": "Ben"
-      },
-      {
-        "family": "Borcard",
-        "given": "Daniel"
-      },
-      {
-        "family": "Carvalho",
-        "given": "Gustavo"
-      },
-      {
-        "family": "Chirico",
-        "given": "Michael"
-      },
-      {
-        "family": "De Caceres",
-        "given": "Miquel"
-      },
-      {
-        "family": "Durand",
-        "given": "Sebastien"
-      },
-      {
-        "family": "Evangelista",
-        "given": "Heloisa Beatriz Antoniazi"
-      },
-      {
-        "family": "FitzJohn",
-        "given": "Rich"
-      },
-      {
-        "family": "Friendly",
-        "given": "Michael"
-      },
-      {
-        "family": "Furneaux",
-        "given": "Brendan"
-      },
-      {
-        "family": "Hannigan",
-        "given": "Geoffrey"
-      },
-      {
-        "family": "Hill",
-        "given": "Mark O."
-      },
-      {
-        "family": "Lahti",
-        "given": "Leo"
-      },
-      {
-        "family": "McGlinn",
-        "given": "Dan"
-      },
-      {
-        "family": "Ouellette",
-        "given": "Marie-Helene"
-      },
-      {
-        "family": "Ribeiro Cunha",
-        "given": "Eduardo"
-      },
-      {
-        "family": "Smith",
-        "given": "Tyler"
-      },
-      {
-        "family": "Stier",
-        "given": "Adrian"
-      },
-      {
-        "family": "Ter Braak",
-        "given": "Cajo J.F."
-      },
-      {
-        "family": "Weedon",
-        "given": "James"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-vegan",
-    "issued": {
-      "date-parts": [
-        [
-          2022
-        ]
-      ]
+    {
+        "DOI": "10.1128/msphere.00355-23",
+        "URL": "https://journals.asm.org/doi/full/10.1128/msphere.00355-23",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Schloss",
+                "given": "Patrick D."
+            }
+        ],
+        "container-title": "mSphere",
+        "id": "schloss2023",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2023,
+                    12,
+                    6
+                ]
+            ]
+        },
+        "key": "VAST522A",
+        "libraryid": "3",
+        "page": "e00355-23",
+        "providerkey": "Zotero",
+        "publisher": "American",
+        "source": "journals.asm.org (Atypon)",
+        "title": "Waste not, want not: revisiting the analysis that called into question the practice of rarefaction",
+        "title-short": "Waste not, want not",
+        "type": "article-journal",
+        "volume": "9"
     },
-    "key": "SDB7WLXE",
-    "libraryid": "3",
-    "note": "Citation Key: R-vegan",
-    "providerkey": "Zotero",
-    "title": "vegan: Community ecology package",
-    "type": "report"
-  },
-  {
-    "DOI": "10.1111/2041-210X.12628",
-    "URL": "http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12628/abstract",
-    "author": [
-      {
-        "family": "Yu",
-        "given": "Guangchuang"
-      },
-      {
-        "family": "Smith",
-        "given": "David"
-      },
-      {
-        "family": "Zhu",
-        "given": "Huachen"
-      },
-      {
-        "family": "Guan",
-        "given": "Yi"
-      },
-      {
-        "family": "Lam",
-        "given": "Tommy Tsan-Yuk"
-      }
-    ],
-    "container-title": "Methods in Ecology and Evolution",
-    "id": "ggtree2017a",
-    "issue": "1",
-    "issued": {
-      "date-parts": [
-        [
-          2017
-        ]
-      ]
+    {
+        "id": "vandeputte2017",
+        "type": "article-journal",
+        "container-title": "Nature",
+        "DOI": "10.1038/nature24460",
+        "ISSN": "0028-0836, 1476-4687",
+        "issue": "7681",
+        "journalAbbreviation": "Nature",
+        "language": "en",
+        "page": "507-511",
+        "source": "DOI.org (Crossref)",
+        "title": "Quantitative microbiome profiling links gut community variation to microbial load",
+        "URL": "https://www.nature.com/articles/nature24460",
+        "volume": "551",
+        "author": [
+            {
+                "family": "Vandeputte",
+                "given": "Doris"
+            },
+            {
+                "family": "Kathagen",
+                "given": "Gunter"
+            },
+            {
+                "family": "D’hoe",
+                "given": "Kevin"
+            },
+            {
+                "family": "Vieira-Silva",
+                "given": "Sara"
+            },
+            {
+                "family": "Valles-Colomer",
+                "given": "Mireia"
+            },
+            {
+                "family": "Sabino",
+                "given": "João"
+            },
+            {
+                "family": "Wang",
+                "given": "Jun"
+            },
+            {
+                "family": "Tito",
+                "given": "Raul Y."
+            },
+            {
+                "family": "De Commer",
+                "given": "Lindsey"
+            },
+            {
+                "family": "Darzi",
+                "given": "Youssef"
+            },
+            {
+                "family": "Vermeire",
+                "given": "Séverine"
+            },
+            {
+                "family": "Falony",
+                "given": "Gwen"
+            },
+            {
+                "family": "Raes",
+                "given": "Jeroen"
+            }
+        ],
+        "accessed": {
+            "date-parts": [
+                [
+                    2025,
+                    5,
+                    28
+                ]
+            ]
+        },
+        "issued": {
+            "date-parts": [
+                [
+                    2017,
+                    11
+                ]
+            ]
+        }
     },
-    "key": "5C5XGKFF",
-    "libraryid": "3",
-    "note": "Citation Key: ggtree2017a",
-    "page": "28-36",
-    "providerkey": "Zotero",
-    "title": "ggtree: an R package for visualization and annotation of phylogenetic trees with their covariates and other associated data.",
-    "type": "article-journal",
-    "volume": "8"
-  },
-  {
-    "URL": "https://CRAN.R-project.org/package=patchwork",
-    "author": [
-      {
-        "family": "Pedersen",
-        "given": "Thomas Lin"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-patchwork",
-    "issued": {
-      "date-parts": [
-        [
-          2024
-        ]
-      ]
-    },
-    "key": "DQLCFF2N",
-    "libraryid": "3",
-    "note": "Citation Key: R-patchwork",
-    "providerkey": "Zotero",
-    "title": "patchwork: The composer of plots",
-    "type": "report"
-  },
-  {
-    "URL": "http://ape-package.ird.fr/",
-    "author": [
-      {
-        "family": "Paradis",
-        "given": "Emmanuel"
-      },
-      {
-        "family": "Blomberg",
-        "given": "Simon"
-      },
-      {
-        "family": "Bolker",
-        "given": "Ben"
-      },
-      {
-        "family": "Brown",
-        "given": "Joseph"
-      },
-      {
-        "family": "Claramunt",
-        "given": "Santiago"
-      },
-      {
-        "family": "Claude",
-        "given": "Julien"
-      },
-      {
-        "family": "Cuong",
-        "given": "Hoa Sien"
-      },
-      {
-        "family": "Desper",
-        "given": "Richard"
-      },
-      {
-        "family": "Didier",
-        "given": "Gilles"
-      },
-      {
-        "family": "Durand",
-        "given": "Benoit"
-      },
-      {
-        "family": "Dutheil",
-        "given": "Julien"
-      },
-      {
-        "family": "Ewing",
-        "given": "RJ"
-      },
-      {
-        "family": "Gascuel",
-        "given": "Olivier"
-      },
-      {
-        "family": "Guillerme",
-        "given": "Thomas"
-      },
-      {
-        "family": "Heibl",
-        "given": "Christoph"
-      },
-      {
-        "family": "Ives",
-        "given": "Anthony"
-      },
-      {
-        "family": "Jones",
-        "given": "Bradley"
-      },
-      {
-        "family": "Krah",
-        "given": "Franz"
-      },
-      {
-        "family": "Lawson",
-        "given": "Daniel"
-      },
-      {
-        "family": "Lefort",
-        "given": "Vincent"
-      },
-      {
-        "family": "Legendre",
-        "given": "Pierre"
-      },
-      {
-        "family": "Lemon",
-        "given": "Jim"
-      },
-      {
-        "family": "Louvel",
-        "given": "Guillaume"
-      },
-      {
-        "family": "Marcon",
-        "given": "Eric"
-      },
-      {
-        "family": "McCloskey",
-        "given": "Rosemary"
-      },
-      {
-        "family": "Nylander",
-        "given": "Johan"
-      },
-      {
-        "family": "Opgen-Rhein",
-        "given": "Rainer"
-      },
-      {
-        "family": "Popescu",
-        "given": "Andrei-Alin"
-      },
-      {
-        "family": "Royer-Carenzi",
-        "given": "Manuela"
-      },
-      {
-        "family": "Schliep",
-        "given": "Klaus"
-      },
-      {
-        "family": "Strimmer",
-        "given": "Korbinian"
-      },
-      {
-        "family": "Vienne",
-        "given": "Damien",
-        "non-dropping-particle": "de"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-ape",
-    "issued": {
-      "date-parts": [
-        [
-          2023
-        ]
-      ]
-    },
-    "key": "WSWWL3L2",
-    "libraryid": "3",
-    "note": "Citation Key: R-ape",
-    "providerkey": "Zotero",
-    "title": "ape: Analyses of phylogenetics and evolution",
-    "type": "report"
-  },
-  {
-    "URL": "https://CRAN.R-project.org/package=broom",
-    "author": [
-      {
-        "family": "Robinson",
-        "given": "David"
-      },
-      {
-        "family": "Hayes",
-        "given": "Alex"
-      },
-      {
-        "family": "Couch",
-        "given": "Simon"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-broom",
-    "issued": {
-      "date-parts": [
-        [
-          2023
-        ]
-      ]
-    },
-    "key": "F735P5J7",
-    "libraryid": "3",
-    "note": "Citation Key: R-broom",
-    "providerkey": "Zotero",
-    "title": "broom: Convert statistical objects into tidy tibbles",
-    "type": "report"
-  },
-  {
-    "URL": "https://github.com/kevinsblake/NatParksPalettes",
-    "author": [
-      {
-        "family": "Blake",
-        "given": "Kevin"
-      }
-    ],
-    "genre": "manual",
-    "id": "R-NatParksPalettes",
-    "issued": {
-      "date-parts": [
-        [
-          2022
-        ]
-      ]
-    },
-    "key": "ZCHKQJBX",
-    "libraryid": "3",
-    "note": "Citation Key: R-NatParksPalettes",
-    "providerkey": "Zotero",
-    "title": "NatParksPalettes: Color palettes inspired by national parks",
-    "type": "report"
-  },
-  {
-    "DOI": "10.32614/CRAN.package.corrr",
-    "URL": "https://CRAN.R-project.org/package=corrr",
-    "author": [
-      {
-        "family": "Kuhn",
-        "given": "Max"
-      },
-      {
-        "family": "Jackson",
-        "given": "Simon"
-      },
-      {
-        "family": "Cimentada",
-        "given": "Jorge"
-      }
-    ],
-    "genre": "manual",
-    "id": "kuhn2022",
-    "issued": {
-      "date-parts": [
-        [
-          2022
-        ]
-      ]
-    },
-    "key": "N8ICQNZB",
-    "libraryid": "3",
-    "providerkey": "Zotero",
-    "title": "corrr: Correlations in R",
-    "type": "report"
-  },
-  {
-    "DOI": "10.32614/CRAN.package.renv",
-    "URL": "https://CRAN.R-project.org/package=renv",
-    "author": [
-      {
-        "family": "Ushey",
-        "given": "Kevin"
-      },
-      {
-        "family": "Wickham",
-        "given": "Hadley"
-      }
-    ],
-    "genre": "manual",
-    "id": "ushey2024",
-    "issued": {
-      "date-parts": [
-        [
-          2024
-        ]
-      ]
-    },
-    "key": "Q9I4UBGQ",
-    "libraryid": "3",
-    "providerkey": "Zotero",
-    "title": "renv: Project environments",
-    "type": "report"
-  },
-  {
-    "URL": "https://www.R-project.org/",
-    "author": [
-      {
-        "family": "R Core Team"
-      }
-    ],
-    "id": "rcoreteamLanguageEnvironmentStatistical2020",
-    "issued": {
-      "date-parts": [
-        [
-          2020
-        ]
-      ]
-    },
-    "key": "42XZZC54",
-    "libraryid": "1",
-    "providerkey": "Zotero",
-    "publisher": "R Foundation for Statistical Computing",
-    "publisher-place": "Vienna, Austria",
-    "title": "R: A Language and Environment for Statistical Computing",
-    "type": "book"
-  },
-  {
-    "URL": "http://www.rstudio.com/",
-    "author": [
-      {
-        "family": "RStudio Team"
-      }
-    ],
-    "id": "rstudioteam2020",
-    "issued": {
-      "date-parts": [
-        [
-          2020
-        ]
-      ]
-    },
-    "key": "HURZAA9U",
-    "libraryid": "3",
-    "providerkey": "Zotero",
-    "publisher": "RStudio, PBC.",
-    "publisher-place": "Boston, MA",
-    "title": "RStudio: Integrated Development Environment for R",
-    "type": "book"
-  },
-  {
-    "DOI": "10.1128/msphere.00355-23",
-    "URL": "https://journals.asm.org/doi/full/10.1128/msphere.00355-23",
-    "accessed": {
-      "date-parts": []
-    },
-    "author": [
-      {
-        "family": "Schloss",
-        "given": "Patrick D."
-      }
-    ],
-    "container-title": "mSphere",
-    "id": "schloss2023",
-    "issue": "1",
-    "issued": {
-      "date-parts": [
-        [
-          2023,
-          12,
-          6
-        ]
-      ]
-    },
-    "key": "VAST522A",
-    "libraryid": "3",
-    "page": "e00355-23",
-    "providerkey": "Zotero",
-    "publisher": "American",
-    "source": "journals.asm.org (Atypon)",
-    "title": "Waste not, want not: revisiting the analysis that called into question the practice of rarefaction",
-    "title-short": "Waste not, want not",
-    "type": "article-journal",
-    "volume": "9"
-  },
-  {
-    "id": "vandeputte2017",
-    "type": "article-journal",
-    "container-title": "Nature",
-    "DOI": "10.1038/nature24460",
-    "ISSN": "0028-0836, 1476-4687",
-    "issue": "7681",
-    "journalAbbreviation": "Nature",
-    "language": "en",
-    "page": "507-511",
-    "source": "DOI.org (Crossref)",
-    "title": "Quantitative microbiome profiling links gut community variation to microbial load",
-    "URL": "https://www.nature.com/articles/nature24460",
-    "volume": "551",
-    "author": [
-      {
-        "family": "Vandeputte",
-        "given": "Doris"
-      },
-      {
-        "family": "Kathagen",
-        "given": "Gunter"
-      },
-      {
-        "family": "D\u2019hoe",
-        "given": "Kevin"
-      },
-      {
-        "family": "Vieira-Silva",
-        "given": "Sara"
-      },
-      {
-        "family": "Valles-Colomer",
-        "given": "Mireia"
-      },
-      {
-        "family": "Sabino",
-        "given": "Jo\u00e3o"
-      },
-      {
-        "family": "Wang",
-        "given": "Jun"
-      },
-      {
-        "family": "Tito",
-        "given": "Raul Y."
-      },
-      {
-        "family": "De Commer",
-        "given": "Lindsey"
-      },
-      {
-        "family": "Darzi",
-        "given": "Youssef"
-      },
-      {
-        "family": "Vermeire",
-        "given": "S\u00e9verine"
-      },
-      {
-        "family": "Falony",
-        "given": "Gwen"
-      },
-      {
-        "family": "Raes",
-        "given": "Jeroen"
-      }
-    ],
-    "accessed": {
-      "date-parts": [
-        [
-          2025,
-          5,
-          28
-        ]
-      ]
-    },
-    "issued": {
-      "date-parts": [
-        [
-          2017,
-          11
-        ]
-      ]
+    {
+        "DOI": "10.1038/s41467-020-16224-6",
+        "ISSN": "2041-1723",
+        "URL": "https://www.nature.com/articles/s41467-020-16224-6",
+        "accessed": {
+            "date-parts": []
+        },
+        "author": [
+            {
+                "family": "Barlow",
+                "given": "Jacob T."
+            },
+            {
+                "family": "Bogatyrev",
+                "given": "Said R."
+            },
+            {
+                "family": "Ismagilov",
+                "given": "Rustem F."
+            }
+        ],
+        "container-title": "Nature Communications",
+        "container-title-short": "Nat Commun",
+        "id": "barlow2020",
+        "issue": "1",
+        "issued": {
+            "date-parts": [
+                [
+                    2020,
+                    5,
+                    22
+                ]
+            ]
+        },
+        "key": "9FC6PKRB",
+        "language": "en",
+        "libraryid": "3",
+        "page": "2590",
+        "providerkey": "Zotero",
+        "publisher": "Nature",
+        "rights": "2020 The Author(s)",
+        "source": "www.nature.com",
+        "title": "A quantitative sequencing framework for absolute abundance measurements of mucosal and lumenal microbial communities",
+        "type": "article-journal",
+        "volume": "11"
     }
-  }
 ]
