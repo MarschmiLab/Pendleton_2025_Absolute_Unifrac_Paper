@@ -1,0 +1,48 @@
+---
+editor_options: 
+  chunk_output_type: console
+bibliography: references.json
+header-includes:
+   - \usepackage{setspace}
+   - \singlespacing
+   - \usepackage{fancyhdr}  
+   - \pagestyle{fancy}      
+   - \fancyhf{}             
+   - \fancyfoot[C]{\thepage}
+   - \renewcommand{\headrulewidth}{0pt}
+output:
+  bookdown::pdf_document2:
+    number_sections: false
+    latex_engine: xelatex
+    toc: false
+geometry: margin=1in
+papersize: a4
+pagestyle: empty
+fontsize: 11 pt 
+---
+
+```{r echo=FALSE, out.height = "9%", fig.align = "left"}
+    knitr::include_graphics("images/bold_cornell_logo_pms187_red.pdf")
+```
+
+July 17th, 2025
+
+\vspace{1em}
+
+Dear ISME Communications Editors,
+
+We are excited to submit our manuscript, “***Interpreting UniFrac with Absolute Abundance: A Conceptual and Practical Guide***,” for consideration as a Brief Communication in *ISME Communications*.
+
+This work presents a conceptual and practical advancement in microbial community analysis by extending the widely used UniFrac metric to incorporate absolute abundance information, which we term *Absolute UniFrac*. Unlike traditional UniFrac, which assumes relative abundance and overlooks variation in microbial load, our approach integrates both phylogenetic information and total cell counts to better reflect ecological differences between communities.
+
+We demonstrate the utility of Absolute UniFrac through a combination of simulations and a case study of freshwater microbial communities. We show that incorporating absolute abundance can enhance sensitivity to biologically meaningful shifts, improve statistical power, and reveal patterns obscured in compositional data. We also introduce a generalized version with a tunable $\alpha$ parameter to balance sensitivity and interpretability, particularly when differences in microbial load occur on long phylogenetic branches.
+
+Thank you for your consideration. We would be honored to contribute to *ISME Communications*.
+
+Sincerely, 
+
+Mar (Marian) Schmidt, PhD  
+Assistant Professor, Department of Microbiology  
+Faculty Fellow, Atkinson Center for a Sustainable Future  
+Cornell University  
+https://marschmilab.github.io/  
