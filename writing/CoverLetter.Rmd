@@ -1,7 +1,6 @@
 ---
 editor_options: 
   chunk_output_type: console
-bibliography: references.json
 header-includes:
    - \usepackage{setspace}
    - \singlespacing
@@ -25,17 +24,21 @@ fontsize: 11 pt
     knitr::include_graphics("images/bold_cornell_logo_pms187_red.pdf")
 ```
 
-July 17th, 2025
+July 18th, 2025
 
 \vspace{1em}
 
 Dear ISME Communications Editors,
 
-We are excited to submit our manuscript, “***Interpreting UniFrac with Absolute Abundance: A Conceptual and Practical Guide***,” for consideration as a Brief Communication in *ISME Communications*.
+We are excited to submit our manuscript, “*Interpreting UniFrac with Absolute Abundance: A Conceptual and Practical Guide*,” for consideration as a Brief Communication in *ISME Communications*.
 
-This work presents a conceptual and practical advancement in microbial community analysis by extending the widely used UniFrac metric to incorporate absolute abundance information, which we term *Absolute UniFrac*. Unlike traditional UniFrac, which assumes relative abundance and overlooks variation in microbial load, our approach integrates both phylogenetic information and total cell counts to better reflect ecological differences between communities.
+This study introduces *Absolute UniFrac*, a conceptual and practical extension of the widely used UniFrac metric that incorporates absolute abundance information. While traditional UniFrac operates on relative abundance and overlooks variation in microbial load, our method integrates phylogenetic structure with total cell counts to reveal ecological patterns that would otherwise remain hidden.
 
-We demonstrate the utility of Absolute UniFrac through a combination of simulations and a case study of freshwater microbial communities. We show that incorporating absolute abundance can enhance sensitivity to biologically meaningful shifts, improve statistical power, and reveal patterns obscured in compositional data. We also introduce a generalized version with a tunable $\alpha$ parameter to balance sensitivity and interpretability, particularly when differences in microbial load occur on long phylogenetic branches.
+Through simulations and a freshwater microbial case study, we demonstrate that Absolute UniFrac increases sensitivity to biologically meaningful shifts, improves statistical power, and enhances interpretability. We also clarify how microbial load variation, particularly along deep branches, can influence results and we offer guidance for thoughtful application.  We extend the Generalized UniFrac framework (Chen et al., 2012, *Bioinformatics*) by integrating absolute abundance via a tunable $\alpha$ parameter, offering a flexible, absolute abundance-aware tool for beta diversity analysis.
+
+By bridging a foundational phylogenetic method with the realities of modern microbiome quantification, our work fills a critical methodological gap. It brings UniFrac into the next era of microbial ecology, where absolute abundance will be essential for comparing communities across space, time, and ecosystems of all kinds.
+
+All code and data to reproduce our analyses are publicly available at [https://github.com/MarschmiLab/Pendleton_2025_Absolute_Unifrac_Paper](https://github.com/MarschmiLab/Pendleton_2025_Absolute_Unifrac_Paper).
 
 Thank you for your consideration. We would be honored to contribute to *ISME Communications*.
 
