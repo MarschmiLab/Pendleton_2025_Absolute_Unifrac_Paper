@@ -1,0 +1,280 @@
+---
+title: "Making Our Phylogenetic Tree"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "Augustus Pendleton"
+editor_options: 
+  chunk_output_type: console
+---
+
+# Load Packages and Functions
+```{r load-pack}
+# Load Packages
+pacman::p_load(phyloseq, ggtree, patchwork, tidytree, phytools, tidyverse, install = TRUE)
+```
+
+
+# Load data
+
+```{r load-data}
+# Load in the raw_phyloseq data from DADA2_workflow.Rmd
+load("clean_props_phylo")
+
+clean_props_phylo
+```
+
+
+# Write ASV Fasta file
+```{r write-asv}
+# first pull taxonomic table from phyloseq object
+# contains ASV and sequences
+tax_table <- clean_props_phylo@tax_table %>% as.data.frame() %>% 
+  select(ASV, ASVseqs)
+
+# add > symbol to ASV names for file formatting
+tax_table$ASV <- paste0(">",tax_table$ASV)
+
+# bind ASVs and sequences together in one long character
+seqs_fasta <- c(rbind(tax_table$ASV, tax_table$ASVseqs))
+
+# write seqs_fasta out as a fasta file
+write(seqs_fasta, file = "props_asvs.fasta")
+```
+
+
+# MAFFT for Alignment
+
+This step aligns the ASV fasta from phyloseq_preprocessing and outputs an aligned fasta file. Note that you should be running this from the project's home directory!
+
+```{r run-maffft, engine = 'bash', engine.opts='-l', eval = FALSE}
+
+# Run MAFFT on file
+# I am using auto options for now (instead of specifying arguments)
+# MAFFT automatically recognizes that it is a nucleotide alignment
+
+# Set seed (not sure if relevant but not taking chances)
+RANDOM=31491
+
+/programs/mafft/bin/mafft --auto --quiet data/05_Build_Tree/preprocessed_asvs.fasta > data/05_Build_Tree/aligned_asvs.fasta 
+
+```
+
+
+# FastTree
+
+This section of code takes the aligned fasta file and runs it through Fast Tree to output an unrooted tree. It also takes awhile. The end of the logfile will tell you relevant information on who the tree was built. 
+
+```{r run-fasttree, engine = 'bash', engine.opts='-l', eval = FALSE}
+#add to path
+export PATH=/programs/FastTree-2.1.11:$PATH
+
+# run command
+# -nt indicates it is a nucleotide alignment 
+# -gtr sets the model to a generalized time-reversible model 
+# -fastest speeds up the process and reduces memory usage (recommended for >50,000 sequences) - check if gtr is neighbor-joining
+# takes aligned_seqs fasta file as input and outputs unrooted.tree
+# saves log file as fasttree.log (includes intermediate trees, settings, and model details)
+# Again, setting seed, not sure that it's necessary
+RANDOM=31491
+FastTree -gtr -nt -fastest -quiet -log data/05_Build_Tree/fasttree.log data/05_Build_Tree/aligned_asvs.fasta  > data/05_Build_Tree/unrooted.tree
+
+```
+
+# Plot with ggtree
+
+First load tree and add to phyloseq object
+
+```{r create-physeq, fig.dim = c(12, 6)}
+# read tree file
+tree <- read.tree("data/05_Build_Tree/unrooted.tree") 
+```
+
+
+
+# Rooting our tree
+
+```{r first-tree-view}
+# Find ASVs that are Archaea
+arch_asvs <- tax_table(clean_props_phylo) %>%
+  as.data.frame() %>%
+  filter(Kingdom == "Archaea") %>%
+  pull(ASV)
+
+# Find the node that encompasses all Archaea
+arch_node <- findMRCA(tree, tips = arch_asvs, type = "node")
+
+# Root the tree at that node
+arch_root_tree <- ape::root(tree, node = arch_node, resolve.root = TRUE)
+is.rooted(arch_root_tree)
+
+
+# Merge with our physeq
+arch_root_physeq <- merge_phyloseq(clean_props_phylo, arch_root_tree)
+
+# Plot
+ggtree(arch_root_physeq) + 
+  geom_tippoint(aes(color = Kingdom))
+
+
+ggtree(arch_root_physeq) +
+  geom_tippoint(aes(color = Phylum))
+
+```
+
+Okay, our tree looks pretty good. However, we see some very long bacterial outgroups that I am suspicious of. There seem to be three main outgroups, which are rarely annotated at even the Phylum level
+
+# Looking at their branch lengths
+
+```{r visualizing-root-heights}
+
+# We can trim our trim by limiting how far branches are allow to be from the root
+rootedTree <- phy_tree(arch_root_physeq)
+
+
+# Here, we find the node number of each tip
+nodes <- purrr::map_dbl(rootedTree$tip.label, function(x,y)which(y==x),y=rootedTree$tip.label)
+
+# We'll name it, just to stay consistent
+names(nodes) <- rootedTree$tip.label
+
+# Then, we'll calculate the height from the root for each tip (node)
+heights <- purrr::map_dbl(nodes, nodeheight, tree = rootedTree, .progress = TRUE)
+
+range(heights)
+
+ggplot(data.frame(height = heights),
+       aes(x = height)) + 
+  geom_histogram() + 
+  scale_y_log10() 
+
+head(sort(heights, decreasing = TRUE), 40)
+
+# We define some arbitrary heights to filter our tree by
+cutoffs <- c(1.5, 1.75, 1.85, 2, 3.5, Inf)
+
+# Find which ASVs would be disqualifed based on these heights
+cut_asvs <- purrr::map(cutoffs, \(x)names(heights)[heights>x])
+
+names(cut_asvs) <- paste0("RootHeight_", cutoffs)
+
+# Now, produce multiple physeq objects which have had those long tips removed
+subset_physeqs <- list()
+for(cut_i in 1:length(cut_asvs)){
+  subset_physeqs[[cut_i]] <- subset_taxa(arch_root_physeq, !ASV %in% cut_asvs[[cut_i]])
+}
+
+names(subset_physeqs) <- paste0("RootHeight_", cutoffs)
+
+# Plot each tree
+plots <- purrr::map(subset_physeqs, function(x)x%>%
+               ggtree()+
+               geom_tippoint(aes(color=Kingdom), size=1.5)+
+                 xlim(c(0,12)))
+
+# Visualize - which cutoff seems reasonable?
+wrap_plots(plotlist = plots, ncol = 1)
+
+```
+
+To me, it looks like limiting distance from the root somewhere between 1.5 and 1.75 would be best. I want to look at some of those long outgroups. For the ASVs that we're dropping, what are their counts? There is still that kinda weird outgroup though - can we zoom in there?
+
+```{r looking-at-weird-outgrup, fig.width=12, fig.height = 8}
+ggtree(subset_physeqs$RootHeight_1.75) + 
+  geom_tiplab()
+```
+
+ASV_5089 is quite nan outlier. Let's see who they are
+
+```{r looking-at-weird-outgroup2}
+
+subset_physeqs$RootHeight_1.85 %>%
+  tax_table %>%
+  data.frame %>%
+  filter(ASV %in% c("ASV_5089", "ASV_7984"))
+
+```
+
+Okay, it's a chloroflexi. This is bore out by a BLAST search too - that makes me feel like our tree is if fairly good company. Are we being too harsh? 
+
+```{r looking-at-weird-outgroups3}
+long_tips <- sort(heights[heights < 2], decreasing = TRUE) %>% head(10) %>% names()
+
+subset_physeqs$RootHeight_2 %>%
+  tax_table %>%
+  data.frame %>%
+  filter(ASV %in% long_tips)
+```
+
+Hmm, we start to pick up some classification at ASV_3411. And I blasted those top eight. Getting a whole lot of nothing, sometimes unculturued bacteria, and a few mitochondria/chloroplast hits. Also, weirdly, some urease hits. I feel good about our 1.75 cut-off then. 
+
+# Looking at feature counts
+
+```{r feature-counts}
+arch_root_physeq %>%
+  transform_sample_counts(function(x) {x/sum(x)}) %>%
+  subset_taxa(., ASV %in% cut_asvs[["RootHeight_1.75"]]) %>%
+  otu_table() %>%
+  rowSums() %>% 
+  sort
+```
+
+Okay, some of these taxa are not totally rare. Let's look at ASV632, ASV590, and ASV430
+
+```{r}
+arch_root_physeq %>%
+  tax_table %>%
+  data.frame %>%
+  filter(ASV %in% c("ASV_632", "ASV_590", "ASV_430"))
+
+```
+
+Hmmm, still not classified down to the Bacterial level, pretty much nothing on blast, and they had long tip lengths. I feel good about removing them. 
+
+# Final tree
+
+```{r trimmed-tree}
+trim_tree_physeq <- subset_physeqs[["RootHeight_1.75"]]
+
+
+
+# Can we re-root?
+trim_tree <- phy_tree(trim_tree_physeq)
+
+new_arch_asvs <- trim_tree_physeq %>%
+  tax_table() %>%
+  data.frame() %>%
+  filter(Kingdom == "Archaea") %>%
+  pull(ASV)
+
+
+new_arch_node <- findMRCA(trim_tree, tips =  new_arch_asvs, type = "node")
+
+# Root the tree at that node
+new_arch_root_tree <- ape::root(trim_tree, node = new_arch_node, resolve.root = TRUE)
+
+is.rooted(new_arch_root_tree)
+# Merge with our physeq
+
+trim_tree_physeq@phy_tree <- NULL
+
+new_arch_root_physeq <- merge_phyloseq(trim_tree_physeq, new_arch_root_tree)
+
+ggtree(new_arch_root_physeq) + 
+  geom_tippoint(aes(color = Phylum))
+```
+
+Looks great! I am satisfied
+
+# Saving our final trimmed-up tree
+
+```{r save-tree}
+
+trim_tree_physeq <- new_arch_root_physeq
+
+save(trim_tree_physeq, file = "data/05_Build_Tree/trim_tree_physeq.RData")
+```
+
+# Session Information 
+```{r}
+# Reproducibility
+devtools::session_info()
+```
