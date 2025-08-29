@@ -1,0 +1,175 @@
+---
+title: "Comparing Samples with Beta Diversity" 
+author: "Augustus Pendleton"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+editor_options: 
+  chunk_output_type: console
+---
+# Load Data and Packages
+
+```{r load-packages}
+
+pacman::p_load(phyloseq, ggdendro, dendextend, vegan, patchwork, GUniFrac, tidyverse)
+
+# Make sure we're using the MarschmiLab version, which allows us to incorporate absolute abundance!
+packageDescription("GUniFrac")
+
+load("root_physeq.RData")
+
+# Let's focus on our area of interest: Control vs. Operation
+
+small_physeq <- 
+  root_physeq %>%
+  subset_samples(Reactor_cycle == 1) %>% 
+  subset_samples(Reactor_phase != "Startup")
+
+```
+
+# Explore samples via ordination
+
+Conflicted with the best way to approach rarefaction and absolute values here. I'm less confident than I was with Ontario that I'm reaching equal saturation across my samples, and I don't want my beta diversity to be confounded by richness due to sequencing depth. What I settled on:
+
+
+The generated_rarefied_abs_tables returns these rarefied, absolute-count normalized tables in the form of a 3D-array, where dim 1 is each sample, dim 2 is each iteration of rarefaction, and dim 3 is each ASV
+
+```{r, generating-abs-dist-objects}
+
+#install.packages("abind")
+#install.packages("extraDistr")
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  small_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample, cell_per_ml)
+
+cell_counts <- cell_counts_prep$cell_per_ml
+
+names(cell_counts) = cell_counts_prep$sample
+
+abs_tables <- generated_rarefied_abs_tables(physeq = small_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+                              iterations = 100, # Number of rarefy steps
+                              rare.depth = min(sample_sums(small_physeq)), # Depth to rarefy to
+                              abs.counts = cell_counts, # NAMED vector of cell counts for each sample
+                              seed = 314,
+                              return_rel = FALSE) # Random seed for reproducibility
+
+dims <- dim(abs_tables)
+
+abs_bray_dists <- 
+  map(c(1:dims[2]), 
+    \(x)vegdist(abs_tables[,x,], method = "bray"))
+
+abs_bray_dist <- Reduce(`+`, abs_bray_dists) / length(abs_bray_dists)
+
+
+abs_gun_dists <-
+  map(c(1:dims[2]),
+    \(x)GUniFrac(otu.tab = abs_tables[,x,],
+                 tree = phy_tree(small_physeq),
+                 alpha = seq(from = 0, to = 1, by = 0.1),
+                 normalize_counts = FALSE,
+                 verbose = FALSE))
+
+save(abs_gun_dists, file = "abs_gun_dists.RData")
+
+load("abs_gun_dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+abs_unifracs <- 
+  map(gun_names, \(x){
+  dist_objs <- map(abs_gun_dists,
+                   \(y)as.dist(y$unifracs[,,x]))
+  
+  Reduce(`+`, dist_objs) / length(dist_objs)
+})
+
+```
+
+```{r, generating-rel-dist-objects}
+
+rel_counts <- rep(1, 17)
+
+names(rel_counts) <- names(cell_counts)
+
+rel_tables <- cell_counts_preprel_tables <- generated_rarefied_abs_tables(physeq = small_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+                              iterations = 100, # Number of rarefy steps
+                              rare.depth = min(sample_sums(small_physeq)), # Depth to rarefy to
+                              abs.counts = rel_counts, # NAMED vector of cell counts for each sample
+                              seed = 314,
+                              return_rel = TRUE) # Random seed for reproducibility
+
+
+rel_bray_dists <- 
+  map(c(1:dims[2]), 
+    \(x)vegdist(rel_tables[,x,], method = "bray"))
+
+rel_bray_dist <- Reduce(`+`, rel_bray_dists) / length(rel_bray_dists)
+
+
+rel_gun_dists <-
+  map(c(1:dims[2]),
+    \(x)GUniFrac(otu.tab = rel_tables[,x,],
+                 tree = phy_tree(small_physeq),
+                 alpha = seq(from = 0, to = 1, by = 0.1),
+                 normalize_counts = FALSE,
+                 verbose = FALSE))
+
+save(rel_gun_dists, file = "rel_gun_dists.RData")
+
+load("rel_gun_dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+rel_unifracs <- 
+  map(gun_names, \(x){
+  dist_objs <- map(rel_gun_dists,
+                   \(y)as.dist(y$unifracs[,,x]))
+  
+  Reduce(`+`, dist_objs) / length(dist_objs)
+})
+
+```
+
+```{r ordinations, fig.height = 10, fig.width = 25}
+
+plot_props_function <- function(dist){
+  plot_ordination(small_physeq,
+                ordination = ordinate(small_physeq, "PCoA", distance = dist),
+                color = "Reactor_phase") + 
+  geom_point(aes(shape = as.character(Reactor_cycle)), size = 4, alpha = 0.7)
+}
+
+  plot_ordination(small_physeq,
+                ordination = ordinate(small_physeq, "PCoA", distance = abs_unifracs[[4]]),
+                color = "timepoint") + 
+  geom_point(aes(shape = as.character(Reactor_phase)), size = 4, alpha = 0.7)
+
+
+abs_plots <- map(abs_unifracs, plot_props_function)
+rel_plots <- map(rel_unifracs, plot_props_function)
+
+library(patchwork)
+
+wrap_plots(rel_plots, nrow = 1, guides = "collect") / 
+  wrap_plots(abs_plots, nrow = 1, guides = "collect") + 
+  theme(legend.position = "none")
+
+ad_func <- function(dist){
+  perm_res <- adonis2(dist~Reactor_phase, data = data.frame(sample_data(small_physeq)))
+  return(perm_res$R2[1])
+}
+map(rel_unifracs, ad_func)
+
+map(abs_unifracs, ad_func)
+
+adonis2(abs_bray_dist~Reactor_phase, data = data.frame(sample_data(small_physeq)))$R2[1]
+
+adonis2(rel_bray_dist~Reactor_phase, data = data.frame(sample_data(small_physeq)))$R2[1]
+```

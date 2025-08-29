@@ -618,18 +618,17 @@ SRR2917205_R1_filtered.fastq.gz                  21106</code></pre>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a plot to track the reads through our DADA2 pipeline</span></span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>track_df <span class="sc">%&gt;%</span></span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(input<span class="sc">:</span>nochim, <span class="at">names_to =</span> <span class="st">"read_type"</span>, <span class="at">values_to =</span> <span class="st">"num_reads"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#left_join(metadata, by = "sample_name") %&gt;% </span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">read_type =</span> <span class="fu">fct_relevel</span>(read_type, </span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"input"</span>, <span class="st">"filtered"</span>, <span class="st">"denoisedF"</span>, <span class="st">"denoisedR"</span>, <span class="st">"merged"</span>, <span class="st">"nochim"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> read_type, <span class="at">y =</span> num_reads, <span class="at">fill =</span> read_type)) <span class="sc">+</span> </span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#facet_grid(~strata) + </span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> sample)) <span class="sc">+</span> </span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">shape =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"grey"</span>) <span class="sc">+</span> </span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Spectral"</span>) <span class="sc">+</span> </span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Filtering Step"</span>, <span class="at">y =</span> <span class="st">"Number of Sequences"</span>) <span class="sc">+</span></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">read_type =</span> <span class="fu">fct_relevel</span>(read_type, </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"input"</span>, <span class="st">"filtered"</span>, <span class="st">"denoisedF"</span>, <span class="st">"denoisedR"</span>, <span class="st">"merged"</span>, <span class="st">"nochim"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> read_type, <span class="at">y =</span> num_reads, <span class="at">fill =</span> read_type)) <span class="sc">+</span> </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#facet_grid(~strata) + </span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> sample)) <span class="sc">+</span> </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">shape =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"grey"</span>) <span class="sc">+</span> </span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Spectral"</span>) <span class="sc">+</span> </span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Filtering Step"</span>, <span class="at">y =</span> <span class="st">"Number of Sequences"</span>) <span class="sc">+</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/track-seqs-loess-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -651,9 +650,10 @@ date  (1): Collection_Date
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>clean_meta <span class="ot">&lt;-</span> props_meta_raw <span class="sc">%&gt;%</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">sample =</span> Run, Reactor_cycle, <span class="at">sample_num =</span> <span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>, Reactor_phase, temp, timepoint, Description)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>props_abund_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"props_abundance.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">sample =</span> Run, Reactor_cycle, <span class="at">sample_num =</span> <span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>, Reactor_phase, temp, timepoint, Description) <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sample_num =</span> <span class="fu">str_remove</span>(sample_num, <span class="st">"A"</span>))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>props_abund_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"props_abundance.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 79 Columns: 21
 ── Column specification ────────────────────────────────────────────────────────
@@ -699,35 +699,31 @@ Joining with `by = join_by(sample_num)`</code></pre>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>track_df_final <span class="sc">%&gt;%</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> d0, <span class="at">y =</span> perc_reads_retained)) <span class="sc">+</span> </span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 18 rows containing missing values or values outside the scale range
-(`geom_point()`).</code></pre>
-</div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>low_reads <span class="ot">&lt;-</span> track_df_final <span class="sc">%&gt;%</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">order_by =</span> perc_reads_retained) <span class="sc">%&gt;%</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sample)</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>high_reads <span class="ot">&lt;-</span> track_df_final <span class="sc">%&gt;%</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">order_by =</span> perc_reads_retained) <span class="sc">%&gt;%</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sample)</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(forward_reads[<span class="fu">str_detect</span>(forward_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>low_reads <span class="ot">&lt;-</span> track_df_final <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">order_by =</span> perc_reads_retained) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sample)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>high_reads <span class="ot">&lt;-</span> track_df_final <span class="sc">%&gt;%</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">order_by =</span> perc_reads_retained) <span class="sc">%&gt;%</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sample)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(forward_reads[<span class="fu">str_detect</span>(forward_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/unnamed-chunk-1-5.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(reverse_reads[<span class="fu">str_detect</span>(reverse_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(reverse_reads[<span class="fu">str_detect</span>(reverse_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/unnamed-chunk-1-6.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(filtered_filepaths_forward[<span class="fu">str_detect</span>(forward_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(filtered_filepaths_forward[<span class="fu">str_detect</span>(forward_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/unnamed-chunk-1-7.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(filtered_filepaths_reverse[<span class="fu">str_detect</span>(reverse_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotQualityProfile</span>(filtered_filepaths_reverse[<span class="fu">str_detect</span>(reverse_reads, <span class="fu">paste0</span>(<span class="fu">c</span>(low_reads, high_reads), <span class="at">collapse =</span> <span class="st">"|"</span>))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/unnamed-chunk-1-8.png" class="img-fluid" width="672"></p>
 </div>
@@ -735,19 +731,19 @@ Joining with `by = join_by(sample_num)`</code></pre>
 <p>Like, the quality doesn’t look that significantly different to me, comparing the samples which kept a lot of their reads vs.&nbsp;the samples which lost a lot of their reads. And like we see after filtering that all of the reads have been removed, but good lord I do not know why.</p>
 <p>If this was my own data, there would be a lot more detective work to do. Since this is just one part of a larger metaanalysis, I think I’m just going to remove those samples and move forward with the samples that we do have.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(track_df_final<span class="sc">$</span>perc_reads_retained, <span class="at">breaks =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(track_df_final<span class="sc">$</span>perc_reads_retained, <span class="at">breaks =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="01_Props_ASV_and_Phylo_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>new_track_df <span class="ot">&lt;-</span> track_df_final <span class="sc">%&gt;%</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(perc_reads_retained <span class="sc">&gt;</span> <span class="dv">40</span>)</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>new_seqtab1 <span class="ot">&lt;-</span> seqtab_nc_len[<span class="fu">str_detect</span>(<span class="fu">row.names</span>(seqtab_nc_len), <span class="fu">paste0</span>(new_track_df<span class="sc">$</span>sample, <span class="at">collapse =</span> <span class="st">"|"</span>)),] </span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>new_seqtab2 <span class="ot">&lt;-</span> new_seqtab1[,<span class="fu">colSums</span>(new_seqtab1) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(new_seqtab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>new_track_df <span class="ot">&lt;-</span> track_df_final <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(perc_reads_retained <span class="sc">&gt;</span> <span class="dv">40</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>new_seqtab1 <span class="ot">&lt;-</span> seqtab_nc_len[<span class="fu">str_detect</span>(<span class="fu">row.names</span>(seqtab_nc_len), <span class="fu">paste0</span>(new_track_df<span class="sc">$</span>sample, <span class="at">collapse =</span> <span class="st">"|"</span>)),] </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>new_seqtab2 <span class="ot">&lt;-</span> new_seqtab1[,<span class="fu">colSums</span>(new_seqtab1) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(new_seqtab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  47 216</code></pre>
 </div>
@@ -757,14 +753,14 @@ Joining with `by = join_by(sample_num)`</code></pre>
 <section id="taxonomic-assignment" class="level1">
 <h1>Taxonomic Assignment</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">assignTaxonomy</span>(new_seqtab2, <span class="st">"/workdir/databases/silva_v138/version_2/silva_nr99_v138.2_toGenus_trainset.fa.gz"</span>,</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">multithread=</span><span class="dv">60</span>,</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">tryRC =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>new_tax_tab <span class="ot">&lt;-</span> taxa <span class="sc">%&gt;%</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"ASVseqs"</span>) </span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(new_tax_tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">assignTaxonomy</span>(new_seqtab2, <span class="st">"/workdir/databases/silva_v138/version_2/silva_nr99_v138.2_toGenus_trainset.fa.gz"</span>,</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">multithread=</span><span class="dv">60</span>,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">tryRC =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>new_tax_tab <span class="ot">&lt;-</span> taxa <span class="sc">%&gt;%</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"ASVseqs"</span>) </span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(new_tax_tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                                                                                                                                                                                                                                                                                                                                                                                                      ASVseqs
 1 TGGGGAATTTTGGACAATGGGCGCAAGCCTGATCCAGCCATTCCGCGTGCAGGATGAAGGCCCTCGGGTTGTAAACTGCTTTTGTACGGAACGAAAAGGCTCTCACTAATACTGGGGGCTCATGACGGTACCGTAAGAATAAGCACCGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGTGCGCAGGCGGTGATGTAAGACGGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATTCGTGACTGCATCGCTGGAGTGCGGCAGAGGGGGATGGAATTCCGCGTGTAGCAGTGAAATGCGTAGATATGCGGAGGAACACCGATGGCGAAGGCAATCCCCTGGGCCTGCACTGACGCTCATGCACGAAAGCGTGGGGAGCAAACA
@@ -788,52 +784,52 @@ Joining with `by = join_by(sample_num)`</code></pre>
 5   Reyranellaceae        Reyranella
 6  Pedosphaeraceae              &lt;NA&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intution check </span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(new_tax_tab<span class="sc">$</span>ASVseqs <span class="sc">==</span> <span class="fu">colnames</span>(new_seqtab2))</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>asv_headers <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="fu">dim</span>(new_seqtab2)[<span class="dv">2</span>], <span class="at">mode =</span> <span class="st">"character"</span>)</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co"># loop through vector and fill it in with ASV names </span></span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(new_seqtab2)[<span class="dv">2</span>]) {</span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  asv_headers[i] <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"&gt;ASV"</span>, i, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="co"># intitution check</span></span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(asv_headers, <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intution check </span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(new_tax_tab<span class="sc">$</span>ASVseqs <span class="sc">==</span> <span class="fu">colnames</span>(new_seqtab2))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>asv_headers <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="fu">dim</span>(new_seqtab2)[<span class="dv">2</span>], <span class="at">mode =</span> <span class="st">"character"</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co"># loop through vector and fill it in with ASV names </span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(new_seqtab2)[<span class="dv">2</span>]) {</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  asv_headers[i] <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"&gt;ASV"</span>, i, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="co"># intitution check</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(asv_headers, <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "&gt;ASV_1"  "&gt;ASV_2"  "&gt;ASV_3"  "&gt;ASV_4"  "&gt;ASV_5"  "&gt;ASV_6"  "&gt;ASV_7" 
  [8] "&gt;ASV_8"  "&gt;ASV_9"  "&gt;ASV_10" "&gt;ASV_11" "&gt;ASV_12" "&gt;ASV_13" "&gt;ASV_14"
 [15] "&gt;ASV_15" "&gt;ASV_16" "&gt;ASV_17" "&gt;ASV_18" "&gt;ASV_19" "&gt;ASV_20"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="do">##### Rename ASVs in table then write out our ASV fasta file! </span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>asv_tab <span class="ot">&lt;-</span> <span class="fu">t</span>(new_seqtab2)</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Rename our asvs! </span></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(asv_tab) <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"&gt;"</span>, <span class="st">""</span>, asv_headers)</span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's add the ASV names </span></span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(new_tax_tab) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(asv_tab)</span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a><span class="do">### Final prep of tax table. Add new column with ASV names </span></span>
-<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>asv_tax <span class="ot">&lt;-</span> </span>
-<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>  new_tax_tab <span class="sc">%&gt;%</span></span>
-<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add rownames from count table for phyloseq handoff</span></span>
-<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ASV =</span> <span class="fu">rownames</span>(asv_tab)) <span class="sc">%&gt;%</span></span>
-<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Resort the columns with select</span></span>
-<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Kingdom, Phylum, Class, Order, Family, Genus, ASV, ASVseqs)</span>
-<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Intution check</span></span>
-<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(asv_tax<span class="sc">$</span>ASV <span class="sc">==</span> <span class="fu">rownames</span>(asv_tax), <span class="fu">rownames</span>(asv_tax) <span class="sc">==</span> <span class="fu">rownames</span>(asv_tab))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="do">##### Rename ASVs in table then write out our ASV fasta file! </span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>asv_tab <span class="ot">&lt;-</span> <span class="fu">t</span>(new_seqtab2)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Rename our asvs! </span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(asv_tab) <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"&gt;"</span>, <span class="st">""</span>, asv_headers)</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's add the ASV names </span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(new_tax_tab) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(asv_tab)</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a><span class="do">### Final prep of tax table. Add new column with ASV names </span></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>asv_tax <span class="ot">&lt;-</span> </span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>  new_tax_tab <span class="sc">%&gt;%</span></span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add rownames from count table for phyloseq handoff</span></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ASV =</span> <span class="fu">rownames</span>(asv_tab)) <span class="sc">%&gt;%</span></span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Resort the columns with select</span></span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Kingdom, Phylum, Class, Order, Family, Genus, ASV, ASVseqs)</span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Intution check</span></span>
+<span id="cb54-22"><a href="#cb54-22" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(asv_tax<span class="sc">$</span>ASV <span class="sc">==</span> <span class="fu">rownames</span>(asv_tax), <span class="fu">rownames</span>(asv_tax) <span class="sc">==</span> <span class="fu">rownames</span>(asv_tab))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Make a phyloseq object</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(asv_tab) <span class="ot">&lt;-</span> <span class="fu">str_remove</span>(<span class="fu">colnames</span>(asv_tab), <span class="st">"_R1_filtered.fastq.gz"</span>)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">as.matrix</span>(asv_tax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(asv_tab) <span class="ot">&lt;-</span> <span class="fu">str_remove</span>(<span class="fu">colnames</span>(asv_tab), <span class="st">"_R1_filtered.fastq.gz"</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">as.matrix</span>(asv_tax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Kingdom    Phylum                       Class                
 ASV_1   "Bacteria" "Pseudomonadota"             "Gammaproteobacteria"
@@ -1704,21 +1700,21 @@ ASV_214 "TGGGGAATCTTGCGCAATGGACGAAAGTCTGACGCAGCCACGCCGCGTGAGTGAAGAAGGCCTTCGGGTTG
 ASV_215 "TTAGGAATCTTCCCCAATGGGCGAAAGCCTGAGGGAGCGATACCGCTTGAACGACGAAGCCCTTCGGGGTGTAAAGTTCTGAACTGGGGACGATAATGACGGTACCCAGGTAATAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATCCGGATTCACTGGGTTTAAAGGGTGCGTAGGCGGGTATGTAAGTCAGTGGTGAAATCTCGGAGCTTAACTCCGAAACTGCCATTGATACTATATATCTTGAATATTGTGGAGGTTTGCGGAATATGTCATGTAGCGGTGAAATGCTTAGATATGACATAGAACACCTATTGCGAAGGCAGCAGGCTACACATATATTGACGCTGAGGCACGAAAGCGTGGGGATCAAACA"                              
 ASV_216 "TAAGGAATATTGGTCAATGGACGCAAGTCTGAACCAGCCATGCCGCGTGAAGGATTAAGGTCCTCTGGATTGTAAACTTCTTTTATTTGGGACGAAAAAAGGGAATTCTTTCTCACTTGACGGTACCAGATGAATAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGTAGGTTGTTGTATAAGTTAGTTGTGAAATACCTGTGCTTAACGCGGGGGAGTCAACTAGTACTGTATGACTTGAGTAAAGCAGAGGGTGGTGGAATTTCCGGTGTAGCGGTGAAATGCGTAGAGATCGGAAGGAACATCGGTGGCGAAGGCGACCACCTGGGCTATTACTGACACTGAGGCACGAAAGCGTGGGTAGCAAACA"        </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(new_track_df) <span class="ot">&lt;-</span> new_track_df<span class="sc">$</span>sample</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>props_phylo <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">otu_table</span>(asv_tab, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tax_table</span>(<span class="fu">as.matrix</span>(asv_tax)),</span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_data</span>(new_track_df)</span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>clean_props_phylo <span class="ot">&lt;-</span> </span>
-<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  props_phylo <span class="sc">%&gt;%</span></span>
-<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset_taxa</span>(Family <span class="sc">!=</span> <span class="st">"Mitochondria"</span> <span class="sc">|</span> <span class="fu">is.na</span>(Family)) <span class="sc">%&gt;%</span></span>
-<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset_taxa</span>(Order <span class="sc">!=</span><span class="st">"Chloroplast"</span> <span class="sc">|</span> <span class="fu">is.na</span>(Order)) </span>
-<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Removed one ASV that was a Chloroplast</span></span>
-<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(clean_props_phylo, <span class="at">file =</span>  <span class="st">"clean_props_phylo.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(new_track_df) <span class="ot">&lt;-</span> new_track_df<span class="sc">$</span>sample</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>props_phylo <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">otu_table</span>(asv_tab, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tax_table</span>(<span class="fu">as.matrix</span>(asv_tax)),</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_data</span>(new_track_df)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>clean_props_phylo <span class="ot">&lt;-</span> </span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  props_phylo <span class="sc">%&gt;%</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset_taxa</span>(Family <span class="sc">!=</span> <span class="st">"Mitochondria"</span> <span class="sc">|</span> <span class="fu">is.na</span>(Family)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset_taxa</span>(Order <span class="sc">!=</span><span class="st">"Chloroplast"</span> <span class="sc">|</span> <span class="fu">is.na</span>(Order)) </span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Removed one ASV that was a Chloroplast</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(clean_props_phylo, <span class="at">file =</span>  <span class="st">"clean_props_phylo.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 

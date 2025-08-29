@@ -324,7 +324,6 @@ rownames(track_df) <- track_df$sample
 # Generate a plot to track the reads through our DADA2 pipeline
 track_df %>%
   pivot_longer(input:nochim, names_to = "read_type", values_to = "num_reads") %>%
-  #left_join(metadata, by = "sample_name") %>% 
   mutate(read_type = fct_relevel(read_type, 
                                  "input", "filtered", "denoisedF", "denoisedR", "merged", "nochim")) %>%
   ggplot(aes(x = read_type, y = num_reads, fill = read_type)) + 
@@ -341,12 +340,12 @@ track_df %>%
 Some samples absolutely drop off the face of the earth after getting filtered, while others are fairly good? Why?
 
 Let's bring in some metadata to see what's going on.
-```{r find-metadaat}
-
+```{r find-metadata}
 props_meta_raw <- read_csv("props_meta.csv")
 
 clean_meta <- props_meta_raw %>%
-  select(sample = Run, Reactor_cycle, sample_num = `Sample Name`, Reactor_phase, temp, timepoint, Description)
+  select(sample = Run, Reactor_cycle, sample_num = `Sample Name`, Reactor_phase, temp, timepoint, Description) %>%
+  mutate(sample_num = str_remove(sample_num, "A"))
 
 props_abund_raw <- read_csv("props_abundance.csv")
 
@@ -354,6 +353,7 @@ props_abund_raw <- read_csv("props_abundance.csv")
 clean_abund <- props_abund_raw %>%
   select(sample_num = `sample_title*`, cell_per_ml = `Cell density (cells/mL)`, d0 = `Hill diversity: D0`, d1 = `Hill diversity: D1`) %>%
   mutate(sample_num = as.character(sample_num))
+
 ```
 
 
