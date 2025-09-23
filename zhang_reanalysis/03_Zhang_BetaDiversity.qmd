@@ -4,6 +4,11 @@ author: "Augustus Pendleton"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 editor_options: 
   chunk_output_type: console
+knitr: 
+  opts_chunk: 
+    dpi: 300
+    dev: png
+    dev.args: { bg: "transparent" }
 ---
 
 # Load Data and Packages
@@ -136,7 +141,7 @@ rel_unifracs <-
 
 Comparing dist values
 
-```{r}
+```{r compare-dists, fig.width = 12, fig.height = 4}
 
 bcr_au <- rel_bray_dist - abs_unifracs$d_1 
 
@@ -186,7 +191,7 @@ zhang_sam %>%
 
 I decided to use Rotation, just with mature samples. 
 
-```{r, subset-samples}
+```{r permanovas_and_mantels, fig.width = 4, fig.height = 4}
 
 mature_samples <- 
   zhang_sam %>%

@@ -304,7 +304,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">linewidth=</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>comparison)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/compare-dists-1.png" class="img-fluid" width="3600"></p>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">ua =</span> <span class="fu">rep</span>(<span class="fu">c</span>(abs_unifracs<span class="sc">$</span>d_1), <span class="dv">3</span>),</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">other_dist =</span> <span class="fu">c</span>(<span class="fu">c</span>(rel_bray_dist),<span class="fu">c</span>(rel_unifracs<span class="sc">$</span>d_1), <span class="fu">c</span>(abs_bray_dist)),</span>
@@ -320,7 +320,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">italic</span>(U<span class="sc">^</span>{A})), <span class="at">y =</span> <span class="st">"Other Distance"</span>, <span class="at">caption =</span> <span class="st">"n = 4278"</span>)  <span class="sc">+</span></span>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="672"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/compare-dists-2.png" class="img-fluid" width="3600"></p>
 </div>
 </div>
 </section>
@@ -339,7 +339,7 @@ Attaching package: 'extraDistr'</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/choose-axis-1.png" class="img-fluid" width="672"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/choose-axis-1.png" class="img-fluid" width="2100"></p>
 </div>
 </div>
 <p>Okay, we’re gonna compare diets (the main intervention), but just within stool.</p>
@@ -390,7 +390,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span> </span>
 <span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/subset-samples-1.png" class="img-fluid" width="672"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/permanovas_and_mantels-1.png" class="img-fluid" width="1200"></p>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rel_f <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">map</span>(rel_perms, \(x)x<span class="sc">$</span>F[<span class="dv">1</span>]))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>abs_f <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">map</span>(abs_perms, \(x)x<span class="sc">$</span>F[<span class="dv">1</span>]))</span>
@@ -413,7 +413,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span> </span>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">max</span>(rel_bray_perm<span class="sc">$</span>F[<span class="dv">1</span>], abs_bray_perm<span class="sc">$</span>F[<span class="dv">1</span>], rel_f,  abs_f) <span class="sc">-</span> <span class="fu">min</span>(rel_bray_perm<span class="sc">$</span>F[<span class="dv">1</span>], abs_bray_perm<span class="sc">$</span>F[<span class="dv">1</span>], rel_f,  abs_f)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/subset-samples-2.png" class="img-fluid" width="672"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/permanovas_and_mantels-2.png" class="img-fluid" width="1200"></p>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cell_dist <span class="ot">&lt;-</span> mature_df <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Sample_Sum) <span class="sc">%&gt;%</span> </span>
@@ -446,7 +446,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span> </span>
 <span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/subset-samples-3.png" class="img-fluid" width="672"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/permanovas_and_mantels-3.png" class="img-fluid" width="1200"></p>
 </div>
 </div>
 </section>

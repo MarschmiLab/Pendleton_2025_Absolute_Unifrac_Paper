@@ -26,25 +26,3 @@ ont_theme <- theme_classic() +
 theme_set(ont_theme)
 
 triglav <- natparks.pals(name = "Triglav", n = 6)
-
-
-
-
-
-comp_group_colors <- c(
-  "Shallow_May" = triglav[5],
-  "Shallow_September" = triglav[4],
-  "Deep_May" = triglav[6],
-  "Deep_September" = triglav[3])
-
-comp_group_colors_three <- c(
-  "Shallow_May" = triglav[5],
-  "Shallow_September" = triglav[4],
-  "Deep" = triglav[6])
-
-
-erie_month_colors <- c(
-  "May" = "dodgerblue2",
-  "August" = "green4",
-  "September" = "#6A3D9A"
-)
