@@ -304,7 +304,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">linewidth=</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>comparison)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/compare-dists-1.png" class="img-fluid" width="3600"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/compare-dists-1.png" class="img-fluid" width="2250"></p>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">ua =</span> <span class="fu">rep</span>(<span class="fu">c</span>(abs_unifracs<span class="sc">$</span>d_1), <span class="dv">3</span>),</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">other_dist =</span> <span class="fu">c</span>(<span class="fu">c</span>(rel_bray_dist),<span class="fu">c</span>(rel_unifracs<span class="sc">$</span>d_1), <span class="fu">c</span>(abs_bray_dist)),</span>
@@ -320,7 +320,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">italic</span>(U<span class="sc">^</span>{A})), <span class="at">y =</span> <span class="st">"Other Distance"</span>, <span class="at">caption =</span> <span class="st">"n = 4278"</span>)  <span class="sc">+</span></span>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="03_Barlow_BetaDiversity_files/figure-html/compare-dists-2.png" class="img-fluid" width="3600"></p>
+<p><img src="03_Barlow_BetaDiversity_files/figure-html/compare-dists-2.png" class="img-fluid" width="2250"></p>
 </div>
 </div>
 </section>
