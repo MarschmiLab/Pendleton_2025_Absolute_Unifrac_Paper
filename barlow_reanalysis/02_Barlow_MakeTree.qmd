@@ -1,0 +1,116 @@
+---
+title: "Making Our Phylogenetic Tree"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "Augustus Pendleton"
+editor_options: 
+  chunk_output_type: console
+---
+
+# Load Packages and Functions
+```{r load-pack}
+# Load Packages
+pacman::p_load(phyloseq, ggtree, patchwork, tidytree, phytools, tidyverse, install = TRUE)
+
+```
+
+
+# Load data
+
+```{r load-data}
+# Load in the raw_phyloseq data from DADA2_workflow.Rmd
+load("clean_barlow_phylo.RData")
+
+clean_barlow_phylo
+```
+
+
+# Write ASV Fasta file
+```{r write-asv}
+# first pull taxonomic table from phyloseq object
+# contains ASV and sequences
+tax_table <- clean_barlow_phylo@tax_table %>% as.data.frame() %>% 
+  select(ASV, ASVseqs)
+
+# add > symbol to ASV names for file formatting
+tax_table$ASV <- paste0(">",tax_table$ASV)
+
+# bind ASVs and sequences together in one long character
+seqs_fasta <- c(rbind(tax_table$ASV, tax_table$ASVseqs))
+
+# write seqs_fasta out as a fasta file
+write(seqs_fasta, file = "barlow_asvs.fasta")
+```
+
+
+# MAFFT for Alignment
+
+This step aligns the ASV fasta from phyloseq_preprocessing and outputs an aligned fasta file. Note that you should be running this from the project's home directory!
+
+```{r run-maffft, engine = 'bash', engine.opts='-l', eval = FALSE}
+
+# Run MAFFT on file
+# I am using auto options for now (instead of specifying arguments)
+# MAFFT automatically recognizes that it is a nucleotide alignment
+
+# Set seed (not sure if relevant but not taking chances)
+RANDOM=31491
+
+/programs/mafft/bin/mafft --auto --quiet barlow_asvs.fasta > aligned_asvs.fasta 
+
+```
+
+
+# FastTree
+
+This section of code takes the aligned fasta file and runs it through Fast Tree to output an unrooted tree. It also takes awhile. The end of the logfile will tell you relevant information on who the tree was built. 
+
+```{r run-fasttree, engine = 'bash', engine.opts='-l', eval = FALSE}
+#add to path
+export PATH=/programs/FastTree-2.1.11:$PATH
+
+RANDOM=31491
+FastTree -gtr -nt -fastest -quiet -log fasttree.log aligned_asvs.fasta  > unrooted.tree
+
+```
+
+# Plot with ggtree
+
+First load tree and add to phyloseq object
+
+```{r create-physeq, fig.dim = c(12, 6)}
+# read tree file
+tree <- read.tree("unrooted.tree") 
+```
+
+
+
+# Rooting our tree
+
+```{r first-tree-view}
+is.rooted(tree)
+# Midpoint root
+root_tree <- midpoint_root(tree)
+is.rooted(root_tree)
+
+# Merge with our physeq
+root_physeq <- merge_phyloseq(clean_barlow_phylo, root_tree)
+
+# Plot
+ggtree(root_physeq) + 
+  geom_tippoint(aes(color = Phylum))
+
+```
+
+Okay, our tree looks good, There aren't any crazy long branches that really worry me, or are unannotated.
+
+# Saving our final tree
+
+```{r save-tree}
+save(root_physeq, file = "root_physeq.RData")
+```
+
+# Session Information 
+```{r}
+# Reproducibility
+devtools::session_info()
+```

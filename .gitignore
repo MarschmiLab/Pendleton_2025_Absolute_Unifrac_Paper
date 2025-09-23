@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 *.fastq.gz
+*.fasta
+*.RData
+*.rds

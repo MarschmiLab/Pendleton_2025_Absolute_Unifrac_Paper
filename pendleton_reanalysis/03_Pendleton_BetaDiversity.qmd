@@ -1,0 +1,275 @@
+---
+title: "Comparing Samples with Beta Diversity" 
+author: "Augustus Pendleton"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+editor_options: 
+  chunk_output_type: console
+---
+# Load Data and Packages
+
+```{r load-packages}
+
+pacman::p_load(phyloseq, ggdendro, dendextend, vegan, patchwork, GUniFrac, tidyverse)
+
+# Make sure we're using the MarschmiLab version, which allows us to incorporate absolute abundance!
+packageDescription("GUniFrac")
+
+load("full_diversity_physeq.RData")
+
+source("../code/subset_dist_matrix.R")
+source("../code/plotting.R")
+
+```
+
+# Explore samples via ordination
+
+Conflicted with the best way to approach rarefaction and absolute values here. I'm less confident than I was with Ontario that I'm reaching equal saturation across my samples, and I don't want my beta diversity to be confounded by richness due to sequencing depth. What I settled on:
+
+
+The generated_rarefied_abs_tables returns these rarefied, absolute-count normalized tables in the form of a 3D-array, where dim 1 is each sample, dim 2 is each iteration of rarefaction, and dim 3 is each ASV
+
+```{r, generating-abs-dist-objects}
+
+#install.packages("abind")
+#install.packages("extraDistr")
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  full_diversity_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample = Rep_ID, Sample_Sum = avg_cells_per_ml)
+
+cell_counts <- cell_counts_prep$Sample_Sum
+
+names(cell_counts) = cell_counts_prep$sample
+
+abs_tables <- generated_rarefied_abs_tables(physeq = full_diversity_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+                              iterations = 100, # Number of rarefy steps
+                              rare.depth = min(sample_sums(full_diversity_physeq)), # Depth to rarefy to
+                              abs.counts = cell_counts, # NAMED vector of cell counts for each sample
+                              seed = 314,
+                              return_rel = FALSE)
+
+dims <- dim(abs_tables)
+
+abs_bray_dists <- 
+  map(c(1:dims[2]), 
+    \(x)vegdist(abs_tables[,x,], method = "bray"))
+
+abs_bray_dist <- Reduce(`+`, abs_bray_dists) / length(abs_bray_dists)
+
+
+# abs_gun_dists <-
+#   map(c(1:dims[2]),
+#     \(x)GUniFrac(otu.tab = abs_tables[,x,],
+#                  tree = phy_tree(full_diversity_physeq),
+#                  alpha = seq(from = 0, to = 1, by = 0.1),
+#                  normalize_counts = FALSE,
+#                  verbose = FALSE))
+# 
+# save(abs_gun_dists, file = "abs_gun_dists.RData")
+
+load("abs_gun_dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+abs_unifracs <- 
+  map(gun_names, \(x){
+  dist_objs <- map(abs_gun_dists,
+                   \(y)as.dist(y$unifracs[,,x]))
+  
+  Reduce(`+`, dist_objs) / length(dist_objs)
+})
+
+```
+
+```{r, generating-rel-dist-objects}
+
+rel_counts <- rep(1, 72)
+
+names(rel_counts) <- names(cell_counts)
+
+rel_tables <- generated_rarefied_abs_tables(physeq = full_diversity_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+                              iterations = 100, # Number of rarefy steps
+                              rare.depth = min(sample_sums(full_diversity_physeq)), # Depth to rarefy to
+                              abs.counts = rel_counts, # NAMED vector of cell counts for each sample
+                              seed = 314,
+                              return_rel = TRUE) # Random seed for reproducibility
+
+
+rel_bray_dists <- 
+  map(c(1:dims[2]), 
+    \(x)vegdist(rel_tables[,x,], method = "bray"))
+
+rel_bray_dist <- Reduce(`+`, rel_bray_dists) / length(rel_bray_dists)
+
+
+# rel_gun_dists <-
+#   map(c(1:dims[2]),
+#     \(x)GUniFrac(otu.tab = rel_tables[,x,],
+#                  tree = phy_tree(full_diversity_physeq),
+#                  alpha = seq(from = 0, to = 1, by = 0.1),
+#                  normalize_counts = FALSE,
+#                  verbose = FALSE))
+# 
+# save(rel_gun_dists, file = "rel_gun_dists.RData")
+
+load("rel_gun_dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+rel_unifracs <- 
+  map(gun_names, \(x){
+  dist_objs <- map(rel_gun_dists,
+                   \(y)as.dist(y$unifracs[,,x]))
+  
+  Reduce(`+`, dist_objs) / length(dist_objs)
+})
+
+```
+
+# Comparing dist values
+
+```{r}
+
+bcr_au <- rel_bray_dist - abs_unifracs$d_1 
+
+ur_au <- rel_unifracs$d_1 - abs_unifracs$d_1
+
+bca_au <- abs_bray_dist - abs_unifracs$d_1
+
+data.frame(comparison = rep(c("BCR - UA", "UR - UA", "BCA - UA"), each = 2556),
+           diff = c(bcr_au, ur_au, bca_au)) %>%
+  ggplot(aes(x = diff)) + 
+  geom_histogram(bins = 100) + 
+  geom_vline(xintercept = 0, linetype = 2, linewidth= 0.2) + 
+  facet_wrap(~comparison)
+
+
+data.frame(ua = rep(c(abs_unifracs$d_1), 3),
+           other_dist = c(c(rel_bray_dist),c(rel_unifracs$d_1), c(abs_bray_dist)),
+           dist_name = rep(c("Relative Bray", "Relative Unifrac", "Absolute Bray"), each = 2556)) %>%
+  ggplot(aes(x = ua, y = other_dist)) + 
+  stat_density_2d(geom = "polygon", contour = TRUE,
+                  aes(fill = after_stat(level)),
+                  bins = 10) +
+  scale_fill_distiller(palette = "Blues", direction = 1) + 
+  facet_wrap(~dist_name) + 
+  geom_abline(slope = 1, intercept = 0, linetype = 2, linewidth = 0.2) + 
+  coord_fixed(xlim = c(0,1), ylim = c(0,1)) + 
+  labs(x = expression(italic(U^{A})), y = "Other Distance", caption = "n = 2556") + 
+  theme(legend.position = "none")
+
+```
+
+
+
+```{r, subset-samples}
+
+# This code does nothing cause I didn't remove anything, but didn't want to make all the small edits
+
+pendleton_sam <- 
+  full_diversity_physeq %>%
+  sample_data() %>%
+  data.frame() %>%
+  rename(sample = Rep_ID, Sample_Sum = avg_cells_per_ml)
+
+
+
+sm_abs_bray_dist <- abs_bray_dist
+sm_rel_bray_dist <- rel_bray_dist
+sm_rel_unifracs <- rel_unifracs
+sm_abs_unifracs <- abs_unifracs
+
+abs_bray_perm <- adonis2(sm_abs_bray_dist~Comp_Group_Hier, data = pendleton_sam)
+rel_bray_perm <- adonis2(sm_rel_bray_dist~Comp_Group_Hier, data = pendleton_sam)
+
+rel_perms <- map(sm_rel_unifracs, \(x){
+  adonis2(x~Comp_Group_Hier, data = pendleton_sam)
+})
+
+abs_perms <- map(sm_abs_unifracs, \(x){
+  adonis2(x~Comp_Group_Hier, data = pendleton_sam)
+})
+
+rel_rs <- unlist(map(rel_perms, \(x)x$R2[1]))
+abs_rs <- unlist(map(abs_perms, \(x)x$R2[1]))
+
+data.frame(rs = c(rel_rs[-1], abs_rs[-1]),
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = rs, color = metric)) + 
+  annotate(geom = "segment", y = rel_bray_perm$R2[1], yend = rel_bray_perm$R2[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y = abs_bray_perm$R2[1], yend = abs_bray_perm$R2[1],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y = rel_rs[1], yend = rel_rs[1],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = expression(italic(R^2))) + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  coord_fixed(xlim = c(0,1), ylim = c(0,1))
+
+rel_f <- unlist(map(rel_perms, \(x)x$F[1]))
+abs_f <- unlist(map(abs_perms, \(x)x$F[1]))
+
+data.frame(f = c(rel_f[-1], abs_f[-1]),
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = f, color = metric)) + 
+  annotate(geom = "segment", y = rel_bray_perm$F[1], yend = rel_bray_perm$F[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y = abs_bray_perm$F[1], yend = abs_bray_perm$F[1],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y = rel_f[1], yend = rel_f[1],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = expression(italic(pseudo-F))) + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  coord_fixed(ratio = 1/(max(rel_bray_perm$F[1], abs_bray_perm$F[1], rel_f,  abs_f) - min(rel_bray_perm$F[1], abs_bray_perm$F[1], rel_f,  abs_f)))
+
+
+
+cell_dist <- pendleton_sam %>%
+  dplyr::select(Sample_Sum) %>% 
+  dist()
+
+
+dist_list <- list(Bray_Rel = sm_rel_bray_dist,
+                  Bray_Abs = sm_abs_bray_dist) %>%
+  append(sm_rel_unifracs) %>%
+  append(sm_abs_unifracs)
+
+mantels <- unlist(map(dist_list, \(x)vegan::mantel(cell_dist, x, permutations = 999)$statistic))
+
+
+data.frame(mans = mantels[c(4:14, 16:26)],
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = mans, color = metric)) + 
+  annotate(geom = "segment", y = mantels[1], yend =  mantels[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y =  mantels[2], yend =  mantels[2],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y =  mantels[3], yend =  mantels[3],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = "Mantel R") + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  coord_fixed(xlim = c(0,1), ylim = c(0,1))
+
+```

@@ -29,8 +29,8 @@ generated_rarefied_abs_tables <- function(physeq, iterations, rare.depth, abs.co
     df <-
       physeq %>%
       otu_table() %>%
-      data.frame() %>%
-      t()
+      t() %>%
+      data.frame()
   }
   
   if(any(colnames(df) != names(abs.counts))){

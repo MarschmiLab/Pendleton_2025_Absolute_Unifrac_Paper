@@ -16,12 +16,8 @@ packageDescription("GUniFrac")
 
 load("root_physeq.RData")
 
-# Let's focus on our area of interest: Control vs. Operation
-
-small_physeq <- 
-  root_physeq %>%
-  subset_samples(Reactor_cycle == 1) %>% 
-  subset_samples(Reactor_phase != "Startup")
+source("../code/subset_dist_matrix.R")
+source("../code/plotting.R")
 
 ```
 
@@ -39,18 +35,18 @@ The generated_rarefied_abs_tables returns these rarefied, absolute-count normali
 source("../code/generate_rarefied_abs_tables.R")
 
 cell_counts_prep <- 
-  small_physeq %>%
+  root_physeq %>%
   sample_data %>%
   data.frame %>%
-  select(sample, cell_per_ml)
+  select(sample, Sample_Sum = cell_per_ml)
 
-cell_counts <- cell_counts_prep$cell_per_ml
+cell_counts <- cell_counts_prep$Sample_Sum
 
 names(cell_counts) = cell_counts_prep$sample
 
-abs_tables <- generated_rarefied_abs_tables(physeq = small_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+abs_tables <- generated_rarefied_abs_tables(physeq = root_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 100, # Number of rarefy steps
-                              rare.depth = min(sample_sums(small_physeq)), # Depth to rarefy to
+                              rare.depth = min(sample_sums(root_physeq)), # Depth to rarefy to
                               abs.counts = cell_counts, # NAMED vector of cell counts for each sample
                               seed = 314,
                               return_rel = FALSE) # Random seed for reproducibility
@@ -64,15 +60,15 @@ abs_bray_dists <-
 abs_bray_dist <- Reduce(`+`, abs_bray_dists) / length(abs_bray_dists)
 
 
-abs_gun_dists <-
-  map(c(1:dims[2]),
-    \(x)GUniFrac(otu.tab = abs_tables[,x,],
-                 tree = phy_tree(small_physeq),
-                 alpha = seq(from = 0, to = 1, by = 0.1),
-                 normalize_counts = FALSE,
-                 verbose = FALSE))
-
-save(abs_gun_dists, file = "abs_gun_dists.RData")
+# abs_gun_dists <-
+#   map(c(1:dims[2]),
+#     \(x)GUniFrac(otu.tab = abs_tables[,x,],
+#                  tree = phy_tree(root_physeq),
+#                  alpha = seq(from = 0, to = 1, by = 0.1),
+#                  normalize_counts = FALSE,
+#                  verbose = FALSE))
+# 
+# save(abs_gun_dists, file = "abs_gun_dists.RData")
 
 load("abs_gun_dists.RData")
 
@@ -92,13 +88,13 @@ abs_unifracs <-
 
 ```{r, generating-rel-dist-objects}
 
-rel_counts <- rep(1, 17)
+rel_counts <- rep(1, 47)
 
 names(rel_counts) <- names(cell_counts)
 
-rel_tables <- cell_counts_preprel_tables <- generated_rarefied_abs_tables(physeq = small_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+rel_tables <- generated_rarefied_abs_tables(physeq = root_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 100, # Number of rarefy steps
-                              rare.depth = min(sample_sums(small_physeq)), # Depth to rarefy to
+                              rare.depth = min(sample_sums(root_physeq)), # Depth to rarefy to
                               abs.counts = rel_counts, # NAMED vector of cell counts for each sample
                               seed = 314,
                               return_rel = TRUE) # Random seed for reproducibility
@@ -111,15 +107,15 @@ rel_bray_dists <-
 rel_bray_dist <- Reduce(`+`, rel_bray_dists) / length(rel_bray_dists)
 
 
-rel_gun_dists <-
-  map(c(1:dims[2]),
-    \(x)GUniFrac(otu.tab = rel_tables[,x,],
-                 tree = phy_tree(small_physeq),
-                 alpha = seq(from = 0, to = 1, by = 0.1),
-                 normalize_counts = FALSE,
-                 verbose = FALSE))
-
-save(rel_gun_dists, file = "rel_gun_dists.RData")
+# rel_gun_dists <-
+#   map(c(1:dims[2]),
+#     \(x)GUniFrac(otu.tab = rel_tables[,x,],
+#                  tree = phy_tree(root_physeq),
+#                  alpha = seq(from = 0, to = 1, by = 0.1),
+#                  normalize_counts = FALSE,
+#                  verbose = FALSE))
+# 
+# save(rel_gun_dists, file = "rel_gun_dists.RData")
 
 load("rel_gun_dists.RData")
 
@@ -137,39 +133,160 @@ rel_unifracs <-
 
 ```
 
-```{r ordinations, fig.height = 10, fig.width = 25}
+# Comparing dist values
 
-plot_props_function <- function(dist){
-  plot_ordination(small_physeq,
-                ordination = ordinate(small_physeq, "PCoA", distance = dist),
-                color = "Reactor_phase") + 
-  geom_point(aes(shape = as.character(Reactor_cycle)), size = 4, alpha = 0.7)
-}
+```{r}
 
-  plot_ordination(small_physeq,
-                ordination = ordinate(small_physeq, "PCoA", distance = abs_unifracs[[4]]),
-                color = "timepoint") + 
-  geom_point(aes(shape = as.character(Reactor_phase)), size = 4, alpha = 0.7)
+bcr_au <- rel_bray_dist - abs_unifracs$d_1 
+
+ur_au <- rel_unifracs$d_1 - abs_unifracs$d_1
+
+bca_au <- abs_bray_dist - abs_unifracs$d_1
+
+data.frame(comparison = rep(c("BCR - UA", "UR - UA", "BCA - UA"), each = 1081),
+           diff = c(bcr_au, ur_au, bca_au)) %>%
+  ggplot(aes(x = diff)) + 
+  geom_histogram(bins = 100) + 
+  geom_vline(xintercept = 0, linetype = 2, linewidth= 0.2) + 
+  facet_wrap(~comparison)
 
 
-abs_plots <- map(abs_unifracs, plot_props_function)
-rel_plots <- map(rel_unifracs, plot_props_function)
-
-library(patchwork)
-
-wrap_plots(rel_plots, nrow = 1, guides = "collect") / 
-  wrap_plots(abs_plots, nrow = 1, guides = "collect") + 
+data.frame(ua = rep(c(abs_unifracs$d_1), 3),
+           other_dist = c(c(rel_bray_dist),c(rel_unifracs$d_1), c(abs_bray_dist)),
+           dist_name = rep(c("Relative Bray", "Relative Unifrac", "Absolute Bray"), each = 1081)) %>%
+  ggplot(aes(x = ua, y = other_dist)) + 
+  stat_density_2d(geom = "polygon", contour = TRUE,
+                  aes(fill = after_stat(level)),
+                  bins = 10) +
+  scale_fill_distiller(palette = "Blues", direction = 1) + 
+  facet_wrap(~dist_name) + 
+  geom_abline(slope = 1, intercept = 0, linetype = 2, linewidth = 0.2) + 
+  coord_fixed(xlim = c(0,1), ylim = c(0,1)) + 
+  labs(x = expression(italic(U^{A})), y = "Other Distance", caption = "n = 1081") + 
   theme(legend.position = "none")
 
-ad_func <- function(dist){
-  perm_res <- adonis2(dist~Reactor_phase, data = data.frame(sample_data(small_physeq)))
-  return(perm_res$R2[1])
-}
-map(rel_unifracs, ad_func)
+```
 
-map(abs_unifracs, ad_func)
+# Picking which axis to compare across
 
-adonis2(abs_bray_dist~Reactor_phase, data = data.frame(sample_data(small_physeq)))$R2[1]
+```{r choose-axis}
 
-adonis2(rel_bray_dist~Reactor_phase, data = data.frame(sample_data(small_physeq)))$R2[1]
+props_sam <- root_physeq %>%
+  sample_data() %>%
+  data.frame() %>%
+  rename(Sample_Sum = cell_per_ml)
+
+props_sam %>%
+  ggplot(aes(fill = Reactor_phase, x = Sample_Sum)) + 
+  geom_histogram(alpha = 0.5) +
+  facet_wrap(~Reactor_cycle) 
+
+
+```
+
+I decided to use Reactor_Phase, but we'll only use Reactor_cycle 1. 
+
+```{r, subset-samples}
+
+rec1_samples <- 
+  props_sam %>%
+  dplyr::filter(Reactor_cycle == 1) %>%
+  pull(sample)
+
+sm_abs_bray_dist <- subset_dist_matrix(abs_bray_dist, rec1_samples)
+sm_rel_bray_dist <- subset_dist_matrix(rel_bray_dist, rec1_samples)
+sm_rel_unifracs <- map(rel_unifracs, subset_dist_matrix, keeps = rec1_samples)
+sm_abs_unifracs <- map(abs_unifracs, subset_dist_matrix, keeps = rec1_samples)
+
+rec1_df <- 
+  props_sam %>%
+  dplyr::filter(Reactor_cycle == 1)
+
+
+abs_bray_perm <- adonis2(sm_abs_bray_dist~Reactor_phase, data = rec1_df)
+rel_bray_perm <- adonis2(sm_rel_bray_dist~Reactor_phase, data = rec1_df)
+
+rel_perms <- map(sm_rel_unifracs, \(x){
+  adonis2(x~Reactor_phase, data = rec1_df)
+})
+
+abs_perms <- map(sm_abs_unifracs, \(x){
+  adonis2(x~Reactor_phase, data = rec1_df)
+})
+
+rel_rs <- unlist(map(rel_perms, \(x)x$R2[1]))
+abs_rs <- unlist(map(abs_perms, \(x)x$R2[1]))
+
+data.frame(rs = c(rel_rs[-1], abs_rs[-1]),
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = rs, color = metric)) + 
+  annotate(geom = "segment", y = rel_bray_perm$R2[1], yend = rel_bray_perm$R2[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y = abs_bray_perm$R2[1], yend = abs_bray_perm$R2[1],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y = rel_rs[1], yend = rel_rs[1],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = expression(italic(R^2))) + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  coord_fixed(xlim = c(0,1), ylim = c(0,1))
+
+rel_f <- unlist(map(rel_perms, \(x)x$F[1]))
+abs_f <- unlist(map(abs_perms, \(x)x$F[1]))
+
+data.frame(f = c(rel_f[-1], abs_f[-1]),
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = f, color = metric)) + 
+  annotate(geom = "segment", y = rel_bray_perm$F[1], yend = rel_bray_perm$F[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y = abs_bray_perm$F[1], yend = abs_bray_perm$F[1],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y = rel_f[1], yend = rel_f[1],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = expression(italic(pseudo-F))) + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  coord_fixed(ratio = 1/(max(rel_bray_perm$F[1], abs_bray_perm$F[1], rel_f,  abs_f) - min(rel_bray_perm$F[1], abs_bray_perm$F[1], rel_f,  abs_f)))
+
+
+
+cell_dist <- rec1_df %>%
+  dplyr::select(Sample_Sum) %>% 
+  dist()
+
+
+dist_list <- list(Bray_Rel = sm_rel_bray_dist,
+                  Bray_Abs = sm_abs_bray_dist) %>%
+  append(sm_rel_unifracs) %>%
+  append(sm_abs_unifracs)
+
+mantels <- unlist(map(dist_list, \(x)vegan::mantel(cell_dist, x, permutations = 999)$statistic))
+
+
+data.frame(mans = mantels[c(4:14, 16:26)],
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = mans, color = metric)) + 
+  annotate(geom = "segment", y = mantels[1], yend =  mantels[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y =  mantels[2], yend =  mantels[2],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y =  mantels[3], yend =  mantels[3],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = "Mantel R") + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  coord_fixed(xlim = c(0,1), ylim = c(0,1))
+
 ```

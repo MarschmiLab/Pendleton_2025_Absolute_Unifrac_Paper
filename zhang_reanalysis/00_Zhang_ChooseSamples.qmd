@@ -1,0 +1,76 @@
+---
+title: "Picking which samples to analyze"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "Augustus Pendleton"
+editor_options: 
+  chunk_output_type: console
+---
+
+# Loading packages 
+```{r load-packages}
+# Efficient loading of the packages 
+pacman::p_load(tidyverse, install = FALSE)
+
+```
+
+```{r}
+
+meta <- read_csv("zhang_meta.csv")
+
+abund <- read_csv("zhang_absoluteabundance.csv") %>%
+  rename(sample = `Sample ID`, Sample_Sum = `Bacterial abundance`)
+
+clean_meta <- meta %>%
+  select(Run, irrigation, sample = `Sample Name`, Rotation, season)
+
+clean_meta$sample[clean_meta$sample %in% abund$sample]
+clean_meta$sample[!clean_meta$sample %in% abund$sample]
+clean_meta[!clean_meta$sample %in% abund$sample,]
+
+final_meta <- 
+  abund %>%
+  left_join(clean_meta)
+
+```
+
+There are 36 samples. The samples without corresponding abundances are the ITS/fungal sequencing, which we want to remove anyways. 
+
+See where differences lay in cell abundances
+
+
+```{r plot-cell-abundances}
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = irrigation)) + 
+  geom_density(alpha = 0.5) + 
+  scale_x_log10()
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = Rotation)) + 
+  geom_density(alpha = 0.5) + 
+  scale_x_log10()
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = season)) + 
+  geom_density(alpha = 0.5) + 
+  scale_x_log10()
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = season)) + 
+  geom_density(alpha = 0.5) + 
+  scale_x_log10() + 
+  facet_wrap(~irrigation)
+
+
+```
+
+Okay cool - it seems like season might be the axis where we see meaningful differences in absolute abundances. 
+
+# Save our meta-file
+
+```{r save-meta}
+
+write_csv(final_meta, "final_meta.csv")
+
+
+```

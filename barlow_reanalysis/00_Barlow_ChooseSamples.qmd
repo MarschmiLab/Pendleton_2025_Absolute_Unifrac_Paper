@@ -1,0 +1,119 @@
+---
+title: "Picking which samples to analyze"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: "Augustus Pendleton"
+editor_options: 
+  chunk_output_type: console
+---
+
+# Loading packages 
+```{r load-packages}
+# Efficient loading of the packages 
+pacman::p_load(tidyverse, install = FALSE)
+
+```
+
+```{r}
+
+meta <- read_csv("barlow_meta.csv")
+
+abund <- read_csv("barlow_abundances.csv")
+
+clean_meta <- meta %>%
+  select(Run, Day, Dilution, Host_diet, host_genotype, host_tissue_sampled, `Sample Name`)
+
+
+clean_abund_names <- str_replace_all(abund$Sample, " ", "_")
+
+clean_meta$`Sample Name`[clean_meta$`Sample Name` %in% clean_abund_names]
+clean_meta$`Sample Name`[!clean_meta$`Sample Name` %in% clean_abund_names]
+clean_abund_names[!clean_abund_names %in% clean_meta$`Sample Name`]
+
+clean_meta[clean_meta$`Sample Name` %in% clean_abund_names,]
+
+```
+
+You know, I'll take it. 93 samples is a good enough number of samples for me to at least start with. 
+
+
+```{r picking-samples}
+
+clean_abund <- 
+  abund %>%
+  rowwise() %>%
+  mutate(Sample_Sum = sum(c_across(contains(";"))),
+         Sample = str_replace_all(Sample, " ", "_")) %>%
+  select(Sample, Sample_Sum, Diet, Site, Day, mouse, Cage)
+
+
+clean_together <- 
+  clean_meta %>%
+  rename(Sample = `Sample Name`) %>%
+  inner_join(clean_abund, by = "Sample")
+
+all(clean_together$Day.x == clean_together$Day.y)
+all(clean_together$host_tissue_sampled == clean_together$Site)
+all(clean_together$Host_diet == clean_together$Diet)
+
+clean_together %>%
+  filter(host_tissue_sampled != Site) %>%
+  select(Site, host_tissue_sampled)
+
+# Okay, they match, but host_tissue_sampled is more descriptive
+
+
+clean_together %>%
+  filter(Host_diet != Diet) %>%
+  select(Host_diet, Diet)
+
+#Also match, but Host_diet is better
+clean_together %>%
+  count(Dilution)
+
+clean_together %>%
+  count(host_genotype)
+
+
+final_meta <- 
+  clean_together %>%
+  select(Run, Day = Day.x, Host_diet, host_tissue_sampled, Sample, Sample_Sum, mouse, Cage)
+
+```
+
+See where differences lay in cell abundances
+
+
+```{r plot-cell-abundances}
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = Day)) + 
+  geom_density(alpha = 0.5)
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = Host_diet)) + 
+  geom_density(alpha = 0.5)
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = host_tissue_sampled)) + 
+  geom_density(alpha = 0.5) + 
+  scale_x_log10()
+
+
+final_meta %>%
+  ggplot(aes(x = Sample_Sum, fill = Host_diet)) + 
+  geom_density(alpha = 0.5) + 
+  scale_x_log10() + 
+  facet_wrap(~host_tissue_sampled)
+
+```
+
+Okay cool - it definitely seems like there is potential here for comparisons between diets, especially at a given site.
+
+# Save our meta-file
+
+```{r save-meta}
+
+write_csv(final_meta, "final_meta.csv")
+
+
+```

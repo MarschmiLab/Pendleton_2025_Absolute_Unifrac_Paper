@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Augustus Pendleton">
+<meta name="dcterms.date" content="2025-09-04">
+
+<title>Picking which samples to analyze</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="00_Barlow_ChooseSamples_files/libs/clipboard/clipboard.min.js"></script>
+<script src="00_Barlow_ChooseSamples_files/libs/quarto-html/quarto.js"></script>
+<script src="00_Barlow_ChooseSamples_files/libs/quarto-html/popper.min.js"></script>
+<script src="00_Barlow_ChooseSamples_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="00_Barlow_ChooseSamples_files/libs/quarto-html/anchor.min.js"></script>
+<link href="00_Barlow_ChooseSamples_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="00_Barlow_ChooseSamples_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="00_Barlow_ChooseSamples_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="00_Barlow_ChooseSamples_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="00_Barlow_ChooseSamples_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Picking which samples to analyze</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Augustus Pendleton </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 4, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="loading-packages" class="level1">
+<h1>Loading packages</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Efficient loading of the packages </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, <span class="at">install =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"barlow_meta.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 116 Columns: 43
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (35): Run, Assay Type, BioProject, BioSample, BioSampleModel, Cage, Cen...
+dbl   (5): AvgSpotLen, Bases, Bytes, Dilution, version
+dttm  (2): ReleaseDate, create_date
+date  (1): Collection_Date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>abund <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"barlow_abundances.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 103 Columns: 148
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr   (4): Sample, Diet, Site, mouse
+dbl (144): D_0__Bacteria;D_1__Actinobacteria;D_2__Acidimicrobiia;D_3__Microt...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>clean_meta <span class="ot">&lt;-</span> meta <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Run, Day, Dilution, Host_diet, host_genotype, host_tissue_sampled, <span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>clean_abund_names <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(abund<span class="sc">$</span>Sample, <span class="st">" "</span>, <span class="st">"_"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>clean_meta<span class="sc">$</span><span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>[clean_meta<span class="sc">$</span><span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span> <span class="sc">%in%</span> clean_abund_names]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "M5NP_CC"        "M5NP_LSI-C"     "M5NP_USI-C"     "M5NP_SC"       
+ [5] "M4P_LI-S"       "M4P_LSI-S"      "M4P_USI-S"      "M4P_CC"        
+ [9] "M4P_LSI-C"      "M4P_USI-C"      "M4P_SC"         "M3NP_LI-S"     
+[13] "M3NP_LSI-S"     "M3NP_USI-S"     "M3NP_CC"        "M3NP_LSI-C"    
+[17] "M3NP_USI-C"     "M3NP_SC"        "M2NP_LI-S"      "M2NP_LSI-S"    
+[21] "M2NP_USI-S"     "M2NP_CC"        "M2NP_LSI-C"     "M2NP_USI-C"    
+[25] "M2NP_SC"        "M1NP_LI-S"      "M1NP_LSI-S"     "M1NP_USI-S"    
+[29] "M1NP_CC"        "M1NP_LSI-C"     "M1NP_USI-C"     "M1NP_SC"       
+[33] "M6P_D10_Stool"  "M6NP_D10_Stool" "M5P_D10_Stool"  "M5NP_D10_Stool"
+[37] "M4P_D10_Stool"  "M4NP_D10_Stool" "M3P_D10_Stool"  "M3NP_D10_Stool"
+[41] "M2P_D10_Stool"  "M2NP_D10_Stool" "M1P_D10_Stool"  "M1NP_D10_Stool"
+[45] "M6P_D7_Stool"   "M6NP_D7_Stool"  "M5P_D7_Stool"   "M5NP_D7_Stool" 
+[49] "M4P_D7_Stool"   "M4NP_D7_Stool"  "M3P_D7_Stool"   "M3NP_D7_Stool" 
+[53] "M2P_D7_Stool"   "M2NP_D7_Stool"  "M1P_D7_Stool"   "M1NP_D7_Stool" 
+[57] "M6NP_D4_Stool"  "M5P_D4_Stool"   "M5NP_D4_Stool"  "M4P_D4_Stool"  
+[61] "M4NP_D4_Stool"  "M3P_D4_Stool"   "M3NP_D4_Stool"  "M2P_D4_Stool"  
+[65] "M2NP_D4_Stool"  "M1P_D4_Stool"   "M1NP_D4_Stool"  "M6NP_D0_Stool" 
+[69] "M5P_D0_Stool"   "M5NP_D0_Stool"  "M4NP_D0_Stool"  "M3P_D0_Stool"  
+[73] "M3NP_D0_Stool"  "M2P_D0_Stool"   "M2NP_D0_Stool"  "M1P_D0_Stool"  
+[77] "M1NP_D0_Stool"  "M5P_LSI-S"      "M4NP_LSI-S"     "M3P_LSI-S"     
+[81] "M2P_LSI-S"      "M3P_LI-S"       "M1P_LSI-S"      "M6NP_LI-S"     
+[85] "M6NP_LSI-S"     "M6NP_USI-S"     "M6NP_CC"        "M6NP_LSI-C"    
+[89] "M6NP_USI-C"     "M6NP_SC"        "M5NP_LI-S"      "M5NP_LSI-S"    
+[93] "M5NP_USI-S"    </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>clean_meta<span class="sc">$</span><span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>[<span class="sc">!</span>clean_meta<span class="sc">$</span><span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span> <span class="sc">%in%</span> clean_abund_names]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "GF_SI_Stool_100000X" "GF_SI_Stool_1000X"   "GF_SI-S_Cntrl"      
+ [4] "GF_SI-S_100000X"     "GF_SI-S_1000X"       "GF_SI-S_10X"        
+ [7] "Buffer_Cntrl"        "M4P_D0_Stool"        "CC_SW_Chow_10000X"  
+[10] "CC_SW_Chow_1000X_4"  "Buffer_100000X"      "CC_SW_Chow_1000X_3" 
+[13] "CC_SW_Chow_1000X_2"  "CC_SW_Chow_1000X_1"  "CC_SW_Chow_100X"    
+[16] "CC_SW_Chow_10X"      "CC_SW_Chow_4"        "CC_SW_Chow_3"       
+[19] "CC_SW_Chow_2"        "CC_SW_Chow_1"        "GF_SI_Stool_Cntrl"  
+[22] "Buffer_1000X"        "Buffer_10X"         </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>clean_abund_names[<span class="sc">!</span>clean_abund_names <span class="sc">%in%</span> clean_meta<span class="sc">$</span><span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "M1NP_USI-S_noC" "M1P_LSI-S_noC"  "M2NP_LI-S_noC"  "M2NP_USI-S_noC"
+ [5] "M3NP_USI-S_noC" "M3P_LI-S_noC"   "M4P_LSI-S_noC"  "M4P_USI-S_noC" 
+ [9] "M5NP_USI-S_noC" "M6NP_USI-S_noC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>clean_meta[clean_meta<span class="sc">$</span><span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span> <span class="sc">%in%</span> clean_abund_names,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 93 × 7
+   Run         Day   Dilution Host_diet host_genotype host_tissue_sampled       
+   &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;                     
+ 1 SRR10217991 10           0 Control   Swiss Webster Cecum Contents            
+ 2 SRR10217992 10           0 Control   Swiss Webster Lower Small Intestine Con…
+ 3 SRR10217993 10           0 Control   Swiss Webster Upper Small Intestine Con…
+ 4 SRR10217994 10           0 Control   Swiss Webster Stomach Contents          
+ 5 SRR10217995 10           0 Control   Swiss Webster Large Intestine Mucosa    
+ 6 SRR10217996 10           0 Control   Swiss Webster Lower Small Intestine Muc…
+ 7 SRR10217997 10           0 Control   Swiss Webster Upper Small Intestine Muc…
+ 8 SRR10217998 10           0 Control   Swiss Webster Cecum Contents            
+ 9 SRR10217999 10           0 Control   Swiss Webster Lower Small Intestine Con…
+10 SRR10218000 10           0 Control   Swiss Webster Upper Small Intestine Con…
+# ℹ 83 more rows
+# ℹ 1 more variable: `Sample Name` &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>You know, I’ll take it. 93 samples is a good enough number of samples for me to at least start with.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>clean_abund <span class="ot">&lt;-</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  abund <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Sample_Sum =</span> <span class="fu">sum</span>(<span class="fu">c_across</span>(<span class="fu">contains</span>(<span class="st">";"</span>))),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Sample =</span> <span class="fu">str_replace_all</span>(Sample, <span class="st">" "</span>, <span class="st">"_"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Sample, Sample_Sum, Diet, Site, Day, mouse, Cage)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>clean_together <span class="ot">&lt;-</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  clean_meta <span class="sc">%&gt;%</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Sample =</span> <span class="st">`</span><span class="at">Sample Name</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(clean_abund, <span class="at">by =</span> <span class="st">"Sample"</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(clean_together<span class="sc">$</span>Day.x <span class="sc">==</span> clean_together<span class="sc">$</span>Day.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(clean_together<span class="sc">$</span>host_tissue_sampled <span class="sc">==</span> clean_together<span class="sc">$</span>Site)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(clean_together<span class="sc">$</span>Host_diet <span class="sc">==</span> clean_together<span class="sc">$</span>Diet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>clean_together <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(host_tissue_sampled <span class="sc">!=</span> Site) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Site, host_tissue_sampled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 36 × 2
+   Site              host_tissue_sampled           
+   &lt;chr&gt;             &lt;chr&gt;                         
+ 1 Lower SI Contents Lower Small Intestine Contents
+ 2 Upper SI Contents Upper Small Intestine Contents
+ 3 Colon Mucosa      Large Intestine Mucosa        
+ 4 Lower SI Mucosa   Lower Small Intestine Mucosa  
+ 5 Upper SI Mucosa   Upper Small Intestine Mucosa  
+ 6 Lower SI Contents Lower Small Intestine Contents
+ 7 Upper SI Contents Upper Small Intestine Contents
+ 8 Colon Mucosa      Large Intestine Mucosa        
+ 9 Lower SI Mucosa   Lower Small Intestine Mucosa  
+10 Upper SI Mucosa   Upper Small Intestine Mucosa  
+# ℹ 26 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Okay, they match, but host_tissue_sampled is more descriptive</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>clean_together <span class="sc">%&gt;%</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Host_diet <span class="sc">!=</span> Diet) <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Host_diet, Diet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 49 × 2
+   Host_diet Diet 
+   &lt;chr&gt;     &lt;chr&gt;
+ 1 Ketogenic Keto 
+ 2 Ketogenic Keto 
+ 3 Ketogenic Keto 
+ 4 Ketogenic Keto 
+ 5 Ketogenic Keto 
+ 6 Ketogenic Keto 
+ 7 Ketogenic Keto 
+ 8 Ketogenic Keto 
+ 9 Ketogenic Keto 
+10 Ketogenic Keto 
+# ℹ 39 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Also match, but Host_diet is better</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>clean_together <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Dilution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  Dilution     n
+     &lt;dbl&gt; &lt;int&gt;
+1        0    93</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>clean_together <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(host_genotype)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  host_genotype     n
+  &lt;chr&gt;         &lt;int&gt;
+1 Swiss Webster    93</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>final_meta <span class="ot">&lt;-</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  clean_together <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Run, <span class="at">Day =</span> Day.x, Host_diet, host_tissue_sampled, Sample, Sample_Sum, mouse, Cage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>See where differences lay in cell abundances</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>final_meta <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Sample_Sum, <span class="at">fill =</span> Day)) <span class="sc">+</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="00_Barlow_ChooseSamples_files/figure-html/plot-cell-abundances-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>final_meta <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Sample_Sum, <span class="at">fill =</span> Host_diet)) <span class="sc">+</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="00_Barlow_ChooseSamples_files/figure-html/plot-cell-abundances-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>final_meta <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Sample_Sum, <span class="at">fill =</span> host_tissue_sampled)) <span class="sc">+</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="00_Barlow_ChooseSamples_files/figure-html/plot-cell-abundances-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>final_meta <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Sample_Sum, <span class="at">fill =</span> Host_diet)) <span class="sc">+</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>host_tissue_sampled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="00_Barlow_ChooseSamples_files/figure-html/plot-cell-abundances-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Okay cool - it definitely seems like there is potential here for comparisons between diets, especially at a given site.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
