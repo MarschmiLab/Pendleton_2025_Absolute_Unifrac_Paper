@@ -4,6 +4,11 @@ author: "Augustus Pendleton"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 editor_options: 
   chunk_output_type: console
+knitr: 
+  opts_chunk: 
+    dpi: 300
+    dev: png
+    dev.args: { bg: "transparent" }
 ---
 # Load Data and Packages
 
@@ -135,7 +140,7 @@ rel_unifracs <-
 
 # Comparing dist values
 
-```{r}
+```{r compare-dists, fig.width = 12, fig.height = 4}
 
 bcr_au <- rel_bray_dist - abs_unifracs$d_1 
 
@@ -186,7 +191,7 @@ props_sam %>%
 
 I decided to use Reactor_Phase, but we'll only use Reactor_cycle 1. 
 
-```{r, subset-samples}
+```{r permanovas_and_mantels, fig.width = 4, fig.height = 4}
 
 rec1_samples <- 
   props_sam %>%
