@@ -292,3 +292,119 @@ data.frame(mans = mantels[c(4:14, 16:26)],
         axis.title = element_text(size = 20)) + 
   coord_fixed(xlim = c(0,1), ylim = c(0,1))
 ```
+
+# Exploring time of calculation
+
+How long do these methods take? How does this scale with the number of OTUs and samples?
+
+```{r timing, fig.height = 3, fig.width = 3}
+
+library(microbenchmark)
+
+test_conditions <- 
+  data.frame(
+  Samples = c(rep(10, 8), 2, 5, 15, 20, 30, 10, 10, 10),
+  ASVs = c(50, 100, 200, 500, 1000, 2000, 5000, 10000, rep(2000, 8)),
+  Alphas = c(rep(1, 13), 2, 4, 8)
+)
+
+rep_tests <- bind_rows(replicate(10, test_conditions, simplify=F))
+
+
+time_results <- vector(mode = "list", length = nrow(rep_tests))
+set.seed(314)
+
+# for(i in c(1:nrow(rep_tests))){
+# 
+#   writeLines(paste("On test number", i, "Samples:", rep_tests$Samples[i], "ASVs:", rep_tests$ASVs[i], "Alphas:", rep_tests$Alphas[i]))
+# 
+#       pretest_physeq <-
+#         trim_physeq %>%
+#         subset_samples(sample %in% sample(sample_names(trim_physeq), rep_tests$Samples[i])) %>%
+#         prune_taxa(taxa_sums(.) > 0, .)
+# 
+#       test_physeq <-
+#         pretest_physeq %>%
+#         subset_taxa(ASV %in% sample(taxa_names(pretest_physeq), rep_tests$ASVs[i]))
+# 
+#       test_mat <- as.matrix(otu_table(test_physeq))
+#       test_mat_gun <- t(test_mat)
+#       test_tree <- phy_tree(test_physeq)
+# 
+#       bray_time <- microbenchmark(vegdist(test_mat, method = "bray"), times = 2, unit = "seconds")
+# 
+#       gun_time <-
+#         microbenchmark(GUniFrac(otu.tab = test_mat_gun,
+#                                 tree = test_tree,
+#                                 alpha = seq(.1, 1, length.out = rep_tests$Alphas[i]),
+#                                 normalize_counts = FALSE,
+#                                 verbose = FALSE),
+#                        times = 2, unit = "seconds")
+#       
+#       wun_time <- microbenchmark(phyloseq::distance(test_physeq, method = "wunifrac"), unit = "seconds")
+# 
+#       time_results[[i]] <-
+#         data.frame(
+#           Bray = summary(bray_time)$median,
+#           Gunifrac = summary(gun_time)$median,
+#           Phylo.Wunifrac = summary(wun_time)$median
+#          )
+# 
+#     }
+# 
+# save(time_results, file = "time_results.RData")
+
+load("time_results.RData")
+
+time_res_df <- 
+  time_results[1:96] %>%
+  bind_rows() %>%
+  cbind(rep_tests[1:96,]) %>%
+  pivot_longer(Bray:Gunifrac, names_to= "Metric", values_to = "Time")
+
+time_res_df %>%
+  filter(Samples == 10, ASVs == 2000, Metric == "Gunifrac") %>%
+  ggplot(aes(x = Alphas, y = Time/60)) + 
+  geom_jitter() + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 0.6) + 
+  stat_summary(geom = "errorbar",
+               fun.min = \(x)median(x)-sd(x),
+               fun.max = \(x)median(x)+sd(x),
+               width = 0) + 
+  labs(y = "Time (mins)", x = "Number of Alphas")
+
+time_res_df %>%
+  filter(Alphas == 1, ASVs == 2000, Metric == "Gunifrac") %>%
+  ggplot(aes(x = Samples, y = Time/60)) + 
+  geom_jitter() + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 0.6) + 
+  stat_summary(geom = "errorbar",
+               fun.min = \(x)median(x)-sd(x),
+               fun.max = \(x)median(x)+sd(x),
+               width = 0) + 
+  labs(y = "Time (mins)", x = "Number of Samples")
+
+time_res_df %>%
+  filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
+  ggplot(aes(x = ASVs, y = Time/60)) + 
+  geom_jitter() + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 0.6) + 
+  stat_summary(geom = "errorbar",
+               fun.min = \(x)median(x)-sd(x),
+               fun.max = \(x)median(x)+sd(x),
+               width = 0) + 
+  labs(y = "Time (mins)", x = "Number of ASVs")
+  
+time_res_df %>%
+  mutate(id = rep(c(1:6), each = 32)) %>%
+  pivot_wider(names_from = Metric, values_from = Time) %>%
+  mutate(Diff = Gunifrac - Bray,
+         Diff_Perc = Gunifrac/Bray) %>%
+  summarize(Median_Diff = median(Diff),
+            Max_Diff = max(Diff),
+            Median_DiffX = median(Diff_Perc),
+            Max_DiffX = max(Diff_Perc),
+            Median_Bray = median(Bray),
+            Median_Gunifrac = median(Gunifrac))
+
+```
