@@ -166,7 +166,7 @@ data.frame(ua = rep(c(abs_unifracs$d_1), 3),
   ggplot(aes(x = ua, y = other_dist)) + 
   stat_density_2d(geom = "polygon", contour = TRUE,
                   aes(fill = after_stat(level)),
-                  bins = 10) +
+                  bins = 30) +
   scale_fill_distiller(palette = "Blues", direction = 1) + 
   facet_wrap(~dist_name, labeller = label_parsed) + 
   geom_abline(slope = 1, intercept = 0, linetype = 2, linewidth = 0.2) + 
