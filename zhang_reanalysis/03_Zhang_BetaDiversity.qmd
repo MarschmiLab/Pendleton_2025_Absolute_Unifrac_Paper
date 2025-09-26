@@ -441,7 +441,7 @@ time_res_df %>%
 time_res_df %>%
   filter(Alphas == 1, Samples == 10) %>%
   ggplot(aes(x = ASVs/1000, y= Time/60, color = Metric)) + 
-  stat_summary(geom = "line", fun = median) + 
+  stat_summary(geom = "line", fun = median, linewidth = 1.5) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
