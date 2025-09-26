@@ -291,6 +291,8 @@ data.frame(mans = mantels[c(4:14, 16:26)],
   theme(legend.position = "none",
         axis.title = element_text(size = 20)) + 
   coord_fixed(xlim = c(0,1), ylim = c(0,1))
+
+
 ```
 
 # Exploring time of calculation
@@ -308,7 +310,7 @@ test_conditions <-
   Alphas = c(rep(1, 13), 2, 4, 8)
 )
 
-rep_tests <- bind_rows(replicate(10, test_conditions, simplify=F))
+rep_tests <- bind_rows(replicate(50, test_conditions, simplify=F))
 
 
 time_results <- vector(mode = "list", length = nrow(rep_tests))
@@ -340,7 +342,7 @@ set.seed(314)
 #                                 normalize_counts = FALSE,
 #                                 verbose = FALSE),
 #                        times = 2, unit = "seconds")
-#       
+# 
 #       wun_time <- microbenchmark(phyloseq::distance(test_physeq, method = "wunifrac"), unit = "seconds")
 # 
 #       time_results[[i]] <-
@@ -352,59 +354,87 @@ set.seed(314)
 # 
 #     }
 # 
-# save(time_results, file = "time_results.RData")
 
-load("time_results.RData")
+# time_res_df <- 
+#   time_results %>%
+#   bind_rows() %>%
+#   cbind(rep_tests) %>%
+#   pivot_longer(Bray:Phylo.Wunifrac, names_to= "Metric", values_to = "Time")
+# 
+# save(time_res_df, file = "time_res_df.RData")
+load("time_res_df.RData")
 
-time_res_df <- 
-  time_results[1:96] %>%
-  bind_rows() %>%
-  cbind(rep_tests[1:96,]) %>%
-  pivot_longer(Bray:Gunifrac, names_to= "Metric", values_to = "Time")
+library(ggpubr)
 
 time_res_df %>%
   filter(Samples == 10, ASVs == 2000, Metric == "Gunifrac") %>%
   ggplot(aes(x = Alphas, y = Time/60)) + 
-  geom_jitter() + 
-  stat_summary(geom = "point", fun = median, size = 4, alpha = 0.6) + 
+  geom_jitter(alpha = 0.4, width = 0.2) + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
                width = 0) + 
-  labs(y = "Time (mins)", x = "Number of Alphas")
+  labs(y = "Time (mins)", x = "Number of Alphas") + 
+  geom_smooth(method = "lm", linetype = 2, linewidth = 0.8, se = FALSE, color = "black") + 
+  stat_regline_equation(aes(label = after_stat(rr.label)))
 
 time_res_df %>%
   filter(Alphas == 1, ASVs == 2000, Metric == "Gunifrac") %>%
   ggplot(aes(x = Samples, y = Time/60)) + 
-  geom_jitter() + 
-  stat_summary(geom = "point", fun = median, size = 4, alpha = 0.6) + 
+  geom_jitter(alpha = 0.4, width = 0.4) + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
-               width = 0) + 
-  labs(y = "Time (mins)", x = "Number of Samples")
+               width = 0) +  
+  labs(y = "Time (mins)", x = "Number of Samples")+ 
+  geom_smooth(method = "lm", linetype = 2, linewidth = 0.8, se = FALSE, color = "black") + 
+  stat_regline_equation(aes(label = after_stat(rr.label)))
 
 time_res_df %>%
   filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
-  ggplot(aes(x = ASVs, y = Time/60)) + 
-  geom_jitter() + 
-  stat_summary(geom = "point", fun = median, size = 4, alpha = 0.6) + 
+  ggplot(aes(x = ASVs/1000, y = Time/60)) + 
+  geom_jitter(alpha = 0.4, width = 0.3) + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
-               width = 0) + 
-  labs(y = "Time (mins)", x = "Number of ASVs")
-  
+               width = 0) +  
+  labs(y = "Time (mins)", x = "ASVs (thouands)")+ 
+  geom_smooth(method = "lm", linetype = 2, linewidth = 0.8, se = FALSE, color = "black") + 
+  stat_regline_equation() + 
+  stat_regline_equation(aes(label = after_stat(rr.label)),
+                        label.y = 6)
+```
+
+
+```{r compare-methods, fig.height = 4, fig.width = 4}
 time_res_df %>%
-  mutate(id = rep(c(1:6), each = 32)) %>%
+  filter(Alphas == 1, Samples == 10) %>%
+  ggplot(aes(x = ASVs/1000, y= Time/60, color = Metric)) + 
+  stat_summary(geom = "line", fun = median) + 
+  stat_summary(geom = "errorbar",
+               fun.min = \(x)median(x)-sd(x),
+               fun.max = \(x)median(x)+sd(x),
+               width = 0) +  
+  scale_y_log10(labels = scales::label_comma()) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred"),
+                     breaks = c("Gunifrac", "Bray", "Phylo.Wunifrac"),
+                     labels = c( "GUnifrac", "Bray-Curtis (vegan)","Fast Unifrac (phyloseq)")) + 
+  labs(y = "Time (mins)", x = "ASVs (thousands)", color = "") +
+  theme(legend.box.background = element_rect(fill = NA,
+                                             color = NA),
+        legend.position = "inside",
+        legend.position.inside = c(0.7, 0.16))
+
+time_res_df %>%
+  mutate(id = rep(c(1:50), each = 48)) %>%
   pivot_wider(names_from = Metric, values_from = Time) %>%
-  mutate(Diff = Gunifrac - Bray,
-         Diff_Perc = Gunifrac/Bray) %>%
-  summarize(Median_Diff = median(Diff),
-            Max_Diff = max(Diff),
-            Median_DiffX = median(Diff_Perc),
-            Max_DiffX = max(Diff_Perc),
-            Median_Bray = median(Bray),
-            Median_Gunifrac = median(Gunifrac))
+  mutate(Diff_Bray = Gunifrac/Bray,
+         Diff_PW = Gunifrac/Phylo.Wunifrac) %>%
+  summarize(Median_Diff_Bray = median(Diff_Bray),
+            Median_Diff_PW = median(Diff_PW))
+
 
 ```
