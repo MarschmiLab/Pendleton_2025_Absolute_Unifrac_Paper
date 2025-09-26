@@ -267,7 +267,27 @@ data.frame(f = c(rel_f[-1], abs_f[-1]),
         axis.title = element_text(size = 20)) + 
   coord_fixed(ratio = 1/(max(rel_bray_perm$F[1], abs_bray_perm$F[1], rel_f,  abs_f) - min(rel_bray_perm$F[1], abs_bray_perm$F[1], rel_f,  abs_f)))
 
+rel_p <- unlist(map(rel_perms, \(x)x$`Pr(>F)`[1]))
+abs_p <- unlist(map(abs_perms, \(x)x$`Pr(>F)`[1]))
 
+data.frame(f = c(rel_p[-1], abs_p[-1]),
+           alpha = rep(seq(0, 1, by = 0.1), 2),
+           metric = rep(c("Relative","Absolute"), each = 11)) %>%
+  ggplot(aes(x = alpha, y = f, color = metric)) + 
+  annotate(geom = "segment", y = rel_bray_perm$`Pr(>F)`, yend = rel_bray_perm$`Pr(>F)`[1],
+           x = 0, xend = 1, linetype = 2, color = "#196689", linewidth = 2) + 
+  annotate(geom = "segment", y = abs_bray_perm$`Pr(>F)`[1], yend = abs_bray_perm$`Pr(>F)`[1],
+           x = 0, xend = 1, linetype = 2, color = "#B6AA0D", linewidth = 2) +  
+    annotate(geom = "segment", y = rel_p[1], yend = rel_p[1],
+           x = 0, xend = 1, linetype = 2, color = "darkred", linewidth = 2) + 
+  labs(x = "\u03b1", y = expression(italic(p))) + 
+  geom_line(linewidth = 2) + 
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)))+ 
+  scale_color_manual(values = c("#F2C621", "#008FF8"))+ 
+  theme(legend.position = "none",
+        axis.title = element_text(size = 20)) + 
+  scale_y_log10(limits = c(0.001, 1)) + 
+  theme(aspect.ratio = 1)
 
 cell_dist <- rec1_df %>%
   dplyr::select(Sample_Sum) %>% 
