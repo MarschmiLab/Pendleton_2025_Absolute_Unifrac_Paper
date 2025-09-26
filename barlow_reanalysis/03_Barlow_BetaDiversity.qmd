@@ -319,3 +319,62 @@ data.frame(mans = mantels[c(4:14, 16:26)],
   coord_fixed(xlim = c(0,1), ylim = c(0,1))
 ```
 
+# Ordinations for Supplemental
+
+```{r ordinations, fig.width = 4, fig.height=4}
+
+mature_physeq <- subset_samples(root_physeq, sample %in% mature_samples)
+plot_ordination(
+  mature_physeq,
+  ordination = ordinate(mature_physeq, method = "PCoA", distance = sm_abs_unifracs$d_1),
+  color = "Host_diet"
+) + 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Host Diet")
+
+plot_ordination(
+  mature_physeq,
+  ordination = ordinate(mature_physeq, method = "PCoA", distance = sm_rel_unifracs$d_1),
+  color = "Host_diet"
+)+ 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Host Diet")
+  stat_ellipse()
+
+```
+
+```{r ordinations-noleg-abs, fig.width = 4, fig.height=4}
+
+mature_physeq <- subset_samples(root_physeq, sample %in% mature_samples)
+plot_ordination(
+  mature_physeq,
+  ordination = ordinate(mature_physeq, method = "PCoA", distance = sm_abs_unifracs$d_1),
+  color = "Host_diet"
+) + 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Host Diet") + 
+  theme(legend.position = "none")
+
+```
+
+```{r ordinations-noleg-rel, fig.width = 4, fig.height=4}
+
+mature_physeq <- subset_samples(root_physeq, sample %in% mature_samples)
+plot_ordination(
+  mature_physeq,
+  ordination = ordinate(mature_physeq, method = "PCoA", distance = sm_rel_unifracs$d_1),
+  color = "Host_diet"
+) + 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Host Diet") + 
+  theme(legend.position = "none")
+
+```

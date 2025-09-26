@@ -339,3 +339,65 @@ cor(as.dist(np_uns[[1]]), as.dist(p_uns[[1]]))
 map2(np_uns, p_uns, \(x,y)cor(as.dist(x),as.dist(y)))
 
 ```
+
+## Ordinations
+
+```{r ordinations, fig.width = 4, fig.height=4}
+
+
+plot_ordination(
+  full_diversity_physeq,
+  ordination = ordinate(full_diversity_physeq, method = "PCoA", distance = sm_abs_unifracs$d_1),
+  color = "Comp_Group_Hier"
+) + 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Depth/Month")
+
+plot_ordination(
+  full_diversity_physeq,
+  ordination = ordinate(full_diversity_physeq, method = "PCoA", distance = sm_rel_unifracs$d_1),
+  color = "Comp_Group_Hier"
+)+ 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Depth/Month")
+  stat_ellipse()
+
+```
+
+```{r ordinations-noleg-abs, fig.width = 4, fig.height=4}
+
+
+plot_ordination(
+  full_diversity_physeq,
+  ordination = ordinate(full_diversity_physeq, method = "PCoA", distance = sm_abs_unifracs$d_1),
+  color = "Comp_Group_Hier"
+) + 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Depth/Month")+
+  theme(legend.position = "none")
+
+```
+
+
+```{r ordinations-noleg-rel, fig.width = 4, fig.height=4}
+
+
+plot_ordination(
+  full_diversity_physeq,
+  ordination = ordinate(full_diversity_physeq, method = "PCoA", distance = sm_rel_unifracs$d_1),
+  color = "Comp_Group_Hier"
+) + 
+  theme(legend.box.background = element_rect(color = NA),
+        aspect.ratio = 1) + 
+  scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
+  labs(color = "Depth/Month")+
+  theme(legend.position = "none")
+
+```
+
