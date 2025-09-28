@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Augustus Pendleton">
-<meta name="dcterms.date" content="2025-09-26">
+<meta name="dcterms.date" content="2025-09-27">
 
 <title>Comparing Samples with Beta Diversity</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 26, 2025</p>
+      <p class="date">September 27, 2025</p>
     </div>
   </div>
   
@@ -220,7 +220,7 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>abs_bray_dist <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, abs_bray_dists) <span class="sc">/</span> <span class="fu">length</span>(abs_bray_dists)</span>
 <span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># start &lt;- Sys.time()</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># abs_gun_dists &lt;-</span></span>
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   map(c(1:dims[2]),</span></span>
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">#     \(x)GUniFrac(otu.tab = abs_tables[,x,],</span></span>
@@ -228,23 +228,22 @@ Attaching package: 'extraDistr'</code></pre>
 <span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co">#                  alpha = seq(from = 0, to = 1, by = 0.1),</span></span>
 <span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co">#                  normalize_counts = FALSE,</span></span>
 <span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co">#                  verbose = FALSE))</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co"># end &lt;- Sys.time()</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co"># start - end</span></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co"># save(abs_gun_dists, file = "abs_gun_dists.RData")</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"abs_gun_dists.RData"</span>)</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>gun_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d_UW"</span>,<span class="st">"d_0"</span>,<span class="st">"d_0.1"</span>,<span class="st">"d_0.2"</span>,<span class="st">"d_0.3"</span>,<span class="st">"d_0.4"</span>,<span class="st">"d_0.5"</span>,<span class="st">"d_0.6"</span>,<span class="st">"d_0.7"</span>,<span class="st">"d_0.8"</span>,<span class="st">"d_0.9"</span>,<span class="st">"d_1"</span>)</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gun_names) <span class="ot">&lt;-</span> gun_names</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>abs_unifracs <span class="ot">&lt;-</span> </span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(gun_names, \(x){</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  dist_objs <span class="ot">&lt;-</span> <span class="fu">map</span>(abs_gun_dists,</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>                   \(y)<span class="fu">as.dist</span>(y<span class="sc">$</span>unifracs[,,x]))</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, dist_objs) <span class="sc">/</span> <span class="fu">length</span>(dist_objs)</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co"># save(abs_gun_dists, file = "abs_gun_dists.RData")</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"abs_gun_dists.RData"</span>)</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>gun_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d_UW"</span>,<span class="st">"d_0"</span>,<span class="st">"d_0.1"</span>,<span class="st">"d_0.2"</span>,<span class="st">"d_0.3"</span>,<span class="st">"d_0.4"</span>,<span class="st">"d_0.5"</span>,<span class="st">"d_0.6"</span>,<span class="st">"d_0.7"</span>,<span class="st">"d_0.8"</span>,<span class="st">"d_0.9"</span>,<span class="st">"d_1"</span>)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gun_names) <span class="ot">&lt;-</span> gun_names</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>abs_unifracs <span class="ot">&lt;-</span> </span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(gun_names, \(x){</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  dist_objs <span class="ot">&lt;-</span> <span class="fu">map</span>(abs_gun_dists,</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>                   \(y)<span class="fu">as.dist</span>(y<span class="sc">$</span>unifracs[,,x]))</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, dist_objs) <span class="sc">/</span> <span class="fu">length</span>(dist_objs)</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rel_counts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">36</span>)</span>
@@ -578,7 +577,7 @@ Attaching package: 'ggpubr'</code></pre>
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="03_Zhang_BetaDiversity_files/figure-html/timing-1.png" class="img-fluid" width="900"></p>
+<p><img src="03_Zhang_BetaDiversity_files/figure-html/timing-1.png" class="img-fluid" width="1200"></p>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>time_res_df <span class="sc">%&gt;%</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Alphas <span class="sc">==</span> <span class="dv">1</span>, ASVs <span class="sc">==</span> <span class="dv">2000</span>, Metric <span class="sc">==</span> <span class="st">"Gunifrac"</span>) <span class="sc">%&gt;%</span></span>
@@ -596,7 +595,7 @@ Attaching package: 'ggpubr'</code></pre>
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="03_Zhang_BetaDiversity_files/figure-html/timing-2.png" class="img-fluid" width="900"></p>
+<p><img src="03_Zhang_BetaDiversity_files/figure-html/timing-2.png" class="img-fluid" width="1200"></p>
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>time_res_df <span class="sc">%&gt;%</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Alphas <span class="sc">==</span> <span class="dv">1</span>, Samples <span class="sc">==</span> <span class="dv">10</span>, Metric <span class="sc">==</span> <span class="st">"Gunifrac"</span>) <span class="sc">%&gt;%</span></span>
@@ -616,7 +615,7 @@ Attaching package: 'ggpubr'</code></pre>
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="03_Zhang_BetaDiversity_files/figure-html/timing-3.png" class="img-fluid" width="900"></p>
+<p><img src="03_Zhang_BetaDiversity_files/figure-html/timing-3.png" class="img-fluid" width="1200"></p>
 </div>
 </div>
 <div class="cell">
@@ -712,6 +711,24 @@ Attaching package: 'ggpubr'</code></pre>
 <span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="03_Zhang_BetaDiversity_files/figure-html/ordinations-noleg-rel-1.png" class="img-fluid" width="1200"></p>
+</div>
+</div>
+</section>
+<section id="test-overall-timing" class="level1">
+<h1>Test overall timing</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>),</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    \(x)<span class="fu">GUniFrac</span>(<span class="at">otu.tab =</span> abs_tables[,x,],</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tree =</span> <span class="fu">phy_tree</span>(trim_physeq),</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>),</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">normalize_counts =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">verbose =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>start <span class="sc">-</span> end</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of -2.228276 hours</code></pre>
 </div>
 </div>
 </section>
