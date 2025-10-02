@@ -504,7 +504,6 @@ time_res_df %>%
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
                width = 0) +  
-  scale_y_sqrt() + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred"),
                      breaks = c("Gunifrac", "Bray", "Phylo.Wunifrac"),
                      labels = c( "GUnifrac", "Bray-Curtis (vegan)","Fast Unifrac (phyloseq)")) + 
