@@ -332,7 +332,9 @@ plot_ordination(
   theme(legend.box.background = element_rect(color = NA),
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
-  labs(color = "Host Diet")
+  labs(color = "Host Diet", size = "Copy #/gram")+ 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 plot_ordination(
   mature_physeq,
@@ -359,7 +361,9 @@ plot_ordination(
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Host Diet") + 
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
@@ -375,7 +379,9 @@ plot_ordination(
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Host Diet") + 
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 

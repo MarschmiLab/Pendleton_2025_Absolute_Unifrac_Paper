@@ -92,37 +92,6 @@ abs_unifracs <-
 
 ```
 
-# Test overall timing
-
-```{r timing-one}
-start <- Sys.time()
-test <- 
-  map(c(1:1),
-    \(x)GUniFrac(otu.tab = abs_tables[,x,],
-                 tree = phy_tree(trim_physeq),
-                 alpha = seq(from = 0, to = 1, by = 0.1),
-                 normalize_counts = FALSE,
-                 verbose = FALSE))
-end <- Sys.time()
-start - end
-```
-
-
-```{r timing-overall}
-start <- Sys.time()
-test <- 
-  map(c(1:100),
-    \(x)GUniFrac(otu.tab = abs_tables[,x,],
-                 tree = phy_tree(trim_physeq),
-                 alpha = seq(from = 0, to = 1, by = 0.1),
-                 normalize_counts = FALSE,
-                 verbose = FALSE))
-end <- Sys.time()
-start - end
-
-
-```
-
 ```{r, generating-rel-dist-objects}
 
 rel_counts <- rep(1, 36)
@@ -357,6 +326,42 @@ data.frame(mans = mantels[c(4:14, 16:26)],
 
 How long do these methods take? How does this scale with the number of OTUs and samples?
 
+```{r, eval = FALSE}
+
+pretest_physeq <-
+       trim_physeq
+test_physeq <-
+       pretest_physeq 
+test_mat <- as.matrix(otu_table(test_physeq))
+     
+
+test_mat_gun <- t(test_mat)
+test_tree <- phy_tree(test_physeq)
+bray_time <- microbenchmark(vegdist(test_mat, method = "bray"), times = 2, unit = "seconds")
+microbenchmark(GUniFrac(otu.tab = test_mat_gun,
+                               tree = test_tree,
+                               alpha = seq(.1, 1, length.out = rep_tests$Alphas[i]),
+                               normalize_counts = FALSE,
+                               verbose = FALSE),
+                      times = 1, unit = "seconds")
+
+class(abs_tables[,1,])
+dims <- dim(test_mat_gun)
+good_mat_test <- matrix(test_mat_gun, nrow = 36, ncol = 24123)
+all(colSums(good_mat_test) == colSums(test_mat_gun))
+colnames(good_mat_test) = colnames(test_mat_gun)
+rownames(good_mat_test) = rownames(test_mat_gun)
+
+microbenchmark(GUniFrac(otu.tab = good_mat_test,
+                               tree = test_tree,
+                               alpha = seq(.1, 1, length.out = rep_tests$Alphas[i]),
+                               normalize_counts = FALSE,
+                               verbose = FALSE),
+                      times = 1, unit = "seconds")
+#SO MUCH FASTER!!!!!
+
+```
+
 ```{r timing, fig.height = 4, fig.width = 4}
 
 library(microbenchmark)
@@ -374,105 +379,140 @@ rep_tests <- bind_rows(replicate(50, test_conditions, simplify=F))
 time_results <- vector(mode = "list", length = nrow(rep_tests))
 set.seed(314)
 
-for(i in c(1:nrow(rep_tests))){
- writeLines(paste("On test number", i, "Samples:", rep_tests$Samples[i], "ASVs:", rep_tests$ASVs[i], "Alphas:", rep_tests$Alphas[i]))
-     pretest_physeq <-
-       trim_physeq %>%
-       subset_samples(sample %in% sample(sample_names(trim_physeq), rep_tests$Samples[i])) %>%
-       prune_taxa(taxa_sums(.) > 0, .)
-     test_physeq <-
-       pretest_physeq %>%
-       subset_taxa(ASV %in% sample(taxa_names(pretest_physeq), rep_tests$ASVs[i]))
-     test_mat <- as.matrix(otu_table(test_physeq))
-     test_mat_gun <- t(test_mat)
-     test_tree <- phy_tree(test_physeq)
-     bray_time <- microbenchmark(vegdist(test_mat, method = "bray"), times = 2, unit = "seconds")
-     gun_time <-
-       microbenchmark(GUniFrac(otu.tab = test_mat_gun,
-                               tree = test_tree,
-                               alpha = seq(.1, 1, length.out = rep_tests$Alphas[i]),
-                               normalize_counts = FALSE,
-                               verbose = FALSE),
-                      times = 2, unit = "seconds")
-     wun_time <- microbenchmark(phyloseq::distance(test_physeq, method = "wunifrac"), unit = "seconds")
-     time_results[[i]] <-
-       data.frame(
-         Bray = summary(bray_time)$median,
-         Gunifrac = summary(gun_time)$median,
-         Phylo.Wunifrac = summary(wun_time)$median
-        )
-   }
-time_res_df <-
- time_results %>%
- bind_rows() %>%
- cbind(rep_tests) %>%
- pivot_longer(Bray:Phylo.Wunifrac, names_to= "Metric", values_to = "Time")
-save(time_res_df, file = "time_res_df.RData")
+# for(i in c(1:nrow(rep_tests))){
+#  writeLines(paste("On test number", i, "Samples:", rep_tests$Samples[i], "ASVs:", rep_tests$ASVs[i], "Alphas:", rep_tests$Alphas[i]))
+#      pretest_physeq <-
+#        trim_physeq %>%
+#        subset_samples(sample %in% sample(sample_names(trim_physeq), rep_tests$Samples[i])) %>%
+#        prune_taxa(taxa_sums(.) > 0, .)
+#      test_physeq <-
+#        pretest_physeq %>%
+#        subset_taxa(ASV %in% sample(taxa_names(pretest_physeq), rep_tests$ASVs[i]))
+#      test_mat_otu <- as.matrix(otu_table(test_physeq))
+#      dims <- dim(test_mat_otu)
+#      test_mat <- matrix(test_mat_otu, nrow = dims[1], ncol = dims[2])
+#      colnames(test_mat) = colnames(test_mat_otu)
+#      rownames(test_mat) = rownames(test_mat_otu)
+#      test_mat_gun <- t(test_mat)
+#      test_tree <- phy_tree(test_physeq)
+#      bray_time <- microbenchmark(vegdist(test_mat, method = "bray"), times = 2, unit = "seconds")
+#      gun_time <-
+#        microbenchmark(GUniFrac(otu.tab = test_mat_gun,
+#                                tree = test_tree,
+#                                alpha = seq(.1, 1, length.out = rep_tests$Alphas[i]),
+#                                normalize_counts = FALSE,
+#                                verbose = FALSE),
+#                       times = 2, unit = "seconds")
+#      wun_time <- microbenchmark(phyloseq::distance(test_physeq, method = "wunifrac"), unit = "seconds")
+#      time_results[[i]] <-
+#        data.frame(
+#          Bray = summary(bray_time)$median,
+#          Gunifrac = summary(gun_time)$median,
+#          Phylo.Wunifrac = summary(wun_time)$median
+#         )
+# }
+# save(time_results, file = "time_results.RData")
+# 
+# time_res_df <-
+#  time_results %>%
+#  bind_rows() %>%
+#  cbind(rep_tests) %>%
+#  pivot_longer(Bray:Phylo.Wunifrac, names_to= "Metric", values_to = "Time")
+# save(time_res_df, file = "time_res_df.RData")
+
 load("time_res_df.RData")
 
 library(ggpubr)
 
 time_res_df %>%
   filter(Samples == 10, ASVs == 2000, Metric == "Gunifrac") %>%
-  ggplot(aes(x = Alphas, y = Time/60)) + 
+  ggplot(aes(x = Alphas, y = Time)) + 
   geom_jitter(alpha = 0.4, width = 0.2) + 
   stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
                width = 0) + 
-  labs(y = "Time (mins)", x = "Number of Alphas") + 
+  labs(y = "Time (s)", x = "Number of Alphas") + 
   geom_smooth(method = "lm", linetype = 2, linewidth = 0.8, se = FALSE, color = "black") + 
   stat_regline_equation(aes(label = after_stat(rr.label)))
 
 time_res_df %>%
   filter(Alphas == 1, ASVs == 2000, Metric == "Gunifrac") %>%
-  ggplot(aes(x = Samples, y = Time/60)) + 
+  ggplot(aes(x = Samples, y = Time)) + 
   geom_jitter(alpha = 0.4, width = 0.4) + 
   stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
                width = 0) +  
-  labs(y = "Time (mins)", x = "Number of Samples")+ 
+  labs(y = "Time (s)", x = "Number of Samples")+ 
   geom_smooth(method = "lm", linetype = 2, linewidth = 0.8, se = FALSE, color = "black") + 
   stat_regline_equation(aes(label = after_stat(rr.label)))
 
+
 time_res_df %>%
   filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
-  ggplot(aes(x = ASVs/1000, y = Time/60)) + 
+  mutate(ASV_thousands = ASVs/1000) %>%
+  lm(Time ~ ASV_thousands, data = .) %>% summary()
+
+time_res_df %>%
+  filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
+  mutate(ASV_thousands = ASVs/1000) %>%
+  lm(Time ~ poly(ASV_thousands, 2, raw = TRUE), data = .) %>% summary()
+
+model <- time_res_df %>%
+  filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
+  mutate(ASV_thousands = ASVs/1000) %>%
+  lm(Time ~ I(ASV_thousands^2) + 0, data = .) %>% summary()
+
+time_res_df %>%
+  filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
+  mutate(ASV_thousands = ASVs/1000) %>%
+  ggplot(aes(x = ASV_thousands, y = Time)) + 
   geom_jitter(alpha = 0.4, width = 0.3) + 
   stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
                width = 0) +  
-  labs(y = "Time (mins)", x = "ASVs (thouands)")+ 
-  geom_smooth(method = "lm", linetype = 2, linewidth = 0.8, se = FALSE, color = "black") + 
-  stat_regline_equation() + 
-  stat_regline_equation(aes(label = after_stat(rr.label)),
-                        label.y = 6)
-```
+  labs(y = "Time (s)", x = "ASVs (thousands)") + 
+  scale_y_sqrt() + 
+  geom_smooth(method = "lm", se = FALSE,linetype = 2, color = "black")+
+  annotate(geom = "text", y = 12, x = 1, label = "y==0.13*x^{2}", parse = TRUE)
 
+time_res_df %>%
+  filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
+  ggplot(aes(x = ASVs/1000, y = Time)) + 
+  geom_jitter(alpha = 0.4, width = .6) + 
+  stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
+  stat_summary(geom = "errorbar",
+               fun.min = \(x)median(x)-sd(x),
+               fun.max = \(x)median(x)+sd(x),
+               width = 0) +  
+  labs(y = "Time (s)", x = "ASVs (thousands)") + 
+  geom_smooth(formula = y~I(x^2) + 0, method = "lm", linetype = 2, color = "black", se = FALSE) + 
+  annotate(geom = "text", y = 12, x = 0, label = "y==0.13*x^{2}", parse = TRUE, hjust = 0)
+```
 
 ```{r compare-methods, fig.height = 4, fig.width = 4}
 time_res_df %>%
   filter(Alphas == 1, Samples == 10) %>%
-  ggplot(aes(x = ASVs/1000, y= Time/60, color = Metric)) + 
+  ggplot(aes(x = ASVs/1000, y= Time, color = Metric)) + 
   stat_summary(geom = "line", fun = median, linewidth = 1.5) + 
   stat_summary(geom = "errorbar",
                fun.min = \(x)median(x)-sd(x),
                fun.max = \(x)median(x)+sd(x),
                width = 0) +  
-  scale_y_log10(labels = scales::label_comma()) + 
+  scale_y_sqrt() + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred"),
                      breaks = c("Gunifrac", "Bray", "Phylo.Wunifrac"),
                      labels = c( "GUnifrac", "Bray-Curtis (vegan)","Fast Unifrac (phyloseq)")) + 
-  labs(y = "Time (mins)", x = "ASVs (thousands)", color = "") +
+  labs(y = "Time (s)", x = "ASVs (thousands)", color = "") +
   theme(legend.box.background = element_rect(fill = NA,
                                              color = NA),
         legend.position = "inside",
-        legend.position.inside = c(0.7, 0.16))
+        legend.position.inside = c(0.3, 0.8))
 
 time_res_df %>%
   mutate(id = rep(c(1:50), each = 48)) %>%
@@ -480,7 +520,8 @@ time_res_df %>%
   mutate(Diff_Bray = Gunifrac/Bray,
          Diff_PW = Gunifrac/Phylo.Wunifrac) %>%
   summarize(Median_Diff_Bray = median(Diff_Bray),
-            Median_Diff_PW = median(Diff_PW))
+            Median_Diff_PW = median(Diff_PW),
+            Max_Diff_Bray = max(Diff_Bray))
 
 
 ```
@@ -498,7 +539,9 @@ plot_ordination(
   theme(legend.box.background = element_rect(color = NA),
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
-  labs(color = "Rotation")
+  labs(color = "Rotation", size = "Copy #/gram") + 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 plot_ordination(
   mature_physeq,
@@ -508,7 +551,9 @@ plot_ordination(
   theme(legend.box.background = element_rect(color = NA),
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
-  labs(color = "Rotation")
+  labs(color = "Rotation")+ 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
@@ -523,7 +568,9 @@ plot_ordination(
   theme(aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Rotation") + 
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
@@ -538,7 +585,14 @@ plot_ordination(
   theme(aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Rotation") + 
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  geom_point(aes(size = Sample_Sum), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
+
+
+```{r}
+
+```

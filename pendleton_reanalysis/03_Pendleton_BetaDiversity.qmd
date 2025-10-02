@@ -353,7 +353,9 @@ plot_ordination(
   theme(legend.box.background = element_rect(color = NA),
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
-  labs(color = "Depth/Month")
+  labs(color = "Depth/Month", size = "Cells/ml") + 
+  geom_point(aes(size = avg_cells_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 plot_ordination(
   full_diversity_physeq,
@@ -380,7 +382,9 @@ plot_ordination(
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Depth/Month")+
-  theme(legend.position = "none")
+  theme(legend.position = "none") + 
+  geom_point(aes(size = avg_cells_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
@@ -397,7 +401,9 @@ plot_ordination(
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Depth/Month")+
-  theme(legend.position = "none")
+  theme(legend.position = "none") + 
+  geom_point(aes(size = avg_cells_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 

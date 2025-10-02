@@ -335,7 +335,10 @@ plot_ordination(
   theme(legend.box.background = element_rect(color = NA),
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
-  labs(color = "Reactor Phase")
+  labs(color = "Reactor Phase", size = "Cells/mL") + 
+  geom_point(aes(size = cell_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
+
 
 plot_ordination(
   rec1_physeq,
@@ -345,8 +348,10 @@ plot_ordination(
   theme(legend.box.background = element_rect(color = NA),
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
-  labs(color = "Reactor Phase")
-  stat_ellipse()
+  labs(color = "Reactor Phase") +
+  stat_ellipse()+ 
+  geom_point(aes(size = cell_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
@@ -362,7 +367,9 @@ plot_ordination(
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Reactor Phase")+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  geom_point(aes(size = cell_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
 
@@ -378,6 +385,8 @@ plot_ordination(
         aspect.ratio = 1) + 
   scale_color_manual(values = c("#196689", "#B6AA0D", "darkred")) + 
   labs(color = "Reactor Phase")+
-  theme(legend.position = "none")
+  theme(legend.position = "none")+ 
+  geom_point(aes(size = cell_per_ml), alpha = 0.6) + 
+  scale_size_continuous(labels = scales::label_log())
 
 ```
