@@ -483,6 +483,11 @@ time_res_df %>%
 
 time_res_df %>%
   filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
+  mutate(ASV_thousands = ASVs/1000) %>%
+  lm(Time ~ I(ASV_thousands^2) + 0, data = .) %>% summary()
+
+time_res_df %>%
+  filter(Alphas == 1, Samples == 10, Metric == "Gunifrac") %>%
   ggplot(aes(x = ASVs/1000, y = Time)) + 
   geom_jitter(alpha = 0.4, width = .6) + 
   stat_summary(geom = "point", fun = median, size = 4, alpha = 1) + 
@@ -492,7 +497,8 @@ time_res_df %>%
                width = 0) +  
   labs(y = "Time (s)", x = "ASVs (thousands)") + 
   geom_smooth(formula = y~I(x^2) + 0, method = "lm", linetype = 2, color = "black", se = FALSE) + 
-  annotate(geom = "text", y = 12, x = 0, label = "y==0.13*x^{2}", parse = TRUE, hjust = 0)
+  annotate(geom = "text", y = 12, x = 0, label = "y==0.13*x^{2}", parse = TRUE, hjust = 0) + 
+  annotate(geom = "text", y = 10, x = 0, label = "R^{2}==0.9982", parse = TRUE, hjust = 0)
 ```
 
 ```{r compare-methods, fig.height = 4, fig.width = 4}
