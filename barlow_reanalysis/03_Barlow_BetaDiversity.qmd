@@ -31,7 +31,7 @@ source("../code/plotting.R")
 Conflicted with the best way to approach rarefaction and absolute values here. I'm less confident than I was with Ontario that I'm reaching equal saturation across my samples, and I don't want my beta diversity to be confounded by richness due to sequencing depth. What I settled on:
 
 
-The generated_rarefied_abs_tables returns these rarefied, absolute-count normalized tables in the form of a 3D-array, where dim 1 is each sample, dim 2 is each iteration of rarefaction, and dim 3 is each ASV
+The generate_rarefied_abs_tables returns these rarefied, absolute-count normalized tables in the form of a 3D-array, where dim 1 is each sample, dim 2 is each iteration of rarefaction, and dim 3 is each ASV
 
 ```{r, generating-abs-dist-objects}
 
@@ -49,7 +49,7 @@ cell_counts <- cell_counts_prep$Sample_Sum
 
 names(cell_counts) = cell_counts_prep$sample
 
-abs_tables <- generated_rarefied_abs_tables(physeq = root_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+abs_tables <- generate_rarefied_abs_tables(physeq = root_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 100, # Number of rarefy steps
                               rare.depth = min(sample_sums(root_physeq)), # Depth to rarefy to
                               abs.counts = cell_counts, # NAMED vector of cell counts for each sample
@@ -97,7 +97,7 @@ rel_counts <- rep(1, 93)
 
 names(rel_counts) <- names(cell_counts)
 
-rel_tables <- generated_rarefied_abs_tables(physeq = root_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+rel_tables <- generate_rarefied_abs_tables(physeq = root_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 100, # Number of rarefy steps
                               rare.depth = min(sample_sums(root_physeq)), # Depth to rarefy to
                               abs.counts = rel_counts, # NAMED vector of cell counts for each sample
@@ -417,35 +417,35 @@ for(i in 1:50){
   err_25 <- cell_counts + (cell_counts * direction * rnorm(n = length(cell_counts), mean = 0.25, sd = 0.025))
   err_50 <- cell_counts + (cell_counts * direction * rnorm(n = length(cell_counts), mean = 0.5, sd = 0.05))
   
-  err_01_table <- generated_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+  err_01_table <- generate_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                                                  iterations = 1, # Number of rarefy steps
                                                  rare.depth = min(sample_sums(mature_physeq)), # Depth to rarefy to
                                                  abs.counts = err_01, # NAMED vector of cell counts for each sample
                                                  seed = 314, # Seed determines rarefaction, but not absolute normalization
                                                  return_rel = FALSE)
   
-  err_05_table <- generated_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+  err_05_table <- generate_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                                                  iterations = 1, # Number of rarefy steps
                                                  rare.depth = min(sample_sums(mature_physeq)), # Depth to rarefy to
                                                  abs.counts = err_05, # NAMED vector of cell counts for each sample
                                                  seed = 314, # Seed determines rarefaction, but not absolute normalization
                                                  return_rel = FALSE)
   
-  err_10_table <- generated_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+  err_10_table <- generate_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                                                  iterations = 1, # Number of rarefy steps
                                                  rare.depth = min(sample_sums(mature_physeq)), # Depth to rarefy to
                                                  abs.counts = err_10, # NAMED vector of cell counts for each sample
                                                  seed = 314,# Seed determines rarefaction, but not absolute normalization
                                                  return_rel = FALSE)
   
-  err_25_table <- generated_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+  err_25_table <- generate_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                                                  iterations = 1, # Number of rarefy steps
                                                  rare.depth = min(sample_sums(mature_physeq)), # Depth to rarefy to
                                                  abs.counts = err_25, # NAMED vector of cell counts for each sample
                                                  seed = 314,# Seed determines rarefaction, but not absolute normalization
                                                  return_rel = FALSE)
   
-  err_50_table <- generated_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+  err_50_table <- generate_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                                                    iterations = 1, # Number of rarefy steps
                                                    rare.depth = min(sample_sums(mature_physeq)), # Depth to rarefy to
                                                    abs.counts = err_50, # NAMED vector of cell counts for each sample
@@ -459,7 +459,7 @@ for(i in 1:50){
 }
 
 
-norm_table <- generated_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+norm_table <- generate_rarefied_abs_tables(physeq = mature_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 1, # Number of rarefy steps
                               rare.depth = min(sample_sums(mature_physeq)), # Depth to rarefy to
                               abs.counts = cell_counts, # NAMED vector of cell counts for each sample

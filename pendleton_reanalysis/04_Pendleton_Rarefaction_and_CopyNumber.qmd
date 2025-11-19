@@ -1,0 +1,124 @@
+---
+title: "Assessing impact of rarefaction and copy number" 
+author: "Augustus Pendleton"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+editor_options: 
+  chunk_output_type: console
+knitr: 
+  opts_chunk: 
+    dpi: 300
+    dev: png
+    dev.args: { bg: "transparent" }
+---
+# Load Data and Packages
+
+```{r load-packages}
+
+pacman::p_load(phyloseq, vegan, patchwork, GUniFrac, tidyverse)
+
+load("full_diversity_physeq.RData")
+
+source("../code/subset_dist_matrix.R")
+source("../code/plotting.R")
+
+```
+
+
+```{r, generating-abs-dist-objects}
+
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  full_diversity_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample = Rep_ID, Sample_Sum = avg_cells_per_ml)
+
+cell_counts <- cell_counts_prep$Sample_Sum
+
+names(cell_counts) = cell_counts_prep$sample
+
+rarefaction_limit <- min(sample_sums(full_diversity_physeq))
+
+depths <- c(1, 250, 500, 1000, 5000, 10000, rarefaction_limit)
+
+diff_depth_tables <- 
+  map(depths, \(x){
+  generate_rarefied_abs_tables(physeq = full_diversity_physeq,
+                              iterations = 10, 
+                              rare.depth = x, 
+                              abs.counts = cell_counts, 
+                              seed = 314,
+                              return_rel = FALSE)
+  }
+    )
+
+dims <- dim(diff_depth_tables[[1]])
+
+# diff_depth_dists <-
+#   map(diff_depth_tables, \(depth_tables){
+#     map(c(1:dims[2]),
+#      \(x)GUniFrac(otu.tab = depth_tables[,x,],
+#                   tree = phy_tree(full_diversity_physeq),
+#                   alpha = seq(from = 0, to = 1, by = 0.1),
+#                   normalize_counts = FALSE,
+#                   verbose = FALSE))
+#   })
+# 
+# save(diff_depth_dists, file = "diff_depth_dists.RData")
+
+load("diff_depth_dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+diff_depth_unifracs <- 
+  map(diff_depth_dists, \(ddd){
+    map(gun_names, \(x){
+      dist_objs <- map(ddd,
+                       \(y)as.dist(y$unifracs[,,x]))
+      
+      Reduce(`+`, dist_objs) / length(dist_objs)
+    })
+  })
+
+
+```
+
+Running Mantel test comparisons
+
+```{r}
+
+comp <- diff_depth_unifracs[[1]]
+
+mantel_results <- 
+  map(diff_depth_unifracs[-1], \(rarefied){
+  map2(comp, rarefied, \(x,y){
+    mantels <- mantel(x, y, permutations = 999)$statistic
+  }) %>% unlist()
+}) %>%
+  bind_rows() %>%
+  select(-d_UW) %>%
+  mutate(rd = depths[-1]) %>%
+  pivot_longer(d_0:d_1, names_to = "alpha", values_to = "mR") %>%
+  mutate(alpha = as.numeric(str_remove(alpha, "d_")))
+
+```
+
+# Plotting Mantels
+
+```{r plotting-mantel, fig.width = 4, fig.height = 4}
+
+mantel_results %>%
+  ggplot(aes(x = alpha, y = mR, group = rd, color = as.factor(rd))) + 
+  geom_point() + 
+  geom_line() +
+  coord_cartesian(ylim = c(0.8,1)) + 
+  scale_color_manual(values = volcano) + 
+  labs(x = "\u03b1", y = "Mantel's R to non-rarefied", color = "Rarefied reads\nper sample")+ 
+  theme(legend.position = "inside",
+        legend.position.inside= c(0.8,0.3))
+
+
+```

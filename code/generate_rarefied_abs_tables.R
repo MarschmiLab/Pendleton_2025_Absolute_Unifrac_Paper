@@ -3,19 +3,26 @@ require(extraDistr)
 
 rarefy_sample <- function(otu_vector, iterations, depth, abs.count, return_rel=FALSE) { 
   
-  otu_counts <- rmvhyper(iterations, otu_vector, depth)
-  
-  if(return_rel){
-    rare_abs_counts <- otu_counts/depth
+  if(depth == 1){
+    
+    new.depth <- sum(otu_vector)
+
   }else{
-  rare_abs_counts <- round((otu_counts / depth) * abs.count)
+    new.depth <- depth
   }
 
+  otu_counts <- rmvhyper(iterations, otu_vector, new.depth)
+  
+  if(return_rel){
+    rare_abs_counts <- otu_counts/new.depth
+  }else{
+  rare_abs_counts <- round((otu_counts / new.depth) * abs.count)
+  }
   return(rare_abs_counts)
   }
 
 
-generated_rarefied_abs_tables <- function(physeq, iterations, rare.depth, abs.counts, seed = 1, return_rel = FALSE){
+generate_rarefied_abs_tables <- function(physeq, iterations, rare.depth, abs.counts, seed = 1, return_rel = FALSE){
   
   if(taxa_are_rows(physeq)){
     

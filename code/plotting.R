@@ -26,3 +26,6 @@ ont_theme <- theme_classic() +
 theme_set(ont_theme)
 
 triglav <- natparks.pals(name = "Triglav", n = 6)
+
+volcano <- rev(natparks.pals(name = "Volcanoes", n = 7))[-1]
+volcano

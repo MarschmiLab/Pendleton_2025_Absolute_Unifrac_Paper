@@ -32,7 +32,7 @@ source("../code/plotting.R")
 Conflicted with the best way to approach rarefaction and absolute values here. I'm less confident than I was with Ontario that I'm reaching equal saturation across my samples, and I don't want my beta diversity to be confounded by richness due to sequencing depth. What I settled on:
 
 
-The generated_rarefied_abs_tables returns these rarefied, absolute-count normalized tables in the form of a 3D-array, where dim 1 is each sample, dim 2 is each iteration of rarefaction, and dim 3 is each ASV
+The generate_rarefied_abs_tables returns these rarefied, absolute-count normalized tables in the form of a 3D-array, where dim 1 is each sample, dim 2 is each iteration of rarefaction, and dim 3 is each ASV
 
 ```{r, generating-abs-dist-objects}
 
@@ -50,7 +50,7 @@ cell_counts <- cell_counts_prep$Sample_Sum
 
 names(cell_counts) = cell_counts_prep$sample
 
-abs_tables <- generated_rarefied_abs_tables(physeq = trim_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+abs_tables <- generate_rarefied_abs_tables(physeq = trim_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 100, # Number of rarefy steps
                               rare.depth = min(sample_sums(trim_physeq)), # Depth to rarefy to
                               abs.counts = cell_counts, # NAMED vector of cell counts for each sample
@@ -98,7 +98,7 @@ rel_counts <- rep(1, 36)
 
 names(rel_counts) <- names(cell_counts)
 
-rel_tables <- generated_rarefied_abs_tables(physeq = trim_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
+rel_tables <- generate_rarefied_abs_tables(physeq = trim_physeq, # Physeq with non-normalized counts (do not convert to rel abundance!)
                               iterations = 100, # Number of rarefy steps
                               rare.depth = min(sample_sums(trim_physeq)), # Depth to rarefy to
                               abs.counts = rel_counts, # NAMED vector of cell counts for each sample
