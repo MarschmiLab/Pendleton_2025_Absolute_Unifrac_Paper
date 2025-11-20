@@ -620,7 +620,7 @@ cleaned_percentage %>%
   scale_x_continuous(limits = c(0, 15), breaks = c(1,4,7,11,14)) + 
   scale_y_continuous(expand = expansion(mult = 0)) + 
   annotate(geom = "segment", x = -Inf, xend = Inf, y = 0, yend = 0) + 
-  labs(x = "Predicted Copy Number", y = "Total % of Reads") + 
+  labs(x = "Predicted 16S Copy Number", y = "Total % of Reads") + 
   theme(strip.text = element_text(size = 14),
         legend.position = "none")
 
