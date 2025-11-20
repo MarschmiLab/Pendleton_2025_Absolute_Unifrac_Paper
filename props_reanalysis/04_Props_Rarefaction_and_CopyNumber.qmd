@@ -116,3 +116,9 @@ mantel_results %>%
 
 
 ```
+
+# Dealing with Copy Number (oof)
+
+
+
+

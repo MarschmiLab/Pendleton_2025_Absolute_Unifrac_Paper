@@ -7,3 +7,6 @@
 *.RData
 *.rds
 *~$*
+picrust_analysis/v2.6.0.tar.gz
+picrust_analysis/picrust2-2.6.0
+*bac_KO_predicted.tsv.gz

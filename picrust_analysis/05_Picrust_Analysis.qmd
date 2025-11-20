@@ -1,0 +1,644 @@
+---
+title: "Checking sensitivity to copy number normalization" 
+author: "Augustus Pendleton"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+editor_options: 
+  chunk_output_type: console
+knitr: 
+  opts_chunk: 
+    dpi: 300
+    dev: png
+    dev.args: { bg: "transparent" }
+---
+# Load Data and Packages
+
+```{r load-packages}
+
+pacman::p_load(phyloseq, vegan, patchwork, GUniFrac, tidyverse)
+
+load("../props_reanalysis/root_physeq.RData")
+props_physeq <- root_physeq
+
+load("../barlow_reanalysis/root_physeq.RData")
+barlow_physeq <- root_physeq
+
+load("../pendleton_reanalysis/full_diversity_physeq.RData")
+pendleton_physeq <- full_diversity_physeq
+
+load("../zhang_reanalysis/trim_physeq.RData")
+zhang_physeq <- trim_physeq
+
+
+source("../code/plotting.R")
+
+```
+
+## Picrust2 Analysis
+
+## Exporting data for picrust format
+
+```{r, props_write}
+
+# Export feature/OTU table
+
+# As a biom file
+
+library(biomformat)
+
+packageVersion("biomformat")
+## [1] ‘1.30.0’
+taxa_are_rows(props_physeq)
+props_otu<-as(otu_table(props_physeq),"matrix") # 't' to transform if taxa_are_rows=FALSE
+
+props_otu_biom <- make_biom(data=props_otu)
+
+write_biom(props_otu_biom,"props/otu_biom.biom")
+
+fasta_export_prep <- data.frame(tax_table(props_physeq)) %>%
+  mutate(ASV_Fasta = paste0(">", ASV))
+
+seq_fasta <- c(rbind(fasta_export_prep$ASV_Fasta, fasta_export_prep$ASVseqs))
+
+write(x = seq_fasta, file = "props/seqs.fasta")
+
+```
+
+```{r barlow_write}
+
+taxa_are_rows(barlow_physeq)
+
+barlow_otu<-as(otu_table(barlow_physeq),"matrix") # 't' to transform if taxa_are_rows=FALSE
+
+barlow_otu_biom <- make_biom(data=barlow_otu)
+
+write_biom(barlow_otu_biom,"barlow/otu_biom.biom")
+
+fasta_export_prep <- data.frame(tax_table(barlow_physeq)) %>%
+  mutate(ASV_Fasta = paste0(">", ASV))
+
+seq_fasta <- c(rbind(fasta_export_prep$ASV_Fasta, fasta_export_prep$ASVseqs))
+
+write(x = seq_fasta, file = "barlow/seqs.fasta")
+
+```
+
+
+```{r pendleton_write}
+
+taxa_are_rows(pendleton_physeq)
+
+pendleton_otu<-t(as(otu_table(pendleton_physeq),"matrix")) # 't' to transform if taxa_are_rows=FALSE
+
+pendleton_otu_biom <- make_biom(data=pendleton_otu)
+
+write_biom(pendleton_otu_biom,"pendleton/otu_biom.biom")
+
+fasta_export_prep <- data.frame(tax_table(pendleton_physeq)) %>%
+  mutate(ASV_Fasta = paste0(">", ASV))
+
+seq_fasta <- c(rbind(fasta_export_prep$ASV_Fasta, fasta_export_prep$ASVseqs))
+
+write(x = seq_fasta, file = "pendleton/seqs.fasta")
+
+```
+
+
+```{r zhang_write}
+
+taxa_are_rows(zhang_physeq)
+
+zhang_otu<-as(otu_table(zhang_physeq),"matrix") # 't' to transform if taxa_are_rows=FALSE
+
+zhang_otu_biom <- make_biom(data=zhang_otu)
+
+write_biom(zhang_otu_biom,"zhang/otu_biom.biom")
+
+fasta_export_prep <- data.frame(tax_table(zhang_physeq)) %>%
+  mutate(ASV_Fasta = paste0(">", ASV))
+
+seq_fasta <- c(rbind(fasta_export_prep$ASV_Fasta, fasta_export_prep$ASVseqs))
+
+write(x = seq_fasta, file = "zhang/seqs.fasta")
+
+```
+
+
+```{r new-picrust, engine = 'bash', engine.opts='-l' , eval = FALSE}
+
+wget https://github.com/picrust/picrust2/archive/v2.6.0.tar.gz
+tar xvzf  v2.6.0.tar.gz
+cd picrust2-2.6.0/
+
+# MANUALLY EDITED YAML TO CHANGE ENV NAME
+conda env create -f picrust2-env.yaml
+conda activate picrust2.6_unifrac
+pip install --editable .
+
+cd ..
+
+picrust2_pipeline.py -s props/seqs.fasta -i props/otu_biom.biom -o props/output -p 15 --verbose --no_pathways --skip_minpath --remove_intermediate
+
+picrust2_pipeline.py -s barlow/seqs.fasta -i barlow/otu_biom.biom -o barlow/output -p 15 --verbose --no_pathways --skip_minpath --remove_intermediate
+
+picrust2_pipeline.py -s pendleton/seqs.fasta -i pendleton/otu_biom.biom -o pendleton/output -p 15 --verbose --no_pathways --skip_minpath --remove_intermediate
+
+picrust2_pipeline.py -s zhang/seqs.fasta -i zhang/otu_biom.biom -o zhang/output -p 15 --verbose --no_pathways --skip_minpath --remove_intermediate
+
+conda deactivate
+
+```
+
+# Reading in Props
+
+```{r readin-props}
+
+props_raw <- read_tsv("props/output/EC_metagenome_out/seqtab_norm.tsv.gz") %>%
+  column_to_rownames("normalized") %>%
+  as.matrix() %>%
+  round()
+
+read_tsv("props/output/combined_marker_predicted_and_nsti.tsv.gz") %>%
+  count(`16S_rRNA_Count`)
+
+# Percentage of ASV reads that remained the same
+sum(props_raw == props_otu[order(row.names(props_otu)), ]) / length(props_raw)
+
+dim(props_raw) == dim(props_otu)
+
+row.names(props_raw) == row.names(props_otu[order(row.names(props_otu)), ])
+
+colnames(props_raw) == colnames(props_otu)
+
+norm_physeq <- props_physeq
+
+norm_physeq@otu_table <- NULL
+
+norm_physeq@otu_table <- otu_table(props_raw, taxa_are_rows = TRUE)
+
+mat_list <- list(Standard = props_physeq,
+                 Normalized = norm_physeq)
+
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  props_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample, Sample_Sum = cell_per_ml)
+
+cell_counts <- cell_counts_prep$Sample_Sum
+
+names(cell_counts) = cell_counts_prep$sample
+
+rarefaction_limit <- min(c(sample_sums(props_physeq), sample_sums(norm_physeq)))
+
+tables <- 
+  map(mat_list, \(x){
+  generate_rarefied_abs_tables(physeq = x,
+                              iterations = 10, 
+                              rare.depth = rarefaction_limit, 
+                              abs.counts = cell_counts, 
+                              seed = 314,
+                              return_rel = FALSE)
+  }
+    )
+
+dims <- dim(tables[[1]])
+
+dists <- 
+  map(tables, \(table){
+    map(c(1:dims[2]),
+     \(x)GUniFrac(otu.tab = table[,x,],
+                  tree = phy_tree(props_physeq),
+                  alpha = seq(from = 0, to = 1, by = 0.1),
+                  normalize_counts = FALSE,
+                  verbose = FALSE))
+  })
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+unifracs <- 
+  map(dists, \(ddd){
+    map(gun_names, \(x){
+      dist_objs <- map(ddd,
+                       \(y)as.dist(y$unifracs[,,x]))
+      
+      Reduce(`+`, dist_objs) / length(dist_objs)
+    })
+  })
+
+props_unifrac_res <- 
+  map2(unifracs[[1]], unifracs[[2]], \(x,y){
+    mantels <- mantel(x, y, permutations = 999)$statistic
+  }) %>% unlist() %>%
+  bind_rows() %>%
+  select(-d_UW) %>%
+  pivot_longer(d_0:d_1, names_to = "alpha", values_to = "mR") %>%
+  mutate(alpha = as.numeric(str_remove(alpha, "d_")),
+         Dataset = "Cooling Reactor")
+
+props_unifrac_res
+
+```
+
+# Reading in Barlow
+
+```{r readin-barlow}
+
+barlow_raw <- read_tsv("barlow/output/EC_metagenome_out/seqtab_norm.tsv.gz") %>%
+  column_to_rownames("normalized") %>%
+  as.matrix() %>%
+  round()
+
+read_tsv("barlow/output/combined_marker_predicted_and_nsti.tsv.gz") %>%
+  count(`16S_rRNA_Count`)
+
+# Percentage of ASV reads that remained the same
+sum(barlow_raw == barlow_otu[order(row.names(barlow_otu)), ]) / length(barlow_raw)
+
+dim(barlow_raw) == dim(barlow_otu)
+
+all(row.names(barlow_raw) == row.names(barlow_otu[order(row.names(barlow_otu)), ]))
+
+all(colnames(barlow_raw) == colnames(barlow_otu))
+
+norm_physeq <- barlow_physeq
+
+norm_physeq@otu_table <- NULL
+
+norm_physeq@otu_table <- otu_table(barlow_raw, taxa_are_rows = TRUE)
+
+mat_list <- list(Standard = barlow_physeq,
+                 Normalized = norm_physeq)
+
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  barlow_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample, Sample_Sum)
+
+cell_counts <- cell_counts_prep$Sample_Sum
+
+names(cell_counts) = cell_counts_prep$sample
+
+rarefaction_limit <- min(c(sample_sums(norm_physeq),sample_sums(barlow_physeq)))
+
+tables <- 
+  map(mat_list, \(x){
+  generate_rarefied_abs_tables(physeq = x,
+                              iterations = 10, 
+                              rare.depth = rarefaction_limit, 
+                              abs.counts = cell_counts, 
+                              seed = 314,
+                              return_rel = FALSE)
+  }
+    )
+
+dims <- dim(tables[[1]])
+
+# dists <-
+#   map(tables, \(table){
+#     map(c(1:dims[2]),
+#      \(x)GUniFrac(otu.tab = table[,x,],
+#                   tree = phy_tree(barlow_physeq),
+#                   alpha = seq(from = 0, to = 1, by = 0.1),
+#                   normalize_counts = FALSE,
+#                   verbose = FALSE))
+#   })
+# 
+# save(dists, file = "barlow/dists.RData")
+
+load("barlow/dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+unifracs <- 
+  map(dists, \(ddd){
+    map(gun_names, \(x){
+      dist_objs <- map(ddd,
+                       \(y)as.dist(y$unifracs[,,x]))
+      
+      Reduce(`+`, dist_objs) / length(dist_objs)
+    })
+  })
+
+barlow_unifrac_res <- 
+  map2(unifracs[[1]], unifracs[[2]], \(x,y){
+    mantels <- mantel(x, y, permutations = 999)$statistic
+  }) %>% unlist() %>%
+  bind_rows() %>%
+  select(-d_UW) %>%
+  pivot_longer(d_0:d_1, names_to = "alpha", values_to = "mR") %>%
+  mutate(alpha = as.numeric(str_remove(alpha, "d_")),
+         Dataset = "Mouse Gut")
+
+barlow_unifrac_res
+
+```
+
+# Reading in Pendleton
+
+```{r readin-pendleton}
+
+pendleton_raw <- read_tsv("pendleton/output/EC_metagenome_out/seqtab_norm.tsv.gz") %>%
+  column_to_rownames("normalized") %>%
+  as.matrix() %>%
+  round()
+
+read_tsv("pendleton/output/combined_marker_predicted_and_nsti.tsv.gz") %>%
+  count(`16S_rRNA_Count`)
+
+dim(pendleton_raw) == dim(pendleton_otu)
+
+# Some ASVs were dropped during PICRUST, likely as a result of poor alignment to reference sequences
+
+dropped_asvs <- row.names(pendleton_otu)[!row.names(pendleton_otu) %in% row.names(pendleton_raw)]
+length(dropped_asvs)
+
+
+
+all(colnames(pendleton_raw) == colnames(pendleton_otu))
+
+norm_physeq <- pendleton_physeq
+
+norm_physeq@otu_table <- NULL
+
+norm_physeq@otu_table <- otu_table(pendleton_raw, taxa_are_rows = TRUE)
+
+mat_list <- list(Standard = pendleton_physeq,
+                 Normalized = norm_physeq)
+
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  pendleton_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample = Rep_ID, Sample_Sum = avg_cells_per_ml)
+
+cell_counts <- cell_counts_prep$Sample_Sum
+
+names(cell_counts) = cell_counts_prep$sample
+
+rarefaction_limit <- min(c(sample_sums(norm_physeq), sample_sums(pendleton_physeq)))
+
+tables <- 
+  map(mat_list, \(x){
+  generate_rarefied_abs_tables(physeq = x,
+                              iterations = 10, 
+                              rare.depth = rarefaction_limit, 
+                              abs.counts = cell_counts, 
+                              seed = 314,
+                              return_rel = FALSE)
+  }
+    )
+
+dims <- dim(tables[[1]])
+
+# dists <-
+#   map(tables, \(table){
+#     map(c(1:dims[2]),
+#      \(x)GUniFrac(otu.tab = table[,x,],
+#                   tree = phy_tree(pendleton_physeq),
+#                   alpha = seq(from = 0, to = 1, by = 0.1),
+#                   normalize_counts = FALSE,
+#                   verbose = FALSE))
+#   })
+# 
+# save(dists, file = "pendleton/dists.RData")
+
+load("pendleton/dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+unifracs <- 
+  map(dists, \(ddd){
+    map(gun_names, \(x){
+      dist_objs <- map(ddd,
+                       \(y)as.dist(y$unifracs[,,x]))
+      
+      Reduce(`+`, dist_objs) / length(dist_objs)
+    })
+  })
+
+pendleton_unifrac_res <- 
+  map2(unifracs[[1]], unifracs[[2]], \(x,y){
+    mantels <- mantel(x, y, permutations = 999)$statistic
+  }) %>% unlist() %>%
+  bind_rows() %>%
+  select(-d_UW) %>%
+  pivot_longer(d_0:d_1, names_to = "alpha", values_to = "mR") %>%
+  mutate(alpha = as.numeric(str_remove(alpha, "d_")),
+         Dataset = "Freshwater")
+
+pendleton_unifrac_res
+
+```
+
+# Reading in Zhang
+
+```{r readin-zhang}
+
+zhang_raw <- read_tsv("zhang/output/EC_metagenome_out/seqtab_norm.tsv.gz") %>%
+  column_to_rownames("normalized") %>%
+  as.matrix() %>%
+  round()
+
+read_tsv("zhang/output/combined_marker_predicted_and_nsti.tsv.gz") %>%
+  count(`16S_rRNA_Count`)
+
+# Okay, who 
+
+# Also lost some ASVs to alignment here
+dim(zhang_raw) == dim(zhang_otu)
+
+norm_physeq <- zhang_physeq
+
+norm_physeq@otu_table <- NULL
+
+norm_physeq@otu_table <- otu_table(zhang_raw, taxa_are_rows = TRUE)
+
+mat_list <- list(Standard = zhang_physeq,
+                 Normalized = norm_physeq)
+
+
+source("../code/generate_rarefied_abs_tables.R")
+
+cell_counts_prep <- 
+  zhang_physeq %>%
+  sample_data %>%
+  data.frame %>%
+  select(sample, Sample_Sum)
+
+cell_counts <- cell_counts_prep$Sample_Sum
+
+names(cell_counts) = cell_counts_prep$sample
+
+rarefaction_limit <- min(c(sample_sums(norm_physeq), sample_sums(zhang_physeq)))
+
+tables <- 
+  map(mat_list, \(x){
+  generate_rarefied_abs_tables(physeq = x,
+                              iterations = 10, 
+                              rare.depth = rarefaction_limit, 
+                              abs.counts = cell_counts, 
+                              seed = 314,
+                              return_rel = FALSE)
+  }
+    )
+
+dims <- dim(tables[[1]])
+
+# dists <-
+#   map(tables, \(table){
+#     map(c(1:dims[2]),
+#      \(x)GUniFrac(otu.tab = table[,x,],
+#                   tree = phy_tree(zhang_physeq),
+#                   alpha = seq(from = 0, to = 1, by = 0.1),
+#                   normalize_counts = FALSE,
+#                   verbose = FALSE))
+#   })
+# 
+# save(dists, file = "zhang/dists.RData")
+
+load("zhang/dists.RData")
+
+gun_names <- c("d_UW","d_0","d_0.1","d_0.2","d_0.3","d_0.4","d_0.5","d_0.6","d_0.7","d_0.8","d_0.9","d_1")
+
+names(gun_names) <- gun_names
+
+unifracs <- 
+  map(dists, \(ddd){
+    map(gun_names, \(x){
+      dist_objs <- map(ddd,
+                       \(y)as.dist(y$unifracs[,,x]))
+      
+      Reduce(`+`, dist_objs) / length(dist_objs)
+    })
+  })
+
+zhang_unifrac_res <- 
+  map2(unifracs[[1]], unifracs[[2]], \(x,y){
+    mantels <- mantel(x, y, permutations = 999)$statistic
+  }) %>% unlist() %>%
+  bind_rows() %>%
+  select(-d_UW) %>%
+  pivot_longer(d_0:d_1, names_to = "alpha", values_to = "mR") %>%
+  mutate(alpha = as.numeric(str_remove(alpha, "d_")),
+         Dataset = "Soil")
+
+zhang_unifrac_res
+
+```
+
+# Collate Results
+
+```{r mantel-plot, fig.width = 4.2, fig.height = 4}
+
+rbind(props_unifrac_res, barlow_unifrac_res, pendleton_unifrac_res, zhang_unifrac_res) %>%
+  mutate(Dataset = factor(Dataset, levels = c("Cooling Reactor", "Mouse Gut", "Freshwater", "Soil"))) %>%
+  ggplot(aes(x = alpha, y = mR, group = Dataset, color = Dataset)) + 
+  geom_point() + 
+  geom_line() +
+  scale_color_manual(values = triglav[c(1,3,4,5)]) + 
+  labs(x = "\u03b1", y = "Mantel's R to non-normalized", color = "Dataset")+ 
+  theme(legend.position = "inside",
+        legend.position.inside= c(0.8,0.5))
+
+```
+
+
+# Just to confirm the ASV abundances ARE changing
+
+
+```{r}
+
+big_cn_asvs <- read_tsv("zhang/output/combined_marker_predicted_and_nsti.tsv.gz") %>%
+  slice_max(`16S_rRNA_Count`)
+
+big_cn_asvs <- read_tsv("zhang/output/combined_marker_predicted_and_nsti.tsv.gz") %>%
+  slice_max(`16S_rRNA_Count`) %>% pull(sequence)
+
+norm_asv_sums <- rowSums(zhang_raw)
+nonnorm_asv_sums <- rowSums(zhang_otu)
+
+norm_asv_sums[big_cn_asvs]
+nonnorm_asv_sums[big_cn_asvs]
+
+```
+
+Okay, yes, it is actually doing something, I promise!
+
+# Percentage of community with copy number >1
+
+```{r read-distribution, fig.height = 5, fig.width = 5}
+
+count_list <- list(Cooling = "props/output/combined_marker_predicted_and_nsti.tsv.gz",
+                   Gut = "barlow/output/combined_marker_predicted_and_nsti.tsv.gz",
+                   Water = "pendleton/output/combined_marker_predicted_and_nsti.tsv.gz",
+                   Soil = "zhang/output/combined_marker_predicted_and_nsti.tsv.gz")
+
+rowsums_list <- list(Cooling = rowSums(props_otu),
+                     Gut = rowSums(barlow_otu),
+                     Water = rowSums(pendleton_otu),
+                     Soil = rowSums(zhang_otu))
+
+
+cn2_asvs <- map(count_list, \(x){
+  read_tsv(x) %>%
+    rename(copyn = `16S_rRNA_Count`) %>%
+    select(copyn, sequence) %>%
+    group_by(copyn) %>%
+    summarize(asv_list = list(sequence))
+})
+
+cleaned_percentage <- map2(cn2_asvs, rowsums_list, \(x,y){
+  x %>%
+    rowwise() %>%
+    mutate(count_sum = sum(y[asv_list])) %>%
+    ungroup() %>%
+    mutate(count_perc = count_sum / sum(count_sum))
+}) %>%
+  bind_rows(.id = "Dataset")
+
+cleaned_percentage %>%
+  mutate(Dataset = factor(Dataset, 
+                          levels = c("Cooling","Gut","Water","Soil"),
+                          labels = c("Cooling Reactor", "Mouse Gut", "Freshwater", "Soil"))) %>%
+  ggplot(aes(x = copyn, y = count_perc, fill = Dataset)) + 
+  geom_col() + 
+  facet_wrap(~Dataset) +
+  scale_fill_manual(values = triglav[c(1,3,4,5)]) +
+  scale_x_continuous(limits = c(0, 15), breaks = c(1,4,7,11,14)) + 
+  scale_y_continuous(expand = expansion(mult = 0)) + 
+  annotate(geom = "segment", x = -Inf, xend = Inf, y = 0, yend = 0) + 
+  labs(x = "Predicted Copy Number", y = "Total % of Reads") + 
+  theme(strip.text = element_text(size = 14),
+        legend.position = "none")
+
+barlow_big_asvs <- cn2_asvs$Gut %>%
+  filter(copyn == 7) %>%
+  pull(asv_list) %>%
+  unlist()
+
+barlow_physeq %>%
+  tax_table() %>%
+  data.frame() %>%
+  filter(ASV %in% barlow_big_asvs) %>%
+  select(-ASVseqs) %>%
+  left_join(data.frame(Sums = rowsums_list$Gut[barlow_big_asvs],
+           ASV = names(rowsums_list$Gut[barlow_big_asvs]))) %>%
+  arrange(desc(Sums))
+
+
+
+```
+

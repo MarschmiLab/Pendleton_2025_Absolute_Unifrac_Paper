@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Augustus Pendleton">
+<meta name="dcterms.date" content="2025-11-20">
+
+<title>Checking sensitivity to copy number normalization</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="05_Picrust_Analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="05_Picrust_Analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="05_Picrust_Analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="05_Picrust_Analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="05_Picrust_Analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="05_Picrust_Analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="05_Picrust_Analysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="05_Picrust_Analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="05_Picrust_Analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="05_Picrust_Analysis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Checking sensitivity to copy number normalization</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Augustus Pendleton </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 20, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="load-data-and-packages" class="level1">
+<h1>Load Data and Packages</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(phyloseq, vegan, patchwork, GUniFrac, tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../props_reanalysis/root_physeq.RData"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>props_physeq <span class="ot">&lt;-</span> root_physeq</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../barlow_reanalysis/root_physeq.RData"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>barlow_physeq <span class="ot">&lt;-</span> root_physeq</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../pendleton_reanalysis/full_diversity_physeq.RData"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>pendleton_physeq <span class="ot">&lt;-</span> full_diversity_physeq</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../zhang_reanalysis/trim_physeq.RData"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>zhang_physeq <span class="ot">&lt;-</span> trim_physeq</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../code/plotting.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="picrust2-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="picrust2-analysis">Picrust2 Analysis</h2>
+</section>
+<section id="exporting-data-for-picrust-format" class="level2">
+<h2 class="anchored" data-anchor-id="exporting-data-for-picrust-format">Exporting data for picrust format</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Export feature/OTU table</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># As a biom file</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(biomformat)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">"biomformat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] '1.30.0'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] ‘1.30.0’</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_are_rows</span>(props_physeq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>props_otu<span class="ot">&lt;-</span><span class="fu">as</span>(<span class="fu">otu_table</span>(props_physeq),<span class="st">"matrix"</span>) <span class="co"># 't' to transform if taxa_are_rows=FALSE</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>props_otu_biom <span class="ot">&lt;-</span> <span class="fu">make_biom</span>(<span class="at">data=</span>props_otu)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_biom</span>(props_otu_biom,<span class="st">"props/otu_biom.biom"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>fasta_export_prep <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">tax_table</span>(props_physeq)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ASV_Fasta =</span> <span class="fu">paste0</span>(<span class="st">"&gt;"</span>, ASV))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>seq_fasta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(fasta_export_prep<span class="sc">$</span>ASV_Fasta, fasta_export_prep<span class="sc">$</span>ASVseqs))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="at">x =</span> seq_fasta, <span class="at">file =</span> <span class="st">"props/seqs.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_are_rows</span>(barlow_physeq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>barlow_otu<span class="ot">&lt;-</span><span class="fu">as</span>(<span class="fu">otu_table</span>(barlow_physeq),<span class="st">"matrix"</span>) <span class="co"># 't' to transform if taxa_are_rows=FALSE</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>barlow_otu_biom <span class="ot">&lt;-</span> <span class="fu">make_biom</span>(<span class="at">data=</span>barlow_otu)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_biom</span>(barlow_otu_biom,<span class="st">"barlow/otu_biom.biom"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>fasta_export_prep <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">tax_table</span>(barlow_physeq)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ASV_Fasta =</span> <span class="fu">paste0</span>(<span class="st">"&gt;"</span>, ASV))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>seq_fasta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(fasta_export_prep<span class="sc">$</span>ASV_Fasta, fasta_export_prep<span class="sc">$</span>ASVseqs))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="at">x =</span> seq_fasta, <span class="at">file =</span> <span class="st">"barlow/seqs.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_are_rows</span>(pendleton_physeq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pendleton_otu<span class="ot">&lt;-</span><span class="fu">t</span>(<span class="fu">as</span>(<span class="fu">otu_table</span>(pendleton_physeq),<span class="st">"matrix"</span>)) <span class="co"># 't' to transform if taxa_are_rows=FALSE</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>pendleton_otu_biom <span class="ot">&lt;-</span> <span class="fu">make_biom</span>(<span class="at">data=</span>pendleton_otu)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_biom</span>(pendleton_otu_biom,<span class="st">"pendleton/otu_biom.biom"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>fasta_export_prep <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">tax_table</span>(pendleton_physeq)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ASV_Fasta =</span> <span class="fu">paste0</span>(<span class="st">"&gt;"</span>, ASV))</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>seq_fasta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(fasta_export_prep<span class="sc">$</span>ASV_Fasta, fasta_export_prep<span class="sc">$</span>ASVseqs))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="at">x =</span> seq_fasta, <span class="at">file =</span> <span class="st">"pendleton/seqs.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_are_rows</span>(zhang_physeq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>zhang_otu<span class="ot">&lt;-</span><span class="fu">as</span>(<span class="fu">otu_table</span>(zhang_physeq),<span class="st">"matrix"</span>) <span class="co"># 't' to transform if taxa_are_rows=FALSE</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>zhang_otu_biom <span class="ot">&lt;-</span> <span class="fu">make_biom</span>(<span class="at">data=</span>zhang_otu)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_biom</span>(zhang_otu_biom,<span class="st">"zhang/otu_biom.biom"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>fasta_export_prep <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">tax_table</span>(zhang_physeq)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ASV_Fasta =</span> <span class="fu">paste0</span>(<span class="st">"&gt;"</span>, ASV))</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>seq_fasta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(fasta_export_prep<span class="sc">$</span>ASV_Fasta, fasta_export_prep<span class="sc">$</span>ASVseqs))</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="at">x =</span> seq_fasta, <span class="at">file =</span> <span class="st">"zhang/seqs.fasta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-engine.opts="-l">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://github.com/picrust/picrust2/archive/v2.6.0.tar.gz</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvzf  v2.6.0.tar.gz</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> picrust2-2.6.0/</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># MANUALLY EDITED YAML TO CHANGE ENV NAME</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> picrust2-env.yaml</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate picrust2.6_unifrac</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--editable</span> .</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="ex">picrust2_pipeline.py</span> <span class="at">-s</span> props/seqs.fasta <span class="at">-i</span> props/otu_biom.biom <span class="at">-o</span> props/output <span class="at">-p</span> 15 <span class="at">--verbose</span> <span class="at">--no_pathways</span> <span class="at">--skip_minpath</span> <span class="at">--remove_intermediate</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ex">picrust2_pipeline.py</span> <span class="at">-s</span> barlow/seqs.fasta <span class="at">-i</span> barlow/otu_biom.biom <span class="at">-o</span> barlow/output <span class="at">-p</span> 15 <span class="at">--verbose</span> <span class="at">--no_pathways</span> <span class="at">--skip_minpath</span> <span class="at">--remove_intermediate</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">picrust2_pipeline.py</span> <span class="at">-s</span> pendleton/seqs.fasta <span class="at">-i</span> pendleton/otu_biom.biom <span class="at">-o</span> pendleton/output <span class="at">-p</span> 15 <span class="at">--verbose</span> <span class="at">--no_pathways</span> <span class="at">--skip_minpath</span> <span class="at">--remove_intermediate</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ex">picrust2_pipeline.py</span> <span class="at">-s</span> zhang/seqs.fasta <span class="at">-i</span> zhang/otu_biom.biom <span class="at">-o</span> zhang/output <span class="at">-p</span> 15 <span class="at">--verbose</span> <span class="at">--no_pathways</span> <span class="at">--skip_minpath</span> <span class="at">--remove_intermediate</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="reading-in-props" class="level1">
+<h1>Reading in Props</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>props_raw <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"props/output/EC_metagenome_out/seqtab_norm.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"normalized"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 215 Columns: 48
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (1): normalized
+dbl (47): SRR2917200, SRR2917201, SRR2917202, SRR2917203, SRR2917204, SRR291...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"props/output/combined_marker_predicted_and_nsti.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 215 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 2
+  `16S_rRNA_Count`     n
+             &lt;dbl&gt; &lt;int&gt;
+1                1   190
+2                2    18
+3                4     3
+4                5     1
+5                7     1
+6                9     1
+7               12     1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentage of ASV reads that remained the same</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(props_raw <span class="sc">==</span> props_otu[<span class="fu">order</span>(<span class="fu">row.names</span>(props_otu)), ]) <span class="sc">/</span> <span class="fu">length</span>(props_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9884216</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(props_raw) <span class="sc">==</span> <span class="fu">dim</span>(props_otu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(props_raw) <span class="sc">==</span> <span class="fu">row.names</span>(props_otu[<span class="fu">order</span>(<span class="fu">row.names</span>(props_otu)), ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [16] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [31] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [46] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [61] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[106] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[121] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[136] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[151] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[166] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[181] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[196] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[211] TRUE TRUE TRUE TRUE TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(props_raw) <span class="sc">==</span> <span class="fu">colnames</span>(props_otu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[16] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[31] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[46] TRUE TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>norm_physeq <span class="ot">&lt;-</span> props_physeq</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="fu">otu_table</span>(props_raw, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>mat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Standard =</span> props_physeq,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Normalized =</span> norm_physeq)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../code/generate_rarefied_abs_tables.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: abind
+Loading required package: extraDistr
+
+Attaching package: 'extraDistr'
+
+The following object is masked from 'package:purrr':
+
+    rdunif</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>cell_counts_prep <span class="ot">&lt;-</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  props_physeq <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sample, <span class="at">Sample_Sum =</span> cell_per_ml)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>cell_counts <span class="ot">&lt;-</span> cell_counts_prep<span class="sc">$</span>Sample_Sum</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cell_counts) <span class="ot">=</span> cell_counts_prep<span class="sc">$</span>sample</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>rarefaction_limit <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">c</span>(<span class="fu">sample_sums</span>(props_physeq), <span class="fu">sample_sums</span>(norm_physeq)))</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> </span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(mat_list, \(x){</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_rarefied_abs_tables</span>(<span class="at">physeq =</span> x,</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>                              <span class="at">iterations =</span> <span class="dv">10</span>, </span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rare.depth =</span> rarefaction_limit, </span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>                              <span class="at">abs.counts =</span> cell_counts, </span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>                              <span class="at">seed =</span> <span class="dv">314</span>,</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>                              <span class="at">return_rel =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>dims <span class="ot">&lt;-</span> <span class="fu">dim</span>(tables[[<span class="dv">1</span>]])</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>dists <span class="ot">&lt;-</span> </span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(tables, \(table){</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>dims[<span class="dv">2</span>]),</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>     \(x)<span class="fu">GUniFrac</span>(<span class="at">otu.tab =</span> table[,x,],</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>                  <span class="at">tree =</span> <span class="fu">phy_tree</span>(props_physeq),</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>                  <span class="at">alpha =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>),</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>                  <span class="at">normalize_counts =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>                  <span class="at">verbose =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>gun_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d_UW"</span>,<span class="st">"d_0"</span>,<span class="st">"d_0.1"</span>,<span class="st">"d_0.2"</span>,<span class="st">"d_0.3"</span>,<span class="st">"d_0.4"</span>,<span class="st">"d_0.5"</span>,<span class="st">"d_0.6"</span>,<span class="st">"d_0.7"</span>,<span class="st">"d_0.8"</span>,<span class="st">"d_0.9"</span>,<span class="st">"d_1"</span>)</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gun_names) <span class="ot">&lt;-</span> gun_names</span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>unifracs <span class="ot">&lt;-</span> </span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(dists, \(ddd){</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(gun_names, \(x){</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>      dist_objs <span class="ot">&lt;-</span> <span class="fu">map</span>(ddd,</span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>                       \(y)<span class="fu">as.dist</span>(y<span class="sc">$</span>unifracs[,,x]))</span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, dist_objs) <span class="sc">/</span> <span class="fu">length</span>(dist_objs)</span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>props_unifrac_res <span class="ot">&lt;-</span> </span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map2</span>(unifracs[[<span class="dv">1</span>]], unifracs[[<span class="dv">2</span>]], \(x,y){</span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>    mantels <span class="ot">&lt;-</span> <span class="fu">mantel</span>(x, y, <span class="at">permutations =</span> <span class="dv">999</span>)<span class="sc">$</span>statistic</span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>d_UW) <span class="sc">%&gt;%</span></span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(d_0<span class="sc">:</span>d_1, <span class="at">names_to =</span> <span class="st">"alpha"</span>, <span class="at">values_to =</span> <span class="st">"mR"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">alpha =</span> <span class="fu">as.numeric</span>(<span class="fu">str_remove</span>(alpha, <span class="st">"d_"</span>)),</span>
+<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>         <span class="at">Dataset =</span> <span class="st">"Cooling Reactor"</span>)</span>
+<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>props_unifrac_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   alpha    mR Dataset        
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          
+ 1   0   0.985 Cooling Reactor
+ 2   0.1 0.990 Cooling Reactor
+ 3   0.2 0.994 Cooling Reactor
+ 4   0.3 0.996 Cooling Reactor
+ 5   0.4 0.998 Cooling Reactor
+ 6   0.5 0.998 Cooling Reactor
+ 7   0.6 0.999 Cooling Reactor
+ 8   0.7 0.999 Cooling Reactor
+ 9   0.8 0.999 Cooling Reactor
+10   0.9 0.999 Cooling Reactor
+11   1   1.000 Cooling Reactor</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-in-barlow" class="level1">
+<h1>Reading in Barlow</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>barlow_raw <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"barlow/output/EC_metagenome_out/seqtab_norm.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"normalized"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 885 Columns: 94
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (1): normalized
+dbl (93): SRR10217991, SRR10217992, SRR10217993, SRR10217994, SRR10217995, S...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"barlow/output/combined_marker_predicted_and_nsti.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 885 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  `16S_rRNA_Count`     n
+             &lt;dbl&gt; &lt;int&gt;
+1                1   804
+2                2    23
+3                3    10
+4                4     3
+5                5    13
+6                6    11
+7                7    17
+8                9     1
+9               14     3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentage of ASV reads that remained the same</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(barlow_raw <span class="sc">==</span> barlow_otu[<span class="fu">order</span>(<span class="fu">row.names</span>(barlow_otu)), ]) <span class="sc">/</span> <span class="fu">length</span>(barlow_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9768908</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(barlow_raw) <span class="sc">==</span> <span class="fu">dim</span>(barlow_otu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">row.names</span>(barlow_raw) <span class="sc">==</span> <span class="fu">row.names</span>(barlow_otu[<span class="fu">order</span>(<span class="fu">row.names</span>(barlow_otu)), ]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">colnames</span>(barlow_raw) <span class="sc">==</span> <span class="fu">colnames</span>(barlow_otu))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>norm_physeq <span class="ot">&lt;-</span> barlow_physeq</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="fu">otu_table</span>(barlow_raw, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>mat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Standard =</span> barlow_physeq,</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Normalized =</span> norm_physeq)</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../code/generate_rarefied_abs_tables.R"</span>)</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>cell_counts_prep <span class="ot">&lt;-</span> </span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  barlow_physeq <span class="sc">%&gt;%</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="sc">%&gt;%</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sample, Sample_Sum)</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>cell_counts <span class="ot">&lt;-</span> cell_counts_prep<span class="sc">$</span>Sample_Sum</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cell_counts) <span class="ot">=</span> cell_counts_prep<span class="sc">$</span>sample</span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>rarefaction_limit <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">c</span>(<span class="fu">sample_sums</span>(norm_physeq),<span class="fu">sample_sums</span>(barlow_physeq)))</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> </span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(mat_list, \(x){</span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_rarefied_abs_tables</span>(<span class="at">physeq =</span> x,</span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>                              <span class="at">iterations =</span> <span class="dv">10</span>, </span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rare.depth =</span> rarefaction_limit, </span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>                              <span class="at">abs.counts =</span> cell_counts, </span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>                              <span class="at">seed =</span> <span class="dv">314</span>,</span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>                              <span class="at">return_rel =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a>dims <span class="ot">&lt;-</span> <span class="fu">dim</span>(tables[[<span class="dv">1</span>]])</span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a><span class="co"># dists &lt;-</span></span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   map(tables, \(table){</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a><span class="co">#     map(c(1:dims[2]),</span></span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a><span class="co">#      \(x)GUniFrac(otu.tab = table[,x,],</span></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a><span class="co">#                   tree = phy_tree(barlow_physeq),</span></span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a><span class="co">#                   alpha = seq(from = 0, to = 1, by = 0.1),</span></span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a><span class="co">#                   normalize_counts = FALSE,</span></span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a><span class="co">#                   verbose = FALSE))</span></span>
+<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a><span class="co">#   })</span></span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a><span class="co"># save(dists, file = "barlow/dists.RData")</span></span>
+<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"barlow/dists.RData"</span>)</span>
+<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a>gun_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d_UW"</span>,<span class="st">"d_0"</span>,<span class="st">"d_0.1"</span>,<span class="st">"d_0.2"</span>,<span class="st">"d_0.3"</span>,<span class="st">"d_0.4"</span>,<span class="st">"d_0.5"</span>,<span class="st">"d_0.6"</span>,<span class="st">"d_0.7"</span>,<span class="st">"d_0.8"</span>,<span class="st">"d_0.9"</span>,<span class="st">"d_1"</span>)</span>
+<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gun_names) <span class="ot">&lt;-</span> gun_names</span>
+<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a>unifracs <span class="ot">&lt;-</span> </span>
+<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(dists, \(ddd){</span>
+<span id="cb47-57"><a href="#cb47-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(gun_names, \(x){</span>
+<span id="cb47-58"><a href="#cb47-58" aria-hidden="true" tabindex="-1"></a>      dist_objs <span class="ot">&lt;-</span> <span class="fu">map</span>(ddd,</span>
+<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a>                       \(y)<span class="fu">as.dist</span>(y<span class="sc">$</span>unifracs[,,x]))</span>
+<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, dist_objs) <span class="sc">/</span> <span class="fu">length</span>(dist_objs)</span>
+<span id="cb47-62"><a href="#cb47-62" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb47-63"><a href="#cb47-63" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb47-64"><a href="#cb47-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-65"><a href="#cb47-65" aria-hidden="true" tabindex="-1"></a>barlow_unifrac_res <span class="ot">&lt;-</span> </span>
+<span id="cb47-66"><a href="#cb47-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map2</span>(unifracs[[<span class="dv">1</span>]], unifracs[[<span class="dv">2</span>]], \(x,y){</span>
+<span id="cb47-67"><a href="#cb47-67" aria-hidden="true" tabindex="-1"></a>    mantels <span class="ot">&lt;-</span> <span class="fu">mantel</span>(x, y, <span class="at">permutations =</span> <span class="dv">999</span>)<span class="sc">$</span>statistic</span>
+<span id="cb47-68"><a href="#cb47-68" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb47-69"><a href="#cb47-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb47-70"><a href="#cb47-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>d_UW) <span class="sc">%&gt;%</span></span>
+<span id="cb47-71"><a href="#cb47-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(d_0<span class="sc">:</span>d_1, <span class="at">names_to =</span> <span class="st">"alpha"</span>, <span class="at">values_to =</span> <span class="st">"mR"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb47-72"><a href="#cb47-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">alpha =</span> <span class="fu">as.numeric</span>(<span class="fu">str_remove</span>(alpha, <span class="st">"d_"</span>)),</span>
+<span id="cb47-73"><a href="#cb47-73" aria-hidden="true" tabindex="-1"></a>         <span class="at">Dataset =</span> <span class="st">"Mouse Gut"</span>)</span>
+<span id="cb47-74"><a href="#cb47-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-75"><a href="#cb47-75" aria-hidden="true" tabindex="-1"></a>barlow_unifrac_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   alpha    mR Dataset  
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+ 1   0   0.990 Mouse Gut
+ 2   0.1 0.990 Mouse Gut
+ 3   0.2 0.990 Mouse Gut
+ 4   0.3 0.990 Mouse Gut
+ 5   0.4 0.989 Mouse Gut
+ 6   0.5 0.988 Mouse Gut
+ 7   0.6 0.987 Mouse Gut
+ 8   0.7 0.985 Mouse Gut
+ 9   0.8 0.984 Mouse Gut
+10   0.9 0.983 Mouse Gut
+11   1   0.982 Mouse Gut</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-in-pendleton" class="level1">
+<h1>Reading in Pendleton</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>pendleton_raw <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"pendleton/output/EC_metagenome_out/seqtab_norm.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"normalized"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 7218 Columns: 73
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (1): normalized
+dbl (72): May_12_B, May_12_E, May_12_M, May_17_E, May_29_B, May_29_E, May_29...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"pendleton/output/combined_marker_predicted_and_nsti.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 7275 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 2
+   `16S_rRNA_Count`     n
+              &lt;dbl&gt; &lt;int&gt;
+ 1                1  6497
+ 2                2   554
+ 3                3   114
+ 4                4    38
+ 5                5    26
+ 6                6    19
+ 7                7    18
+ 8                8     1
+ 9                9     2
+10               10     1
+11               11     2
+12               12     2
+13               14     1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pendleton_raw) <span class="sc">==</span> <span class="fu">dim</span>(pendleton_otu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Some ASVs were dropped during PICRUST, likely as a result of poor alignment to reference sequences</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>dropped_asvs <span class="ot">&lt;-</span> <span class="fu">row.names</span>(pendleton_otu)[<span class="sc">!</span><span class="fu">row.names</span>(pendleton_otu) <span class="sc">%in%</span> <span class="fu">row.names</span>(pendleton_raw)]</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(dropped_asvs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 61</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">colnames</span>(pendleton_raw) <span class="sc">==</span> <span class="fu">colnames</span>(pendleton_otu))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>norm_physeq <span class="ot">&lt;-</span> pendleton_physeq</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="fu">otu_table</span>(pendleton_raw, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>mat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Standard =</span> pendleton_physeq,</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Normalized =</span> norm_physeq)</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../code/generate_rarefied_abs_tables.R"</span>)</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>cell_counts_prep <span class="ot">&lt;-</span> </span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a>  pendleton_physeq <span class="sc">%&gt;%</span></span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="sc">%&gt;%</span></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span></span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">sample =</span> Rep_ID, <span class="at">Sample_Sum =</span> avg_cells_per_ml)</span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a>cell_counts <span class="ot">&lt;-</span> cell_counts_prep<span class="sc">$</span>Sample_Sum</span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cell_counts) <span class="ot">=</span> cell_counts_prep<span class="sc">$</span>sample</span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a>rarefaction_limit <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">c</span>(<span class="fu">sample_sums</span>(norm_physeq), <span class="fu">sample_sums</span>(pendleton_physeq)))</span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> </span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(mat_list, \(x){</span>
+<span id="cb60-26"><a href="#cb60-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_rarefied_abs_tables</span>(<span class="at">physeq =</span> x,</span>
+<span id="cb60-27"><a href="#cb60-27" aria-hidden="true" tabindex="-1"></a>                              <span class="at">iterations =</span> <span class="dv">10</span>, </span>
+<span id="cb60-28"><a href="#cb60-28" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rare.depth =</span> rarefaction_limit, </span>
+<span id="cb60-29"><a href="#cb60-29" aria-hidden="true" tabindex="-1"></a>                              <span class="at">abs.counts =</span> cell_counts, </span>
+<span id="cb60-30"><a href="#cb60-30" aria-hidden="true" tabindex="-1"></a>                              <span class="at">seed =</span> <span class="dv">314</span>,</span>
+<span id="cb60-31"><a href="#cb60-31" aria-hidden="true" tabindex="-1"></a>                              <span class="at">return_rel =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb60-32"><a href="#cb60-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb60-33"><a href="#cb60-33" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb60-34"><a href="#cb60-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-35"><a href="#cb60-35" aria-hidden="true" tabindex="-1"></a>dims <span class="ot">&lt;-</span> <span class="fu">dim</span>(tables[[<span class="dv">1</span>]])</span>
+<span id="cb60-36"><a href="#cb60-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-37"><a href="#cb60-37" aria-hidden="true" tabindex="-1"></a><span class="co"># dists &lt;-</span></span>
+<span id="cb60-38"><a href="#cb60-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   map(tables, \(table){</span></span>
+<span id="cb60-39"><a href="#cb60-39" aria-hidden="true" tabindex="-1"></a><span class="co">#     map(c(1:dims[2]),</span></span>
+<span id="cb60-40"><a href="#cb60-40" aria-hidden="true" tabindex="-1"></a><span class="co">#      \(x)GUniFrac(otu.tab = table[,x,],</span></span>
+<span id="cb60-41"><a href="#cb60-41" aria-hidden="true" tabindex="-1"></a><span class="co">#                   tree = phy_tree(pendleton_physeq),</span></span>
+<span id="cb60-42"><a href="#cb60-42" aria-hidden="true" tabindex="-1"></a><span class="co">#                   alpha = seq(from = 0, to = 1, by = 0.1),</span></span>
+<span id="cb60-43"><a href="#cb60-43" aria-hidden="true" tabindex="-1"></a><span class="co">#                   normalize_counts = FALSE,</span></span>
+<span id="cb60-44"><a href="#cb60-44" aria-hidden="true" tabindex="-1"></a><span class="co">#                   verbose = FALSE))</span></span>
+<span id="cb60-45"><a href="#cb60-45" aria-hidden="true" tabindex="-1"></a><span class="co">#   })</span></span>
+<span id="cb60-46"><a href="#cb60-46" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb60-47"><a href="#cb60-47" aria-hidden="true" tabindex="-1"></a><span class="co"># save(dists, file = "pendleton/dists.RData")</span></span>
+<span id="cb60-48"><a href="#cb60-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-49"><a href="#cb60-49" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"pendleton/dists.RData"</span>)</span>
+<span id="cb60-50"><a href="#cb60-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-51"><a href="#cb60-51" aria-hidden="true" tabindex="-1"></a>gun_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d_UW"</span>,<span class="st">"d_0"</span>,<span class="st">"d_0.1"</span>,<span class="st">"d_0.2"</span>,<span class="st">"d_0.3"</span>,<span class="st">"d_0.4"</span>,<span class="st">"d_0.5"</span>,<span class="st">"d_0.6"</span>,<span class="st">"d_0.7"</span>,<span class="st">"d_0.8"</span>,<span class="st">"d_0.9"</span>,<span class="st">"d_1"</span>)</span>
+<span id="cb60-52"><a href="#cb60-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-53"><a href="#cb60-53" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gun_names) <span class="ot">&lt;-</span> gun_names</span>
+<span id="cb60-54"><a href="#cb60-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-55"><a href="#cb60-55" aria-hidden="true" tabindex="-1"></a>unifracs <span class="ot">&lt;-</span> </span>
+<span id="cb60-56"><a href="#cb60-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(dists, \(ddd){</span>
+<span id="cb60-57"><a href="#cb60-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(gun_names, \(x){</span>
+<span id="cb60-58"><a href="#cb60-58" aria-hidden="true" tabindex="-1"></a>      dist_objs <span class="ot">&lt;-</span> <span class="fu">map</span>(ddd,</span>
+<span id="cb60-59"><a href="#cb60-59" aria-hidden="true" tabindex="-1"></a>                       \(y)<span class="fu">as.dist</span>(y<span class="sc">$</span>unifracs[,,x]))</span>
+<span id="cb60-60"><a href="#cb60-60" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb60-61"><a href="#cb60-61" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, dist_objs) <span class="sc">/</span> <span class="fu">length</span>(dist_objs)</span>
+<span id="cb60-62"><a href="#cb60-62" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb60-63"><a href="#cb60-63" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb60-64"><a href="#cb60-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-65"><a href="#cb60-65" aria-hidden="true" tabindex="-1"></a>pendleton_unifrac_res <span class="ot">&lt;-</span> </span>
+<span id="cb60-66"><a href="#cb60-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map2</span>(unifracs[[<span class="dv">1</span>]], unifracs[[<span class="dv">2</span>]], \(x,y){</span>
+<span id="cb60-67"><a href="#cb60-67" aria-hidden="true" tabindex="-1"></a>    mantels <span class="ot">&lt;-</span> <span class="fu">mantel</span>(x, y, <span class="at">permutations =</span> <span class="dv">999</span>)<span class="sc">$</span>statistic</span>
+<span id="cb60-68"><a href="#cb60-68" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb60-69"><a href="#cb60-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb60-70"><a href="#cb60-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>d_UW) <span class="sc">%&gt;%</span></span>
+<span id="cb60-71"><a href="#cb60-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(d_0<span class="sc">:</span>d_1, <span class="at">names_to =</span> <span class="st">"alpha"</span>, <span class="at">values_to =</span> <span class="st">"mR"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb60-72"><a href="#cb60-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">alpha =</span> <span class="fu">as.numeric</span>(<span class="fu">str_remove</span>(alpha, <span class="st">"d_"</span>)),</span>
+<span id="cb60-73"><a href="#cb60-73" aria-hidden="true" tabindex="-1"></a>         <span class="at">Dataset =</span> <span class="st">"Freshwater"</span>)</span>
+<span id="cb60-74"><a href="#cb60-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-75"><a href="#cb60-75" aria-hidden="true" tabindex="-1"></a>pendleton_unifrac_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   alpha    mR Dataset   
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     
+ 1   0   0.998 Freshwater
+ 2   0.1 0.999 Freshwater
+ 3   0.2 0.999 Freshwater
+ 4   0.3 0.999 Freshwater
+ 5   0.4 1.000 Freshwater
+ 6   0.5 1.000 Freshwater
+ 7   0.6 1.000 Freshwater
+ 8   0.7 1.000 Freshwater
+ 9   0.8 1.000 Freshwater
+10   0.9 1.000 Freshwater
+11   1   1.000 Freshwater</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-in-zhang" class="level1">
+<h1>Reading in Zhang</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>zhang_raw <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"zhang/output/EC_metagenome_out/seqtab_norm.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"normalized"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 24101 Columns: 37
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr  (1): normalized
+dbl (36): SRR18309615, SRR18309616, SRR18309619, SRR18309630, SRR18309641, S...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"zhang/output/combined_marker_predicted_and_nsti.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 24123 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 2
+   `16S_rRNA_Count`     n
+              &lt;dbl&gt; &lt;int&gt;
+ 1                1 20735
+ 2                2  2067
+ 3                3   119
+ 4                4   473
+ 5                5   275
+ 6                6    51
+ 7                7   129
+ 8                8    28
+ 9                9   108
+10               10     9
+11               11    14
+12               12   105
+13               13     3
+14               14     5
+15               27     2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Okay, who </span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Also lost some ASVs to alignment here</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(zhang_raw) <span class="sc">==</span> <span class="fu">dim</span>(zhang_otu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>norm_physeq <span class="ot">&lt;-</span> zhang_physeq</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>norm_physeq<span class="sc">@</span>otu_table <span class="ot">&lt;-</span> <span class="fu">otu_table</span>(zhang_raw, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>mat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Standard =</span> zhang_physeq,</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Normalized =</span> norm_physeq)</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../code/generate_rarefied_abs_tables.R"</span>)</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>cell_counts_prep <span class="ot">&lt;-</span> </span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>  zhang_physeq <span class="sc">%&gt;%</span></span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="sc">%&gt;%</span></span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span></span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sample, Sample_Sum)</span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a>cell_counts <span class="ot">&lt;-</span> cell_counts_prep<span class="sc">$</span>Sample_Sum</span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cell_counts) <span class="ot">=</span> cell_counts_prep<span class="sc">$</span>sample</span>
+<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a>rarefaction_limit <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">c</span>(<span class="fu">sample_sums</span>(norm_physeq), <span class="fu">sample_sums</span>(zhang_physeq)))</span>
+<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> </span>
+<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(mat_list, \(x){</span>
+<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_rarefied_abs_tables</span>(<span class="at">physeq =</span> x,</span>
+<span id="cb69-28"><a href="#cb69-28" aria-hidden="true" tabindex="-1"></a>                              <span class="at">iterations =</span> <span class="dv">10</span>, </span>
+<span id="cb69-29"><a href="#cb69-29" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rare.depth =</span> rarefaction_limit, </span>
+<span id="cb69-30"><a href="#cb69-30" aria-hidden="true" tabindex="-1"></a>                              <span class="at">abs.counts =</span> cell_counts, </span>
+<span id="cb69-31"><a href="#cb69-31" aria-hidden="true" tabindex="-1"></a>                              <span class="at">seed =</span> <span class="dv">314</span>,</span>
+<span id="cb69-32"><a href="#cb69-32" aria-hidden="true" tabindex="-1"></a>                              <span class="at">return_rel =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb69-33"><a href="#cb69-33" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb69-34"><a href="#cb69-34" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb69-35"><a href="#cb69-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-36"><a href="#cb69-36" aria-hidden="true" tabindex="-1"></a>dims <span class="ot">&lt;-</span> <span class="fu">dim</span>(tables[[<span class="dv">1</span>]])</span>
+<span id="cb69-37"><a href="#cb69-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-38"><a href="#cb69-38" aria-hidden="true" tabindex="-1"></a><span class="co"># dists &lt;-</span></span>
+<span id="cb69-39"><a href="#cb69-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   map(tables, \(table){</span></span>
+<span id="cb69-40"><a href="#cb69-40" aria-hidden="true" tabindex="-1"></a><span class="co">#     map(c(1:dims[2]),</span></span>
+<span id="cb69-41"><a href="#cb69-41" aria-hidden="true" tabindex="-1"></a><span class="co">#      \(x)GUniFrac(otu.tab = table[,x,],</span></span>
+<span id="cb69-42"><a href="#cb69-42" aria-hidden="true" tabindex="-1"></a><span class="co">#                   tree = phy_tree(zhang_physeq),</span></span>
+<span id="cb69-43"><a href="#cb69-43" aria-hidden="true" tabindex="-1"></a><span class="co">#                   alpha = seq(from = 0, to = 1, by = 0.1),</span></span>
+<span id="cb69-44"><a href="#cb69-44" aria-hidden="true" tabindex="-1"></a><span class="co">#                   normalize_counts = FALSE,</span></span>
+<span id="cb69-45"><a href="#cb69-45" aria-hidden="true" tabindex="-1"></a><span class="co">#                   verbose = FALSE))</span></span>
+<span id="cb69-46"><a href="#cb69-46" aria-hidden="true" tabindex="-1"></a><span class="co">#   })</span></span>
+<span id="cb69-47"><a href="#cb69-47" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb69-48"><a href="#cb69-48" aria-hidden="true" tabindex="-1"></a><span class="co"># save(dists, file = "zhang/dists.RData")</span></span>
+<span id="cb69-49"><a href="#cb69-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-50"><a href="#cb69-50" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"zhang/dists.RData"</span>)</span>
+<span id="cb69-51"><a href="#cb69-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-52"><a href="#cb69-52" aria-hidden="true" tabindex="-1"></a>gun_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"d_UW"</span>,<span class="st">"d_0"</span>,<span class="st">"d_0.1"</span>,<span class="st">"d_0.2"</span>,<span class="st">"d_0.3"</span>,<span class="st">"d_0.4"</span>,<span class="st">"d_0.5"</span>,<span class="st">"d_0.6"</span>,<span class="st">"d_0.7"</span>,<span class="st">"d_0.8"</span>,<span class="st">"d_0.9"</span>,<span class="st">"d_1"</span>)</span>
+<span id="cb69-53"><a href="#cb69-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-54"><a href="#cb69-54" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gun_names) <span class="ot">&lt;-</span> gun_names</span>
+<span id="cb69-55"><a href="#cb69-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-56"><a href="#cb69-56" aria-hidden="true" tabindex="-1"></a>unifracs <span class="ot">&lt;-</span> </span>
+<span id="cb69-57"><a href="#cb69-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(dists, \(ddd){</span>
+<span id="cb69-58"><a href="#cb69-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(gun_names, \(x){</span>
+<span id="cb69-59"><a href="#cb69-59" aria-hidden="true" tabindex="-1"></a>      dist_objs <span class="ot">&lt;-</span> <span class="fu">map</span>(ddd,</span>
+<span id="cb69-60"><a href="#cb69-60" aria-hidden="true" tabindex="-1"></a>                       \(y)<span class="fu">as.dist</span>(y<span class="sc">$</span>unifracs[,,x]))</span>
+<span id="cb69-61"><a href="#cb69-61" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb69-62"><a href="#cb69-62" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, dist_objs) <span class="sc">/</span> <span class="fu">length</span>(dist_objs)</span>
+<span id="cb69-63"><a href="#cb69-63" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb69-64"><a href="#cb69-64" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb69-65"><a href="#cb69-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-66"><a href="#cb69-66" aria-hidden="true" tabindex="-1"></a>zhang_unifrac_res <span class="ot">&lt;-</span> </span>
+<span id="cb69-67"><a href="#cb69-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map2</span>(unifracs[[<span class="dv">1</span>]], unifracs[[<span class="dv">2</span>]], \(x,y){</span>
+<span id="cb69-68"><a href="#cb69-68" aria-hidden="true" tabindex="-1"></a>    mantels <span class="ot">&lt;-</span> <span class="fu">mantel</span>(x, y, <span class="at">permutations =</span> <span class="dv">999</span>)<span class="sc">$</span>statistic</span>
+<span id="cb69-69"><a href="#cb69-69" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb69-70"><a href="#cb69-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb69-71"><a href="#cb69-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>d_UW) <span class="sc">%&gt;%</span></span>
+<span id="cb69-72"><a href="#cb69-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(d_0<span class="sc">:</span>d_1, <span class="at">names_to =</span> <span class="st">"alpha"</span>, <span class="at">values_to =</span> <span class="st">"mR"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb69-73"><a href="#cb69-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">alpha =</span> <span class="fu">as.numeric</span>(<span class="fu">str_remove</span>(alpha, <span class="st">"d_"</span>)),</span>
+<span id="cb69-74"><a href="#cb69-74" aria-hidden="true" tabindex="-1"></a>         <span class="at">Dataset =</span> <span class="st">"Soil"</span>)</span>
+<span id="cb69-75"><a href="#cb69-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-76"><a href="#cb69-76" aria-hidden="true" tabindex="-1"></a>zhang_unifrac_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   alpha    mR Dataset
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+ 1   0   0.999 Soil   
+ 2   0.1 0.999 Soil   
+ 3   0.2 0.999 Soil   
+ 4   0.3 1.000 Soil   
+ 5   0.4 1.000 Soil   
+ 6   0.5 1.000 Soil   
+ 7   0.6 1.000 Soil   
+ 8   0.7 1.000 Soil   
+ 9   0.8 1.000 Soil   
+10   0.9 1.000 Soil   
+11   1   1.000 Soil   </code></pre>
+</div>
+</div>
+</section>
+<section id="collate-results" class="level1">
+<h1>Collate Results</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(props_unifrac_res, barlow_unifrac_res, pendleton_unifrac_res, zhang_unifrac_res) <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Dataset =</span> <span class="fu">factor</span>(Dataset, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cooling Reactor"</span>, <span class="st">"Mouse Gut"</span>, <span class="st">"Freshwater"</span>, <span class="st">"Soil"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> alpha, <span class="at">y =</span> mR, <span class="at">group =</span> Dataset, <span class="at">color =</span> Dataset)) <span class="sc">+</span> </span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> triglav[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)]) <span class="sc">+</span> </span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"\u03b1"</span>, <span class="at">y =</span> <span class="st">"Mantel's R to non-normalized"</span>, <span class="at">color =</span> <span class="st">"Dataset"</span>)<span class="sc">+</span> </span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"inside"</span>,</span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position.inside=</span> <span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="05_Picrust_Analysis_files/figure-html/mantel-plot-1.png" class="img-fluid" width="1260"></p>
+</div>
+</div>
+</section>
+<section id="just-to-confirm-the-asv-abundances-are-changing" class="level1">
+<h1>Just to confirm the ASV abundances ARE changing</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>big_cn_asvs <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"zhang/output/combined_marker_predicted_and_nsti.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 24123 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>big_cn_asvs <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"zhang/output/combined_marker_predicted_and_nsti.tsv.gz"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(sequence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 24123 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>norm_asv_sums <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(zhang_raw)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>nonnorm_asv_sums <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(zhang_otu)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>norm_asv_sums[big_cn_asvs]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ASV_17497  ASV_2375 
+        0         5 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>nonnorm_asv_sums[big_cn_asvs]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ASV_17497  ASV_2375 
+        9       184 </code></pre>
+</div>
+</div>
+<p>Okay, yes, it is actually doing something, I promise!</p>
+</section>
+<section id="percentage-of-community-with-copy-number-1" class="level1">
+<h1>Percentage of community with copy number &gt;1</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>count_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Cooling =</span> <span class="st">"props/output/combined_marker_predicted_and_nsti.tsv.gz"</span>,</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Gut =</span> <span class="st">"barlow/output/combined_marker_predicted_and_nsti.tsv.gz"</span>,</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Water =</span> <span class="st">"pendleton/output/combined_marker_predicted_and_nsti.tsv.gz"</span>,</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Soil =</span> <span class="st">"zhang/output/combined_marker_predicted_and_nsti.tsv.gz"</span>)</span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>rowsums_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Cooling =</span> <span class="fu">rowSums</span>(props_otu),</span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Gut =</span> <span class="fu">rowSums</span>(barlow_otu),</span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Water =</span> <span class="fu">rowSums</span>(pendleton_otu),</span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">Soil =</span> <span class="fu">rowSums</span>(zhang_otu))</span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>cn2_asvs <span class="ot">&lt;-</span> <span class="fu">map</span>(count_list, \(x){</span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_tsv</span>(x) <span class="sc">%&gt;%</span></span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">copyn =</span> <span class="st">`</span><span class="at">16S_rRNA_Count</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(copyn, sequence) <span class="sc">%&gt;%</span></span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(copyn) <span class="sc">%&gt;%</span></span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">asv_list =</span> <span class="fu">list</span>(sequence))</span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 215 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 885 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 7275 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 24123 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (3): sequence, best_domain, closest_reference_genome
+dbl (2): 16S_rRNA_Count, metadata_NSTI
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>cleaned_percentage <span class="ot">&lt;-</span> <span class="fu">map2</span>(cn2_asvs, rowsums_list, \(x,y){</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">%&gt;%</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">count_sum =</span> <span class="fu">sum</span>(y[asv_list])) <span class="sc">%&gt;%</span></span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">count_perc =</span> count_sum <span class="sc">/</span> <span class="fu">sum</span>(count_sum))</span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span></span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">"Dataset"</span>)</span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>cleaned_percentage <span class="sc">%&gt;%</span></span>
+<span id="cb82-11"><a href="#cb82-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Dataset =</span> <span class="fu">factor</span>(Dataset, </span>
+<span id="cb82-12"><a href="#cb82-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cooling"</span>,<span class="st">"Gut"</span>,<span class="st">"Water"</span>,<span class="st">"Soil"</span>),</span>
+<span id="cb82-13"><a href="#cb82-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Cooling Reactor"</span>, <span class="st">"Mouse Gut"</span>, <span class="st">"Freshwater"</span>, <span class="st">"Soil"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb82-14"><a href="#cb82-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> copyn, <span class="at">y =</span> count_perc, <span class="at">fill =</span> Dataset)) <span class="sc">+</span> </span>
+<span id="cb82-15"><a href="#cb82-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb82-16"><a href="#cb82-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Dataset) <span class="sc">+</span></span>
+<span id="cb82-17"><a href="#cb82-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> triglav[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)]) <span class="sc">+</span></span>
+<span id="cb82-18"><a href="#cb82-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">15</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">11</span>,<span class="dv">14</span>)) <span class="sc">+</span> </span>
+<span id="cb82-19"><a href="#cb82-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb82-20"><a href="#cb82-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"segment"</span>, <span class="at">x =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xend =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> <span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb82-21"><a href="#cb82-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Predicted Copy Number"</span>, <span class="at">y =</span> <span class="st">"Total % of Reads"</span>) <span class="sc">+</span> </span>
+<span id="cb82-22"><a href="#cb82-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb82-23"><a href="#cb82-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_col()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="05_Picrust_Analysis_files/figure-html/read-distribution-1.png" class="img-fluid" width="1500"></p>
+</div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>barlow_big_asvs <span class="ot">&lt;-</span> cn2_asvs<span class="sc">$</span>Gut <span class="sc">%&gt;%</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(copyn <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(asv_list) <span class="sc">%&gt;%</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>barlow_physeq <span class="sc">%&gt;%</span></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tax_table</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ASV <span class="sc">%in%</span> barlow_big_asvs) <span class="sc">%&gt;%</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>ASVseqs) <span class="sc">%&gt;%</span></span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">data.frame</span>(<span class="at">Sums =</span> rowsums_list<span class="sc">$</span>Gut[barlow_big_asvs],</span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">ASV =</span> <span class="fu">names</span>(rowsums_list<span class="sc">$</span>Gut[barlow_big_asvs]))) <span class="sc">%&gt;%</span></span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Sums))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(ASV)`</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Kingdom         Phylum               Class              Order
+1  Bacteria      Bacillota             Bacilli Erysipelotrichales
+2  Bacteria      Bacillota             Bacilli Erysipelotrichales
+3  Bacteria      Bacillota             Bacilli Erysipelotrichales
+4  Bacteria Pseudomonadota Gammaproteobacteria   Enterobacterales
+5  Bacteria      Bacillota             Bacilli Erysipelotrichales
+6  Bacteria      Bacillota             Bacilli Erysipelotrichales
+7  Bacteria      Bacillota             Bacilli Erysipelotrichales
+8  Bacteria      Bacillota             Bacilli Erysipelotrichales
+9  Bacteria      Bacillota             Bacilli Erysipelotrichales
+10 Bacteria      Bacillota             Bacilli Erysipelotrichales
+11 Bacteria      Bacillota             Bacilli Erysipelotrichales
+12 Bacteria      Bacillota             Bacilli Erysipelotrichales
+13 Bacteria      Bacillota             Bacilli Erysipelotrichales
+14 Bacteria      Bacillota             Bacilli Erysipelotrichales
+15 Bacteria      Bacillota             Bacilli Erysipelotrichales
+16 Bacteria      Bacillota             Bacilli Erysipelotrichales
+17 Bacteria      Bacillota          Clostridia Clostridia UCG-014
+                Family                Genus     ASV    Sums
+1  Erysipelotrichaceae       Faecalibaculum   ASV_1 3880642
+2  Erysipelotrichaceae       Faecalibaculum  ASV_10  100664
+3  Erysipelotrichaceae       Faecalibaculum  ASV_21   52372
+4   Enterobacteriaceae Escherichia-Shigella  ASV_85    7602
+5  Erysipelotrichaceae       Faecalibaculum ASV_103    5084
+6  Erysipelotrichaceae       Faecalibaculum ASV_307    1088
+7  Erysipelotrichaceae       Faecalibaculum ASV_456     414
+8  Erysipelotrichaceae       Faecalibaculum ASV_524     272
+9  Erysipelotrichaceae       Faecalibaculum ASV_578     185
+10 Erysipelotrichaceae       Faecalibaculum ASV_611     142
+11 Erysipelotrichaceae       Faecalibaculum ASV_648      99
+12 Erysipelotrichaceae       Faecalibaculum ASV_671      83
+13 Erysipelotrichaceae       Faecalibaculum ASV_684      76
+14 Erysipelotrichaceae       Faecalibaculum ASV_702      63
+15 Erysipelotrichaceae       Faecalibaculum ASV_753      34
+16 Erysipelotrichaceae       Faecalibaculum ASV_784      25
+17                &lt;NA&gt;                 &lt;NA&gt; ASV_794      23</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
